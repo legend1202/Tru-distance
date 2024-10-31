@@ -7,7 +7,7 @@ export interface User extends Document {
   name: string;
   email: string;
   password: string;
-  role?: 'ADMIN' | 'LEADER' | 'MATERIAL' | 'TRAVEL' | 'COST';
+  role?: 'ADMIN' | 'Lead' | 'Tech' | 'Material' | 'Travel' | 'Cost';
   bio: string;
   createdAt: Date;
   updateAt: Date;

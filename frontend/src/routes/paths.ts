@@ -5,6 +5,9 @@ const ROOTS = {
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
   TEMP: '/temp',
+
+  ADMIN: '/admin',
+  BOEMNG: '/boe_mng',
 };
 
 // ----------------------------------------------------------------------
@@ -24,6 +27,25 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    overview: `${ROOTS.DASHBOARD}/overview`,
+    status_summary: `${ROOTS.DASHBOARD}/status_summary`,
+    eval_progress: `${ROOTS.DASHBOARD}/eval_progress`,
+  },
+  boe_mng: {
+    root: ROOTS.BOEMNG,
+    data_import: `${ROOTS.BOEMNG}/data_import`,
+    wbs_summary: `${ROOTS.BOEMNG}/wbs_summary`,
+    task_details: `${ROOTS.BOEMNG}/task_details`,
+  },
+  importPDF: {
+    root: `${ROOTS.DASHBOARD}/import`,
+  },
+  scroll: {
+    root: `${ROOTS.DASHBOARD}/scroll`,
+  },
+  admin: {
+    root: ROOTS.ADMIN,
+    userslist: `${ROOTS.ADMIN}/userslist`,
   },
   temp: {
     home: `${ROOTS.TEMP}/home`,

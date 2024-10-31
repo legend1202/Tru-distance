@@ -88,7 +88,7 @@ export const handleGetUsers = async (
 ): Promise<User[]> => {
   const users = await UserModel.find(
     {
-      role: { $in: ['COMPANY', 'FELLESRAAD', 'CLIENT'] },
+      role: { $in: ['Lead', 'Tech', 'Material', 'Travel', 'Cost'] },
     },
     { _id: 0, __v: 0, password: 0 }
   );
@@ -140,7 +140,7 @@ export const createNewUser = async (
     email,
     password,
     name,
-    role: 'ADMIN',
+    role: 'Cost',
   });
 
   await newUser.save({ session });

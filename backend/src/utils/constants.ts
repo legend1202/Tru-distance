@@ -1,2 +1,2 @@
-export const Roles = ['ADMIN', 'LEADER', 'MATERIAL', 'TRAVEL', 'COST'];
+export const Roles = ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel', 'Cost'];
 export const Gender = ['MAN', 'WOMEN'];

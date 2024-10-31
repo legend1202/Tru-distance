@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { OverviewAppView } from 'src/sections/overview/app/view';
-
+/* import { OverviewAppView } from 'src/sections/dashboard/overview/app/view'; */
+import { OverviewEcommerceView } from 'src/sections/dashboard/overview/view';
 // ----------------------------------------------------------------------
 
 export default function OverviewAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: App</title>
+        <title> Dashboard: Overview</title>
       </Helmet>
 
-      <OverviewAppView />
+      <OverviewEcommerceView />
     </>
   );
 }

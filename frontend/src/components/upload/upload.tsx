@@ -8,7 +8,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
 import { useTranslate } from 'src/locales';
-import { UploadIllustration } from 'src/assets/illustrations';
 
 import Iconify from '../iconify';
 import { UploadProps } from './types';
@@ -50,23 +49,8 @@ export default function Upload({
 
   const renderPlaceholder = (
     <Stack spacing={3} alignItems="center" justifyContent="center" flexWrap="wrap">
-      <UploadIllustration sx={{ width: 1, maxWidth: 200 }} />
       <Stack spacing={1} sx={{ textAlign: 'center' }}>
         <Typography variant="h6">{t('drop_or_select_file')}</Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {t('Drop files here or click')}
-          <Box
-            component="span"
-            sx={{
-              mx: 0.5,
-              color: 'primary.main',
-              textDecoration: 'underline',
-            }}
-          >
-            {t('browse')}
-          </Box>
-          {t('thorough your machine')}
-        </Typography>
       </Stack>
     </Stack>
   );
