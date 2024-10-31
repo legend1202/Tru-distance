@@ -49,7 +49,7 @@ export default function TaskDetailsView() {
   /* const values = watch();  */
 
   useEffect(() => {
-    if (wbsList) {
+    if (wbsList.length > 0) {
       /* const wbsData = wbsSummaryFunc(wbsList[0]); */
       /* setTableData(wbsData); */
       /* setWbsData(wbsList[0]); */

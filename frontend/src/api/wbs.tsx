@@ -12,7 +12,7 @@ export function useGetWBSLists() {
 
   const memoizedValue = useMemo(
     () => ({
-      wbsList: data?.result.wbs as IWbs[],
+      wbsList: data?.result?.wbs as IWbs[] || [],
       wbsLoading: isLoading,
       wbsError: error,
       wbsValidating: isValidating,

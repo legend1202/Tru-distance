@@ -71,7 +71,8 @@ export default function WbsSummaryView() {
   /* const values = watch(); */
 
   useEffect(() => {
-    if (wbsList) {
+    if (wbsList.length > 0) {
+      console.log(wbsList);
       const wbsData = wbsSummaryFunc(wbsList[0]);
       setTableData(wbsData);
       setWbsData(wbsList[0]);
@@ -150,62 +151,64 @@ export default function WbsSummaryView() {
           flexDirection: { md: 'column' },
         }}
       >
-        <DataGrid
-          checkboxSelection
-          disableRowSelectionOnClick
-          rows={tableData}
-          columns={columns}
-          loading={wbsLoading}
-          getRowHeight={() => 'auto'}
-          pageSizeOptions={[5, 10, 25]}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 5 },
-            },
-          }}
-          columnVisibilityModel={columnVisibilityModel}
-          onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-          slots={{
-            toolbar: () => (
-              <GridToolbarContainer>
-                <GridToolbarQuickFilter />
-                <Stack spacing={0.5}>
-                  <Card
-                    sx={{
-                      px: 2,
-                    }}
-                  >
-                    <Typography variant="subtitle1">Total Hours</Typography>
+        {tableData && (
+          <DataGrid
+            checkboxSelection
+            disableRowSelectionOnClick
+            rows={tableData}
+            columns={columns}
+            loading={wbsLoading}
+            getRowHeight={() => 'auto'}
+            pageSizeOptions={[5, 10, 25]}
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 5 },
+              },
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+            slots={{
+              toolbar: () => (
+                <GridToolbarContainer>
+                  <GridToolbarQuickFilter />
+                  <Stack spacing={0.5}>
+                    <Card
+                      sx={{
+                        px: 2,
+                      }}
+                    >
+                      <Typography variant="subtitle1">Total Hours</Typography>
 
-                    <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
-                      {selectedWbsData?.hoursTotal || 0}
-                    </Box>
-                  </Card>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Card
-                    sx={{
-                      px: 2,
-                    }}
-                  >
-                    <Typography variant="subtitle1">Total Costs</Typography>
+                      <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
+                        {selectedWbsData?.hoursTotal || 0}
+                      </Box>
+                    </Card>
+                  </Stack>
+                  <Stack spacing={0.5}>
+                    <Card
+                      sx={{
+                        px: 2,
+                      }}
+                    >
+                      <Typography variant="subtitle1">Total Costs</Typography>
 
-                    <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
-                      {selectedWbsData?.dollarsTotal || 0}
-                    </Box>
-                  </Card>
-                </Stack>
-              </GridToolbarContainer>
-            ),
-            noRowsOverlay: () => <EmptyContent title="No Data" />,
-            noResultsOverlay: () => <EmptyContent title="No results found" />,
-          }}
-          slotProps={{
-            columnsPanel: {
-              getTogglableColumns,
-            },
-          }}
-        />
+                      <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
+                        {selectedWbsData?.dollarsTotal || 0}
+                      </Box>
+                    </Card>
+                  </Stack>
+                </GridToolbarContainer>
+              ),
+              noRowsOverlay: () => <EmptyContent title="No Data" />,
+              noResultsOverlay: () => <EmptyContent title="No results found" />,
+            }}
+            slotProps={{
+              columnsPanel: {
+                getTogglableColumns,
+              },
+            }}
+          />
+        )}
       </Card>
     </Container>
   );
