@@ -19,14 +19,15 @@ const generateMonthlyDistribution = (start: Date, end: Date) => {
 export const wbsSummaryFunc = (wbs: IWbs): IWbsSummary[] => {
   // Processing each task
   let count = 0;
-  const tasksData = wbs.tasks.map((task): IWbsSummary => {
+  const tasksData = [] as IWbsSummary[];
+  wbs.tasks.forEach((task) => {
     const { start } = task.periodOfPerformance;
     const { end } = task.periodOfPerformance;
     const monthlyDistribution = generateMonthlyDistribution(start, end);
 
     const totalHours = monthlyDistribution.reduce((acc, item) => acc + item.hours, 0);
     const totalCost = monthlyDistribution.reduce((acc, item) => acc + item.cost, 0);
-    return {
+    tasksData.push({
       monthlyDistribution,
       id: count,
       taskName: task.name,
@@ -35,8 +36,11 @@ export const wbsSummaryFunc = (wbs: IWbs): IWbsSummary[] => {
       endDate: end,
       totalHours,
       totalCost,
-    };
+    });
     count += 1;
   });
+  /* const tasksData = wbs.tasks.map((task): IWbsSummary => {
+    
+  }); */
   return tasksData;
 };

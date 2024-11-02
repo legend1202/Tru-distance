@@ -72,8 +72,8 @@ export default function WbsSummaryView() {
 
   useEffect(() => {
     if (wbsList.length > 0) {
-      console.log(wbsList);
       const wbsData = wbsSummaryFunc(wbsList[0]);
+      console.log(wbsData);
       setTableData(wbsData);
       setWbsData(wbsList[0]);
       setValue('wbsId', wbsList[0].id);
