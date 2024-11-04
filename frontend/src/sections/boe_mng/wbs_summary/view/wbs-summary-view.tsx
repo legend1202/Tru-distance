@@ -16,7 +16,7 @@ import {
 
 import { paths } from 'src/routes/paths';
 
-import { wbsSummaryFunc } from 'src/utils/wbs-summary';
+import { calculateWBSTotals } from 'src/utils/wbs-total';
 
 import { useGetWBSLists } from 'src/api/wbs';
 
@@ -26,7 +26,7 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import EmptyContent from 'src/components/empty-content/empty-content';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IWbs, IWbsSummary } from 'src/types/wbs';
+import { IWbs, ITask } from 'src/types/wbs';
 
 import { RenderCellName, RenderCellHours, RenderCellCosts } from '../wbs-summary-table-row';
 
@@ -43,9 +43,13 @@ export default function WbsSummaryView() {
 
   const { wbsList, wbsLoading } = useGetWBSLists();
 
-  const [tableData, setTableData] = useState<IWbsSummary[]>([]);
+  const [tableData, setTableData] = useState<ITask[]>([]);
 
   const [selectedWbsData, setWbsData] = useState<IWbs>();
+
+  const [totalHours, setTotalHours] = useState(0);
+
+  const [totalCosts, setTotalCosts] = useState(0);
 
   const [columnVisibilityModel, setColumnVisibilityModel] =
     useState<GridColumnVisibilityModel>(HIDE_COLUMNS);
@@ -72,13 +76,19 @@ export default function WbsSummaryView() {
 
   useEffect(() => {
     if (wbsList.length > 0) {
-      const wbsData = wbsSummaryFunc(wbsList[0]);
-      console.log(wbsData);
-      setTableData(wbsData);
+      setTableData(wbsList[0].tasks);
       setWbsData(wbsList[0]);
       setValue('wbsId', wbsList[0].id);
     }
   }, [wbsList, setValue]);
+
+  useEffect(() => {
+    if (selectedWbsData) {
+      const total = calculateWBSTotals(selectedWbsData);
+      setTotalHours(total.totalHours);
+      setTotalCosts(total.totalCost);
+    }
+  }, [selectedWbsData]);
 
   const columns: GridColDef[] = [
     {
@@ -180,7 +190,7 @@ export default function WbsSummaryView() {
                       <Typography variant="subtitle1">Total Hours</Typography>
 
                       <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
-                        {selectedWbsData?.hoursTotal || 0}
+                        {totalHours}
                       </Box>
                     </Card>
                   </Stack>
@@ -193,7 +203,7 @@ export default function WbsSummaryView() {
                       <Typography variant="subtitle1">Total Costs</Typography>
 
                       <Box component="span" sx={{ color: 'text.disabled', typography: 'body2' }}>
-                        {selectedWbsData?.dollarsTotal || 0}
+                        {totalCosts}
                       </Box>
                     </Card>
                   </Stack>

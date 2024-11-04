@@ -10,7 +10,7 @@ type ParamsProps = {
 export function RenderCellName({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.taskName}
+      primary={params.row.name}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -24,7 +24,7 @@ export function RenderCellName({ params }: ParamsProps) {
 export function RenderCellHours({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.totalHours}
+      primary={params.row.hours}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,
@@ -38,7 +38,7 @@ export function RenderCellHours({ params }: ParamsProps) {
 export function RenderCellCosts({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.totalHours}
+      primary={params.row.costs}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

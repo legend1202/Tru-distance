@@ -11,10 +11,23 @@ import {
 import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
 import { User, UserModel } from '../models/user.model';
 import { Roles } from '../utils/constants';
-import { Wbs, WbsModel } from '../models/wbs.model';
+import { WBSDocument, WbsModel } from '../models/wbs.model';
 
-export const handleGetWbs = async (session?: ClientSession): Promise<Wbs[]> => {
-  const wbs = await WbsModel.find();
+export const handleGetWbs = async (
+  session?: ClientSession
+): Promise<WBSDocument[]> => {
+  /* const wbs = await WbsModel.find(); */
 
-  return wbs;
+  const wbsWithTasks = await WbsModel.aggregate([
+    {
+      $lookup: {
+        from: 'tasks', // The name of the Task collection in MongoDB
+        localField: 'id',
+        foreignField: 'wbsId',
+        as: 'tasks', // The field in the output document where the tasks will be stored
+      },
+    },
+  ]);
+
+  return wbsWithTasks;
 };

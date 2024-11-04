@@ -1,32 +1,30 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface Boe extends Document {
+export interface PeriodOfPerformanceDocument {
+  start: Date;
+  end: Date;
+}
+
+export interface BoeDocument extends Document {
   id: string;
   name: string;
   title: string;
   proposalName: string;
   createdBy: string;
-  periodOfPerformance: {
-    start: Date;
-    end: Date;
-  };
+  periodOfPerformance: PeriodOfPerformanceDocument;
   description: string;
-  spreadTotals: {
-    hours: {
-      year: number;
-      monthly: [number];
-    };
-    dollars: {
-      year: number;
-      monthly: [number];
-    };
-  };
-  createdAt: Date;
-  updateAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const BoeSchema = new Schema<Boe>(
+export const PeriodOfPerformanceSchema =
+  new Schema<PeriodOfPerformanceDocument>({
+    start: { type: Date },
+    end: { type: Date },
+  });
+
+const BoeSchema = new Schema<BoeDocument>(
   {
     id: {
       type: String,
@@ -34,54 +32,19 @@ const BoeSchema = new Schema<Boe>(
       required: true,
       unique: true,
     },
-    name: {
-      type: String,
-    },
-    title: {
-      type: String,
-    },
-    proposalName: {
-      type: String,
-    },
-    createdBy: {
-      type: String,
-    },
-    periodOfPerformance: {
-      start: {
-        type: Date,
-      },
-      end: {
-        type: Date,
-      },
-    },
-    description: {
-      type: String,
-    },
-    spreadTotals: {
-      hours: {
-        year: {
-          type: Number,
-        },
-        monthly: {
-          type: [Number],
-        },
-      },
-      dollars: {
-        year: {
-          type: Number,
-        },
-        monthly: {
-          type: [Number],
-        },
-      },
-    },
+    name: { type: String },
+    title: { type: String },
+    proposalName: { type: String },
+    createdBy: { type: String },
+    periodOfPerformance: { type: PeriodOfPerformanceSchema },
+    description: { type: String },
   },
   {
     timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updateAt',
+      updatedAt: 'updatedAt',
     },
   }
 );
 
-export const BoeModel = model<Boe>('Boe', BoeSchema);
+export const BoeModel = model<BoeDocument>('Boe', BoeSchema);
