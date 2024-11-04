@@ -99,7 +99,7 @@ export default function TaskDetailsView() {
           flexDirection: { md: 'column' },
         }}
       >
-        <GanttWithCurrentTime tasksDataT={selectedTasks} />
+        {selectedTasks && <GanttWithCurrentTime tasksDataT={selectedTasks} />}
       </Card>
     </Container>
   );
