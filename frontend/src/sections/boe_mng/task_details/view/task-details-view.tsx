@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Card, MenuItem } from '@mui/material';
@@ -15,6 +15,8 @@ import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { ITask } from 'src/types/wbs';
+
 import GanttWithCurrentTime from '../ganttChat';
 
 // ----------------------------------------------------------------------
@@ -23,6 +25,8 @@ export default function TaskDetailsView() {
   const settings = useSettingsContext();
 
   const { wbsList } = useGetWBSLists();
+
+  const [selectedTasks, setTasks] = useState<ITask[]>([]);
 
   /* const [tableData, setTableData] = useState<IWbsSummary[]>([]); */
 
@@ -50,9 +54,7 @@ export default function TaskDetailsView() {
 
   useEffect(() => {
     if (wbsList.length > 0) {
-      /* const wbsData = wbsSummaryFunc(wbsList[0]); */
-      /* setTableData(wbsData); */
-      /* setWbsData(wbsList[0]); */
+      setTasks(wbsList[0].tasks);
       setValue('wbsId', wbsList[0].id);
     }
   }, [wbsList, setValue]);
@@ -97,7 +99,7 @@ export default function TaskDetailsView() {
           flexDirection: { md: 'column' },
         }}
       >
-        <GanttWithCurrentTime />
+        <GanttWithCurrentTime tasksDataT={selectedTasks} />
       </Card>
     </Container>
   );
