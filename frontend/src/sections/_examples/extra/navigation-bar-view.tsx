@@ -35,7 +35,7 @@ import ComponentHero from 'src/sections/_examples/component-hero';
 const defaultConfig = {
   gap: 4,
   icon: 24,
-  currentRole: 'admin',
+  currentRole: ['admin'],
   rootItemHeight: 44,
   subItemHeight: 36,
   padding: '4px 8px 4px 12px',

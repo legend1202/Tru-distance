@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { ITUserItem, IUserRoleUpdate } from 'src/types/user';
+import { IUserItem, IUserRoleUpdate } from 'src/types/user';
 
 export function useGetUserLists() {
   const URL = endpoints.admin.userList;
@@ -12,7 +12,7 @@ export function useGetUserLists() {
 
   const memoizedValue = useMemo(
     () => ({
-      users: data?.result.users as ITUserItem[],
+      users: data?.result.users as IUserItem[],
       usersLoading: isLoading,
       usersError: error,
       usersValidating: isValidating,

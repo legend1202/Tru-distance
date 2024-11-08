@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Card, MenuItem } from '@mui/material';
 import Container from '@mui/material/Container';
+import { Card, Stack, Button, MenuItem, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
@@ -27,10 +27,6 @@ export default function TaskDetailsView() {
   const { wbsList } = useGetWBSLists();
 
   const [selectedTasks, setTasks] = useState<ITask[]>([]);
-
-  /* const [tableData, setTableData] = useState<IWbsSummary[]>([]); */
-
-  /*  const [selectedWbsData, setWbsData] = useState<IWbs>(); */
 
   const WbsSchema = Yup.object().shape({
     wbsId: Yup.string().required('Wbs is required'),
@@ -92,15 +88,310 @@ export default function TaskDetailsView() {
         }}
       />
 
-      <Card
-        sx={{
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'column' },
-        }}
-      >
-        {selectedTasks && <GanttWithCurrentTime tasksDataT={selectedTasks} />}
-      </Card>
+      <Stack component={Card} direction="row">
+        <Stack
+          sx={{
+            height: 1,
+            flexShrink: 0,
+            width: 320,
+          }}
+        >
+          <Card
+            sx={{
+              p: 3,
+            }}
+          >
+            <Typography align="center">Proposal Summary</Typography>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Hours: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Cost: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Material: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Travel : </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Typography
+              sx={{
+                mt: 3,
+              }}
+            >
+              Total Hours By CLIN:{' '}
+            </Typography>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+              }}
+            >
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 001: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
+              </Card>
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 002: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
+                  {' '}
+                  555
+                </Typography>
+              </Card>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+              }}
+            >
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 003: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
+              </Card>
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 004: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
+                  {' '}
+                  555
+                </Typography>
+              </Card>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+              }}
+            >
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 005: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
+              </Card>
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 006: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
+                  {' '}
+                  555
+                </Typography>
+              </Card>
+            </Card>
+          </Card>
+
+          <Card
+            sx={{
+              p: 3,
+            }}
+          >
+            <Typography align="center">Evaluation Summary</Typography>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Hours: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Cost: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Material: </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography>Total Travel : </Typography>
+              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+            </Card>
+            <Typography
+              sx={{
+                mt: 3,
+              }}
+            >
+              Total Hours By CLIN:{' '}
+            </Typography>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+              }}
+            >
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 001: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
+              </Card>
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 002: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
+                  {' '}
+                  555
+                </Typography>
+              </Card>
+            </Card>
+            <Card
+              sx={{
+                flexGrow: { md: 1 },
+                display: { md: 'flex' },
+                flexDirection: { md: 'row' },
+              }}
+            >
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 003: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
+              </Card>
+              <Card
+                sx={{
+                  flexGrow: { md: 1 },
+                  display: { md: 'flex' },
+                  flexDirection: { md: 'row' },
+                }}
+              >
+                <Typography>CLIN 004: </Typography>
+                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
+                  {' '}
+                  555
+                </Typography>
+              </Card>
+            </Card>
+          </Card>
+
+          <Button color="success">Enter PIVOT Selections</Button>
+        </Stack>
+        <Card
+          sx={{
+            flexGrow: { md: 1 },
+            display: { md: 'flex' },
+            flexDirection: { md: 'column' },
+          }}
+        >
+          {selectedTasks && <GanttWithCurrentTime tasksDataT={selectedTasks} />}
+          <Card
+            sx={{
+              flexGrow: { md: 1 },
+              display: { md: 'flex' },
+              flexDirection: { md: 'row' },
+              justifyContent: 'space-around',
+            }}
+          >
+            <Button color="success">Roll-up by Fiscal Year</Button>
+            <Button color="success">Roll-up by Calendar Year</Button>
+          </Card>
+        </Card>
+      </Stack>
     </Container>
   );
 }

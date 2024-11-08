@@ -7,7 +7,7 @@ export interface User extends Document {
   name: string;
   email: string;
   password: string;
-  role?: 'ADMIN' | 'Lead' | 'Tech' | 'Material' | 'Travel' | 'Cost';
+  role?: string[]; // 'ADMIN' | 'Lead' | 'Tech' | 'Material' | 'Travel' | 'Cost';
   bio: string;
   createdAt: Date;
   updateAt: Date;
@@ -26,7 +26,7 @@ const UserSchema = new Schema<User>(
     email: { type: String },
     password: { type: String, required: true },
     role: {
-      type: String,
+      type: [String],
     },
     bio: { type: String },
   },

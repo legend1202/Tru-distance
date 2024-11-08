@@ -14,3 +14,7 @@ export function remove(array: string[], value: string): string[] {
 
   return array;
 }
+
+export const haveCommonItem = (array1: string[], array2: string[]) => {
+  return array1.some((item) => array2.includes(item));
+};

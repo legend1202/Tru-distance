@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { AuthenticationError, RequestError } from '../utils/globalErrorHandler';
 import { findOneUser } from '../services/user.services';
+import { haveCommonItem } from '../utils/common';
 
 interface DecodedToken extends JwtPayload {
   userId: string;
@@ -24,7 +25,10 @@ export const verifyAdmin = async (
     req.userId = decoded.userId;
     const existingUser = await findOneUser({ id: decoded.userId });
 
-    if (existingUser && existingUser.role === 'ADMIN') {
+    if (
+      existingUser?.role &&
+      haveCommonItem(existingUser?.role, ['ADMIN', 'Lead'])
+    ) {
       next();
     } else {
       next(new RequestError(`Admin can update only. This user can't update`));

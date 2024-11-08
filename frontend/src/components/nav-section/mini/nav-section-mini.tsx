@@ -1,19 +1,21 @@
-import { memo, useState, useEffect } from "react";
+import { memo, useState, useEffect } from 'react';
 
-import Stack from "@mui/material/Stack";
+import Stack from '@mui/material/Stack';
 
-import { useRouter } from "src/routes/hooks";
+import { useRouter } from 'src/routes/hooks';
 
-import { useAuthContext } from "src/auth/hooks";
-import { PATH_AFTER_REGISTER } from "src/config-global";
+import { haveCommonItem } from 'src/utils/role-check';
 
-import NavList from "./nav-list";
-import { NavProps, NavGroupProps } from "../types";
+import { useAuthContext } from 'src/auth/hooks';
+import { PATH_AFTER_REGISTER } from 'src/config-global';
+
+import NavList from './nav-list';
+import { NavProps, NavGroupProps } from '../types';
 
 // ----------------------------------------------------------------------
 
 function NavSectionMini({ data, slotProps, ...other }: NavProps) {
-  const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState([]);
   const { user } = useAuthContext();
   const router = useRouter();
 
@@ -26,12 +28,7 @@ function NavSectionMini({ data, slotProps, ...other }: NavProps) {
   }, [user, data, router]);
 
   return (
-    <Stack
-      component="nav"
-      id="nav-section-mini"
-      spacing={`${slotProps?.gap || 4}px`}
-      {...other}
-    >
+    <Stack component="nav" id="nav-section-mini" spacing={`${slotProps?.gap || 4}px`} {...other}>
       {data.map((group, index) => (
         <Group
           key={group.subheader || index}
@@ -51,7 +48,7 @@ export default memo(NavSectionMini);
 
 function Group({ items, roles, userRole, slotProps }: NavGroupProps) {
   if (roles && userRole) {
-    const isUserRolePresent = roles.includes(userRole);
+    const isUserRolePresent = haveCommonItem(roles, userRole);
 
     if (isUserRolePresent) {
       return (

@@ -31,9 +31,10 @@ export function RenderCellApprove({ params }: ParamsProps) {
 
 export function RenderCellRole({ params }: ParamsProps) {
   const { t } = useTranslate();
+
   return (
     <ListItemText
-      primary={t(params.row.role)}
+      primary={t(params.row.role.toString())}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

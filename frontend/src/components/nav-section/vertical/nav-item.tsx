@@ -8,6 +8,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import { RouterLink } from 'src/routes/components';
 
+import { haveCommonItem } from 'src/utils/role-check';
+
 import Iconify from '../../iconify';
 import { NavItemProps, NavItemStateProps } from '../types';
 
@@ -29,7 +31,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
       active,
       hasChild,
       externalLink,
-      currentRole = 'admin',
+      currentRole = ['Cost'],
       ...other
     },
     ref
@@ -93,7 +95,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
     );
 
     // Hidden item by role
-    if (roles && !roles.includes(`${currentRole}`)) {
+    if (roles && !haveCommonItem(roles, currentRole)) {
       return null;
     }
 

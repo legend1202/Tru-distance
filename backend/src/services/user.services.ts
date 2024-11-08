@@ -11,6 +11,7 @@ import {
 import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
 import { User, UserModel } from '../models/user.model';
 import { Roles } from '../utils/constants';
+import { haveCommonItem } from '../utils/common';
 
 export const handleUserCreation = async (
   user: Partial<User> & Document,
@@ -54,7 +55,7 @@ export const handleUserLogin = async (
       throw new AuthenticationError(`Password didn't match.`);
     }
 
-    if (existingUser?.role && Roles.includes(existingUser?.role)) {
+    if (existingUser?.role && haveCommonItem(Roles, existingUser.role)) {
       const secretKey: string = process.env.JWT_SECRET_KEY || '';
       const token = jwt.sign(
         {
@@ -84,16 +85,29 @@ export const handleUserLogin = async (
 };
 
 export const handleGetUsers = async (
+  userId?: string,
   session?: ClientSession
 ): Promise<User[]> => {
-  const users = await UserModel.find(
-    {
-      role: { $in: ['Lead', 'Tech', 'Material', 'Travel', 'Cost'] },
-    },
-    { _id: 0, __v: 0, password: 0 }
-  );
+  if (userId) {
+    const users = await UserModel.find(
+      {
+        role: { $in: ['Lead', 'Tech', 'Material', 'Travel', 'Cost'] },
+        id: { $ne: userId },
+      },
+      { _id: 0, __v: 0, password: 0 }
+    );
 
-  return users;
+    return users;
+  } else {
+    const users = await UserModel.find(
+      {
+        role: { $in: ['Lead', 'Tech', 'Material', 'Travel', 'Cost'] },
+      },
+      { _id: 0, __v: 0, password: 0 }
+    );
+
+    return users;
+  }
 };
 
 export const handleAssignRole = async (
@@ -104,7 +118,7 @@ export const handleAssignRole = async (
 
   if (!id) throw new RequestError('User Id must not be empty', 400);
   if (!role) throw new RequestError('Role must not be empty', 400);
-  if (!Roles.includes(role)) {
+  if (!haveCommonItem(Roles, role)) {
     throw new RequestError(
       `User Role must be include one of "ADMIN", "FELLESRAAD", "COMPANY", "CLIENT".`,
       400
@@ -140,7 +154,7 @@ export const createNewUser = async (
     email,
     password,
     name,
-    role: 'Cost',
+    role: ['Cost'],
   });
 
   await newUser.save({ session });

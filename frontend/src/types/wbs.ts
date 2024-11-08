@@ -4,9 +4,11 @@ export type ISubtask = {
   description: string;
   hours: number | 0;
   cost: number | 0;
+  checked?: boolean | undefined;
 };
 
 export type ITask = {
+  checked?: boolean | undefined;
   id: string;
   wbsId: string;
   name: string;

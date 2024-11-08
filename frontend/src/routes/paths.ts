@@ -8,6 +8,7 @@ const ROOTS = {
 
   ADMIN: '/admin',
   BOEMNG: '/boe_mng',
+  APPROVALWORKFLOW: '/approve',
 };
 
 // ----------------------------------------------------------------------
@@ -36,6 +37,9 @@ export const paths = {
     data_import: `${ROOTS.BOEMNG}/data_import`,
     wbs_summary: `${ROOTS.BOEMNG}/wbs_summary`,
     task_details: `${ROOTS.BOEMNG}/task_details`,
+  },
+  approval_workflow: {
+    task_assign: `${ROOTS.APPROVALWORKFLOW}/task_assign`,
   },
   importPDF: {
     root: `${ROOTS.DASHBOARD}/import`,

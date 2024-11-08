@@ -145,9 +145,9 @@ export function useNavData() {
         items: [
           {
             title: t('Evaluator Assignment Approval'),
-            path: paths.dashboard.root,
+            path: paths.approval_workflow.task_assign,
             icon: ICONS.dashboard,
-            roles: ['ADMIN'],
+            roles: ['ADMIN', 'Lead'],
           },
           {
             title: t('Assessment Approval'),

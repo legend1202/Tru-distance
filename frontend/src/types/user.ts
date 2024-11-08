@@ -1,4 +1,4 @@
-import { CustomFile } from "src/components/upload";
+import { CustomFile } from 'src/components/upload';
 
 // ----------------------------------------------------------------------
 
@@ -21,14 +21,14 @@ export type IUserSocialLink = {
 
 export type IUserProfileCover = {
   name: string;
-  role: string;
+  role: string[];
   coverUrl: string;
   avatarUrl: string;
 };
 
 export type IUserProfile = {
   id: string;
-  role: string;
+  role: string[];
   quote: string;
   email: string;
   school: string;
@@ -56,7 +56,7 @@ export type IUserProfileGallery = {
 export type IUserProfileFriend = {
   id: string;
   name: string;
-  role: string;
+  role: string[];
   avatarUrl: string;
 };
 
@@ -84,7 +84,7 @@ export type IUserProfilePost = {
 export type IUserCard = {
   id: string;
   name: string;
-  role: string;
+  role: string[];
   coverUrl: string;
   avatarUrl: string;
   totalPosts: number;
@@ -96,7 +96,7 @@ export type IUserItem = {
   id: string;
   name: string;
   city: string;
-  role: string;
+  role: string[];
   email: string;
   state: string;
   status: string;
@@ -113,7 +113,7 @@ export type ITUserItem = {
   email: string;
   id: string;
   name: string;
-  role: string;
+  role: string[];
 };
 
 export type IUserAccount = {
@@ -145,5 +145,5 @@ export type IUserAccountChangePassword = {
 
 export type IUserRoleUpdate = {
   id: string;
-  role: string;
+  role: string[];
 };

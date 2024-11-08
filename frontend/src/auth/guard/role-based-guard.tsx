@@ -6,6 +6,8 @@ import { Theme, SxProps } from '@mui/material/styles';
 
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
+import { haveCommonItem } from 'src/utils/role-check';
+
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
 import { varBounce, MotionContainer } from 'src/components/animate';
@@ -26,7 +28,7 @@ export default function RoleBasedGuard({ hasContent, roles, children, sx }: Role
   // const currentRole = 'user';
   const currentRole = user?.role; // admin;
 
-  if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
+  if (typeof roles !== 'undefined' && !haveCommonItem(roles, currentRole)) {
     return hasContent ? (
       <Container component={MotionContainer} sx={{ textAlign: 'center', ...sx }}>
         <m.div variants={varBounce().in}>
