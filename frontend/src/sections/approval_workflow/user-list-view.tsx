@@ -1,4 +1,3 @@
-import { useState } from 'react';
 
 import { Stack, useTheme } from '@mui/material';
 
@@ -10,15 +9,15 @@ import UserListItem from './user-list-item';
 
 interface Props {
   users: IUserItem[];
+  selectedUserId: string;
+  handleSelectedUserId: (userId: string) => void;
 }
 
-const UserListView = ({ users }: Props) => {
+const UserListView = ({ users, selectedUserId, handleSelectedUserId }: Props) => {
   const theme = useTheme();
 
-  const [selectedUserId, setSelectedUserId] = useState<string>('');
-
   const handleSetUserId = (userId: string) => {
-    setSelectedUserId(userId);
+    handleSelectedUserId(userId);
   };
   const renderList = (
     <>

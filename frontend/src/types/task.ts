@@ -1,3 +1,5 @@
+import { ITask } from './wbs';
+
 export type ITempTask = {
   id: string;
   wbsId: string;
@@ -34,4 +36,11 @@ export type ITempTask = {
   };
   createdAt: Date;
   updateAt: Date;
+};
+
+export type IApproveTask = {
+  id?: string;
+  wbsId: string;
+  userId: string;
+  tasks: ITask[];
 };

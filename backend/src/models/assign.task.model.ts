@@ -1,17 +1,20 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { PeriodOfPerformanceDocument, PeriodOfPerformanceSchema } from './boe.model';
+import {
+  PeriodOfPerformanceDocument,
+  PeriodOfPerformanceSchema,
+} from './boe.model';
 
-export interface Subtask {
+interface Subtask {
   subtaskCode: string;
   name: string;
   description: string;
   hours: number | 0;
   cost: number | 0;
+  checked: boolean;
 }
 
-export interface TaskDocument extends Document {
-  id: string;
+interface TaskDocument extends Document {
   wbsId: string;
   name: string;
   taskCode: string;
@@ -19,7 +22,15 @@ export interface TaskDocument extends Document {
   description: string;
   hours: number | 0;
   cost: number | 0;
+  checked: boolean;
   subtasks: Subtask[];
+}
+
+export interface AssignedTaskDocument {
+  id: string;
+  wbsId: string;
+  userId: string;
+  tasks: TaskDocument[];
 }
 
 const SubtaskSchema = new Schema<Subtask>({
@@ -28,16 +39,11 @@ const SubtaskSchema = new Schema<Subtask>({
   description: { type: String },
   hours: { type: Number, default: 0 },
   cost: { type: Number, default: 0 },
+  checked: { type: Boolean, default: false },
 });
 
-export const TaskSchema = new Schema<TaskDocument>(
+const TaskSchema = new Schema<TaskDocument>(
   {
-    id: {
-      type: String,
-      default: uuidv4,
-      required: true,
-      unique: true,
-    },
     wbsId: {
       type: String,
     },
@@ -47,6 +53,7 @@ export const TaskSchema = new Schema<TaskDocument>(
     description: { type: String, default: 'TBD' },
     hours: { type: Number, default: 0 },
     cost: { type: Number, default: 0 },
+    checked: { type: Boolean, default: false },
     subtasks: [SubtaskSchema],
   },
   {
@@ -57,4 +64,29 @@ export const TaskSchema = new Schema<TaskDocument>(
   }
 );
 
-export const TaskModel = model<TaskDocument>('Task', TaskSchema);
+const AssignedTaskSchema = new Schema<AssignedTaskDocument>(
+  {
+    id: {
+      type: String,
+      default: uuidv4,
+      required: true,
+      unique: true,
+    },
+    wbsId: {
+      type: String,
+    },
+    userId: { type: String },
+    tasks: { type: [TaskSchema] },
+  },
+  {
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updateAt',
+    },
+  }
+);
+
+export const AssignedTaskModel = model<AssignedTaskDocument>(
+  'AssignedTask',
+  AssignedTaskSchema
+);

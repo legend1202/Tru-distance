@@ -20,7 +20,6 @@ import { ITask } from 'src/types/wbs';
 
 import UserListView from '../../user-list-view';
 import TaskAssignListView from '../../task-assign-list';
-
 // ----------------------------------------------------------------------
 
 export default function TaskAssignView() {
@@ -31,6 +30,12 @@ export default function TaskAssignView() {
   const { wbsList } = useGetWBSLists();
 
   const [tasks, setTasks] = useState<ITask[]>([]);
+
+  const [selectedUserId, setSelectedUserId] = useState<string>('');
+
+  const [wbsId, setWbsId] = useState<string>('');
+
+  const [childKey, setChildKey] = useState(0);
 
   const WbsSchema = Yup.object().shape({
     wbsId: Yup.string().required('Wbs is required'),
@@ -56,8 +61,23 @@ export default function TaskAssignView() {
     if (wbsList.length > 0) {
       setTasks(wbsList[0].tasks);
       setValue('wbsId', wbsList[0].id);
+      setWbsId(wbsList[0].id);
     }
   }, [wbsList, setValue]);
+
+  useEffect(() => {
+    if (users) {
+      setSelectedUserId(users[0].id);
+    }
+  }, [users]);
+
+  useEffect(() => {
+    setChildKey((prevKey) => prevKey + 1); // Update key to force re-render
+  }, [selectedUserId, wbsId]);
+
+  const handleSelectedUserId = (userId: string) => {
+    setSelectedUserId(userId);
+  };
 
   return (
     <Container
@@ -98,8 +118,18 @@ export default function TaskAssignView() {
         }
       />
       <Stack component={Card} direction="row" justifyContent="space-between">
-        <UserListView users={users} />
-        <TaskAssignListView tasks={tasks} />
+        <UserListView
+          users={users}
+          selectedUserId={selectedUserId}
+          handleSelectedUserId={handleSelectedUserId}
+        />
+
+        <TaskAssignListView
+          key={childKey}
+          data={tasks}
+          wbsId={wbsId}
+          selectedUserId={selectedUserId}
+        />
       </Stack>
     </Container>
   );
