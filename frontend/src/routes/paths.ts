@@ -5,7 +5,7 @@ const ROOTS = {
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
   TEMP: '/temp',
-
+  EVALUATION:'/evaluation',
   ADMIN: '/admin',
   BOEMNG: '/boe_mng',
   APPROVALWORKFLOW: '/approve',
@@ -31,6 +31,9 @@ export const paths = {
     overview: `${ROOTS.DASHBOARD}/overview`,
     status_summary: `${ROOTS.DASHBOARD}/status_summary`,
     eval_progress: `${ROOTS.DASHBOARD}/eval_progress`,
+  },
+  evalation:{
+    scope: `${ROOTS.EVALUATION}/scope`
   },
   boe_mng: {
     root: ROOTS.BOEMNG,

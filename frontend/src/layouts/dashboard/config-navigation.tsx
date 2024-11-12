@@ -115,8 +115,8 @@ export function useNavData() {
         items: [
           {
             title: t('Scope Evaluation'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
+            path: paths.evalation.scope,
+            icon: ICONS.external,
             roles: ['Tech'],
           },
           {

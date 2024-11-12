@@ -13,14 +13,14 @@ import { paths } from '../paths';
 // OVERVIEW
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
-const SummaryPage = lazy(() => import('src/pages/dashboard/summary'));
-const EvalProgressPage = lazy(() => import('src/pages/dashboard/eval-progress'));
+const EvaluationScope = lazy(() => import('src/pages/evaluation/scope'));
+
 
 // ----------------------------------------------------------------------
 
-export const dashboardRoutes = [
+export const evaluationRoutes = [
   {
-    path: 'dashboard',
+    path: 'evaluation',
     element: (
       <AuthGuard>
         <DashboardLayout>
@@ -32,8 +32,7 @@ export const dashboardRoutes = [
     ),
     children: [
       { element: <IndexPage />, index: true },
-      { path: paths.dashboard.status_summary, element: <SummaryPage /> },
-      { path: paths.dashboard.eval_progress, element: <EvalProgressPage /> },
+      { path: paths.evalation.scope, element: <EvaluationScope /> },
     ],
   },
 ];

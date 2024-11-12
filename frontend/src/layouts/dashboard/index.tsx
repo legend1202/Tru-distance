@@ -50,10 +50,8 @@ export default function DashboardLayout({ children }: Props) {
   if (isHorizontal) {
     return (
       <>
-        <Header onOpenNav={nav.onTrue} />
-
+        <Header onOpenNav={nav.onFalse} />
         {!isClient && lgUp ? renderHorizontal : renderNavVertical}
-
         <Main>{children}</Main>
       </>
     );
@@ -81,13 +79,13 @@ export default function DashboardLayout({ children }: Props) {
 
   return (
     <>
-      <Header onOpenNav={nav.onTrue} />
+      <Header onOpenNav={nav.onFalse} />
 
       <Box
         sx={{
           minHeight: 1,
-          display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          display: 'flex',
+          flexDirection: { xs: 'column', lg: 'row' },
         }}
       >
         {!isClient && renderNavVertical}

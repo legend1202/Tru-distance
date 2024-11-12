@@ -11,6 +11,8 @@ import { alpha, styled } from '@mui/material/styles';
 import { StepIconProps } from '@mui/material/StepIcon';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
+import { bgGradient } from 'src/theme/css';
+
 import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
@@ -82,10 +84,79 @@ function QontoStepIcon(props: StepIconProps) {
   );
 }
 
+const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 22,
+  },
+  [`&.${stepConnectorClasses.active}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      ...bgGradient({
+        startColor: theme.palette.error.light,
+        endColor: theme.palette.error.main,
+      }),
+    },
+  },
+  [`&.${stepConnectorClasses.completed}`]: {
+    [`& .${stepConnectorClasses.line}`]: {
+      ...bgGradient({
+        startColor: theme.palette.error.light,
+        endColor: theme.palette.error.main,
+      }),
+    },
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    height: 3,
+    border: 0,
+    borderRadius: 1,
+    backgroundColor: theme.palette.divider,
+  },
+}));
 
+const ColorlibStepIconRoot = styled('div')<{
+  ownerState: { completed?: boolean; active?: boolean };
+}>(({ theme, ownerState }) => ({
+  zIndex: 1,
+  width: 50,
+  height: 50,
+  display: 'flex',
+  borderRadius: '50%',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.text.disabled,
+  backgroundColor:
+    theme.palette.mode === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
+  ...(ownerState.active && {
+    boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
+    color: theme.palette.common.white,
+    ...bgGradient({
+      startColor: theme.palette.error.light,
+      endColor: theme.palette.error.main,
+    }),
+  }),
+  ...(ownerState.completed && {
+    color: theme.palette.common.white,
+    ...bgGradient({
+      startColor: theme.palette.error.light,
+      endColor: theme.palette.error.main,
+    }),
+  }),
+}));
 
+function ColorlibStepIcon(props: StepIconProps) {
+  const { active, completed, className, icon } = props;
 
+  const icons: { [index: string]: React.ReactElement } = {
+    1: <Iconify icon="eva:settings-2-outline" width={24} />,
+    2: <Iconify icon="eva:person-add-outline" width={24} />,
+    3: <Iconify icon="eva:monitor-outline" width={24} />,
+  };
 
+  return (
+    <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
+      {icons[String(icon)]}
+    </ColorlibStepIconRoot>
+  );
+}
 
 function getStepContent(step: number) {
   switch (step) {
@@ -125,7 +196,15 @@ export default function CustomizedSteppers() {
         ))}
       </Stepper>
 
-      
+      <Box sx={{ mb: 5 }} />
+
+      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+        {STEPS.map((label) => (
+          <Step key={label}>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
 
       {activeStep === STEPS.length ? (
         <>
