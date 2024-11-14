@@ -31,6 +31,7 @@ import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
 /* import LanguagePopover from '../common/language-popover'; */
 import NotificationsPopover from '../common/notifications-popover';
+import { fontSize } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -77,6 +78,7 @@ const CustomStepLabel = styled(StepLabel)(({ theme }) => ({
   [`&.${stepLabelClasses.root}`]: {
     [`& .${stepLabelClasses.alternativeLabel}`]: {
       marginTop: 0,
+      fontSize:12,
     },
   },
 }));
