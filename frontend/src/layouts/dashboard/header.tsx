@@ -29,9 +29,7 @@ import { NAV, HEADER } from '../config-layout';
 import SettingsButton from '../common/settings-button';
 import AccountPopover from '../common/account-popover';
 import ContactsPopover from '../common/contacts-popover';
-/* import LanguagePopover from '../common/language-popover'; */
 import NotificationsPopover from '../common/notifications-popover';
-import { fontSize } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -159,7 +157,7 @@ export default function Header({ onOpenNav }: Props) {
         <Stepper alternativeLabel activeStep={currentStep} connector={<QontoConnector />}>
           {STEPS.map((label, index) => (
               <Step key={label} onClick={() => setStep(index)}>
-                <CustomStepLabel StepIconComponent={QontoStepIcon}>{label}</CustomStepLabel>
+                <CustomStepLabel>{label}</CustomStepLabel>
               </Step>
           ))}
         </Stepper>
