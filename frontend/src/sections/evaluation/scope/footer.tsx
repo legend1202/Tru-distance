@@ -1,13 +1,13 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import Popover from '@mui/material/Popover';
+import { styled } from '@mui/material/styles';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
-import { styled } from '@mui/material/styles';
-
 import { useGlobalData } from 'src/context/global-data/use-global-data';
-import Popover from '@mui/material/Popover';
 
 const FooterContainer = styled('div')({
   height: '50px',

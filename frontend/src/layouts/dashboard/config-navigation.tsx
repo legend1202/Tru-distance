@@ -102,8 +102,8 @@ export function useNavData() {
             roles: ['ADMIN', 'Lead'],
           },
           {
-            title: t('Task Details'),
-            path: paths.boe_mng.task_details,
+            title: t('BOE Summary / GANNT'),
+            path: paths.boe_mng.boe_gantt,
             icon: ICONS.dashboard,
             roles: ['ADMIN', 'Lead'],
           },

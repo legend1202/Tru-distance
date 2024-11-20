@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, createContext, useMemo } from 'react';
+import React, { useMemo, useState, ReactNode, createContext } from 'react';
 
 export interface GlobalDataContextType {
   currentStep: number;

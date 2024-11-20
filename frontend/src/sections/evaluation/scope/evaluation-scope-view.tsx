@@ -1,10 +1,11 @@
 import { Container } from '@mui/system';
+import Button from '@mui/material/Button';
 import { Card, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 import SplitterLayout from 'src/components/splitter/splitter-layout';
+
 import Footer from './footer';
 
 const FirstButtonGroupContainer = styled('div')({
@@ -113,7 +114,7 @@ export default function EvaluationScopeView() {
       </Grid>
       <Footer />
 
-      <Footer></Footer>
+      <Footer />
     </Container>
   );
 }

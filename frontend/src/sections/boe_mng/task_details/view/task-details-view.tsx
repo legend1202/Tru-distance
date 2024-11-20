@@ -4,22 +4,52 @@ import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Container from '@mui/material/Container';
-import { Card, Stack, Button, MenuItem, Typography } from '@mui/material';
-
-import { paths } from 'src/routes/paths';
+import { Card, Stack, Button } from '@mui/material';
 
 import { useGetWBSLists } from 'src/api/wbs';
 
-import { RHFSelect } from 'src/components/hook-form';
 import { useSettingsContext } from 'src/components/settings';
-import FormProvider from 'src/components/hook-form/form-provider';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { ITask } from 'src/types/wbs';
 
-import GanttWithCurrentTime from '../ganttChat';
+import NewGanttChart from '../ganttChat';
+import ProposalSummaryView from '../proposal_summary_view';
+import EvaluationSummaryView from '../evaluation_summary_view';
 
 // ----------------------------------------------------------------------
+
+const tasks = [
+  {
+    name: 'Task 1',
+    data: [
+      { month: 'Jan', value: 10, status: 'complete' },
+      { month: 'Feb', value: 20, status: 'in-progress' },
+    ],
+    subtasks: [
+      {
+        name: 'Subtask 1.1',
+        data: [
+          { month: 'Jan', value: 5, status: 'complete' },
+          { month: 'Mar', value: 15, status: 'in-progress' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Task 2',
+    data: [
+      { month: 'Mar', value: 40, status: 'complete' },
+      { month: 'Apr', value: 40, status: 'complete' },
+      { month: 'May', value: 40, status: 'complete' },
+      { month: 'Jun', value: 40, status: 'complete' },
+      { month: 'Aug', value: 40, status: 'in-progress' },
+
+      { month: 'Sep', value: 40, status: 'in-progress' },
+      { month: 'Oct', value: 40, status: 'in-progress' },
+      { month: 'Nov', value: 40, status: 'in-progress' },
+    ],
+  },
+];
 
 export default function TaskDetailsView() {
   const settings = useSettingsContext();
@@ -27,6 +57,12 @@ export default function TaskDetailsView() {
   const { wbsList } = useGetWBSLists();
 
   const [selectedTasks, setTasks] = useState<ITask[]>([]);
+
+  const [monthFlag, setMonthFlag] = useState<boolean>(true);
+
+  const handleCalendarChange = (value: boolean) => {
+    setMonthFlag(value);
+  };
 
   const WbsSchema = Yup.object().shape({
     wbsId: Yup.string().required('Wbs is required'),
@@ -57,7 +93,7 @@ export default function TaskDetailsView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <CustomBreadcrumbs
+      {/* <CustomBreadcrumbs
         heading="Task Details"
         links={[
           { name: 'BOE', href: paths.boe_mng.root },
@@ -86,7 +122,7 @@ export default function TaskDetailsView() {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      />
+      /> */}
 
       <Stack component={Card} direction="row">
         <Stack
@@ -96,299 +132,53 @@ export default function TaskDetailsView() {
             width: 320,
           }}
         >
-          <Card
-            sx={{
-              p: 3,
-            }}
-          >
-            <Typography align="center">Proposal Summary</Typography>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Hours: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Cost: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Material: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Travel : </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Typography
-              sx={{
-                mt: 3,
-              }}
-            >
-              Total Hours By CLIN:{' '}
-            </Typography>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-              }}
-            >
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 001: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-              </Card>
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 002: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-                  {' '}
-                  555
-                </Typography>
-              </Card>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-              }}
-            >
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 003: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-              </Card>
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 004: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-                  {' '}
-                  555
-                </Typography>
-              </Card>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-              }}
-            >
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 005: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-              </Card>
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 006: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-                  {' '}
-                  555
-                </Typography>
-              </Card>
-            </Card>
-          </Card>
+          <ProposalSummaryView />
 
-          <Card
-            sx={{
-              p: 3,
-            }}
-          >
-            <Typography align="center">Evaluation Summary</Typography>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Hours: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Cost: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Material: </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography>Total Travel : </Typography>
-              <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
-            </Card>
-            <Typography
-              sx={{
-                mt: 3,
-              }}
-            >
-              Total Hours By CLIN:{' '}
-            </Typography>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-              }}
-            >
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 001: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-              </Card>
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 002: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-                  {' '}
-                  555
-                </Typography>
-              </Card>
-            </Card>
-            <Card
-              sx={{
-                flexGrow: { md: 1 },
-                display: { md: 'flex' },
-                flexDirection: { md: 'row' },
-              }}
-            >
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 003: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-              </Card>
-              <Card
-                sx={{
-                  flexGrow: { md: 1 },
-                  display: { md: 'flex' },
-                  flexDirection: { md: 'row' },
-                }}
-              >
-                <Typography>CLIN 004: </Typography>
-                <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-                  {' '}
-                  555
-                </Typography>
-              </Card>
-            </Card>
-          </Card>
-
-          <Button color="success">Enter PIVOT Selections</Button>
+          <EvaluationSummaryView />
         </Stack>
         <Card
           sx={{
+            pt: 2,
+            pb: 3,
             flexGrow: { md: 1 },
             display: { md: 'flex' },
             flexDirection: { md: 'column' },
+            border: '1px solid #ccc',
           }}
         >
-          {selectedTasks && <GanttWithCurrentTime tasksDataT={selectedTasks} />}
           <Card
             sx={{
+              height: 1,
               flexGrow: { md: 1 },
               display: { md: 'flex' },
               flexDirection: { md: 'row' },
               justifyContent: 'space-around',
             }}
           >
-            <Button color="success">Roll-up by Fiscal Year</Button>
-            <Button color="success">Roll-up by Calendar Year</Button>
+            <NewGanttChart tasks={tasks} monthFlag={monthFlag} />
+          </Card>
+          <Card
+            sx={{
+              mt: 2,
+              height: '48px',
+              flexGrow: { md: 1 },
+              display: { md: 'flex' },
+              flexDirection: { md: 'row' },
+              justifyContent: 'space-around',
+            }}
+          >
+            <Button
+              sx={{ py: 1, px: 2, color: 'white', backgroundColor: 'CornflowerBlue' }}
+              onClick={() => handleCalendarChange(false)}
+            >
+              Roll-up by Fiscal Year
+            </Button>
+            <Button
+              sx={{ py: 1, px: 2, color: 'white', backgroundColor: 'CornflowerBlue' }}
+              onClick={() => handleCalendarChange(true)}
+            >
+              Roll-up by Calendar Year
+            </Button>
           </Card>
         </Card>
       </Stack>

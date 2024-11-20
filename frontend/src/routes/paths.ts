@@ -5,7 +5,7 @@ const ROOTS = {
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
   TEMP: '/temp',
-  EVALUATION:'/evaluation',
+  EVALUATION: '/evaluation',
   ADMIN: '/admin',
   BOEMNG: '/boe_mng',
   APPROVALWORKFLOW: '/approve',
@@ -32,14 +32,15 @@ export const paths = {
     status_summary: `${ROOTS.DASHBOARD}/status_summary`,
     eval_progress: `${ROOTS.DASHBOARD}/eval_progress`,
   },
-  evalation:{
-    scope: `${ROOTS.EVALUATION}/scope`
+  evalation: {
+    scope: `${ROOTS.EVALUATION}/scope`,
   },
   boe_mng: {
     root: ROOTS.BOEMNG,
     data_import: `${ROOTS.BOEMNG}/data_import`,
     wbs_summary: `${ROOTS.BOEMNG}/wbs_summary`,
-    task_details: `${ROOTS.BOEMNG}/task_details`,
+    boe_gantt: `${ROOTS.BOEMNG}/boe_gantt`,
+    boe_pivot: `${ROOTS.BOEMNG}/boe_pivot`,
   },
   approval_workflow: {
     task_assign: `${ROOTS.APPROVALWORKFLOW}/task_assign`,
