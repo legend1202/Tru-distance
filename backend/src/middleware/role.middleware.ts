@@ -24,7 +24,6 @@ export const verifyAdmin = async (
     const decoded = jwt.verify(token, secretKey) as DecodedToken;
     req.userId = decoded.userId;
     const existingUser = await findOneUser({ id: decoded.userId });
-
     if (
       existingUser?.role &&
       haveCommonItem(existingUser?.role, ['ADMIN', 'Lead'])

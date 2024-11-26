@@ -8,18 +8,22 @@ import { Card, Stack, MenuItem } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
+import { haveCommonItem } from 'src/utils/role-check';
+
 import { useGetWBSLists } from 'src/api/wbs';
 import { useGetUserLists } from 'src/api/admin';
+import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 
 import { RHFSelect } from 'src/components/hook-form';
 import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { ITask } from 'src/types/wbs';
+import { IUserItem } from 'src/types/user';
+import { IEvaluationData } from 'src/types/gantt';
 
-import UserListView from '../../user-list-view';
-import TaskAssignListView from '../../task-assign-list';
+import UserListView from '../user-list-view';
+import TaskAssignListView from '../task-assign-list';
 // ----------------------------------------------------------------------
 
 export default function TaskAssignView() {
@@ -29,13 +33,17 @@ export default function TaskAssignView() {
 
   const { wbsList } = useGetWBSLists();
 
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<IEvaluationData[]>([]);
 
   const [selectedUserId, setSelectedUserId] = useState<string>('');
 
   const [wbsId, setWbsId] = useState<string>('');
 
+  const [evaluators, setEvaluators] = useState<IUserItem[]>([]);
+
   const [childKey, setChildKey] = useState(0);
+
+  const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
   const WbsSchema = Yup.object().shape({
     wbsId: Yup.string().required('Wbs is required'),
@@ -59,15 +67,21 @@ export default function TaskAssignView() {
 
   useEffect(() => {
     if (wbsList.length > 0) {
-      setTasks(wbsList[0].tasks);
       setValue('wbsId', wbsList[0].id);
       setWbsId(wbsList[0].id);
     }
   }, [wbsList, setValue]);
 
   useEffect(() => {
-    if (users) {
-      setSelectedUserId(users[0].id);
+    if (users.length > 0) {
+      const filteredUsers = users.filter((user) =>
+        haveCommonItem(['Tech', 'Material', 'Travel', 'Cost'], user.role)
+      );
+      setEvaluators(filteredUsers);
+      setSelectedUserId(filteredUsers[0].id);
+    } else {
+      setEvaluators([]);
+      setSelectedUserId('');
     }
   }, [users]);
 
@@ -78,6 +92,12 @@ export default function TaskAssignView() {
   const handleSelectedUserId = (userId: string) => {
     setSelectedUserId(userId);
   };
+
+  useEffect(() => {
+    if (approvedData) {
+      setTasks(approvedData);
+    }
+  }, [approvedData]);
 
   return (
     <Container
@@ -110,7 +130,7 @@ export default function TaskAssignView() {
               {wbsList &&
                 wbsList.map((wbs) => (
                   <MenuItem key={wbs.id} value={wbs.id}>
-                    {wbs.title}
+                    {wbs.wbsTitle}
                   </MenuItem>
                 ))}
             </RHFSelect>
@@ -119,7 +139,7 @@ export default function TaskAssignView() {
       />
       <Stack component={Card} direction="row" justifyContent="space-between">
         <UserListView
-          users={users}
+          users={evaluators}
           selectedUserId={selectedUserId}
           handleSelectedUserId={handleSelectedUserId}
         />

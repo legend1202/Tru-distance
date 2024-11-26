@@ -13,6 +13,7 @@ import { paths } from '../paths';
 // OVERVIEW
 
 const TaskAssignPage = lazy(() => import('src/pages/approval_workflow/task_assign'));
+const TeamLeadAssignPage = lazy(() => import('src/pages/approval_workflow/team_lead_assign'));
 // ----------------------------------------------------------------------
 
 export const approve_workflow_Routes = [
@@ -30,6 +31,7 @@ export const approve_workflow_Routes = [
     children: [
       { element: <TaskAssignPage />, index: true },
       { path: paths.approval_workflow.task_assign, element: <TaskAssignPage /> },
+      { path: paths.approval_workflow.teamLead_assign, element: <TeamLeadAssignPage /> },
     ],
   },
 ];

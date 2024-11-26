@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { PeriodOfPerformanceDocument, PeriodOfPerformanceSchema } from './boe.model';
+import { PeriodOfPerformanceDocument,  PeriodOfPerformanceSchema} from './origin.task.model';
 
 export interface Subtask {
   subtaskCode: string;

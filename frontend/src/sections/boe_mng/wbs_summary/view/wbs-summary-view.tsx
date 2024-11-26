@@ -10,7 +10,6 @@ import {
   DataGrid,
   GridColDef,
   GridToolbarContainer,
-  GridToolbarQuickFilter,
   GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
@@ -26,7 +25,8 @@ import FormProvider from 'src/components/hook-form/form-provider';
 import EmptyContent from 'src/components/empty-content/empty-content';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IWbs, ITask } from 'src/types/wbs';
+import { IWbs } from 'src/types/wbs';
+import { IOriginData } from 'src/types/gantt';
 
 import { RenderCellName, RenderCellHours, RenderCellCosts } from '../wbs-summary-table-row';
 
@@ -43,7 +43,7 @@ export default function WbsSummaryView() {
 
   const { wbsList, wbsLoading } = useGetWBSLists();
 
-  const [tableData, setTableData] = useState<ITask[]>([]);
+  const [tableData, setTableData] = useState<IOriginData[]>([]);
 
   const [selectedWbsData, setWbsData] = useState<IWbs>();
 
@@ -143,7 +143,7 @@ export default function WbsSummaryView() {
               {wbsList &&
                 wbsList.map((wbs) => (
                   <MenuItem key={wbs.id} value={wbs.id}>
-                    {wbs.title}
+                    {wbs.wbsTitle}
                   </MenuItem>
                 ))}
             </RHFSelect>
@@ -172,7 +172,7 @@ export default function WbsSummaryView() {
             pageSizeOptions={[5, 10, 25]}
             initialState={{
               pagination: {
-                paginationModel: { pageSize: 5 },
+                paginationModel: { pageSize: 25 },
               },
             }}
             columnVisibilityModel={columnVisibilityModel}
@@ -180,7 +180,7 @@ export default function WbsSummaryView() {
             slots={{
               toolbar: () => (
                 <GridToolbarContainer>
-                  <GridToolbarQuickFilter />
+                  {/* <GridToolbarQuickFilter /> */}
                   <Stack spacing={0.5}>
                     <Card
                       sx={{

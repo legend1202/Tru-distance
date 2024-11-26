@@ -1,14 +1,43 @@
-import { Card, Button, Typography } from '@mui/material';
-import { path } from 'd3';
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
+import { useState, useEffect } from 'react';
 
-const EvaluationSummaryView = () => {
+import { Card, Button, Typography } from '@mui/material';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import { calculateTotals } from 'src/utils/wbs-total';
+
+import { IClin } from 'src/types/clin';
+import { IEvaluationData } from 'src/types/gantt';
+
+import ClinTotalItem from './clin-total-item';
+
+type Props = {
+  evaluationData: IEvaluationData[];
+  clins: IClin[];
+};
+
+const EvaluationSummaryView = ({ evaluationData, clins }: Props) => {
+  const [totalHours, setTotalHours] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [totalTravel, setTotalTravel] = useState(0);
+  const [totalMaterial, setTotalMaterial] = useState(0);
+
   const router = useRouter();
 
   const handleMoveToPivot = () => {
     router.push(paths.boe_mng.boe_pivot);
   };
+
+  useEffect(() => {
+    if (evaluationData.length > 0) {
+      const totals = calculateTotals(evaluationData);
+      setTotalHours(totals.totalHours);
+      setTotalCost(totals.totalCost);
+      setTotalTravel(totals.totalTravel);
+      setTotalMaterial(totals.totalMaterial);
+    }
+  }, [evaluationData]);
 
   return (
     <Card
@@ -27,7 +56,7 @@ const EvaluationSummaryView = () => {
         }}
       >
         <Typography>Total Hours: </Typography>
-        <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+        <Typography sx={{ textDecoration: 'underline' }}> {totalHours}</Typography>
       </Card>
       <Card
         sx={{
@@ -38,7 +67,7 @@ const EvaluationSummaryView = () => {
         }}
       >
         <Typography>Total Cost: </Typography>
-        <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+        <Typography sx={{ textDecoration: 'underline' }}> {totalCost}</Typography>
       </Card>
       <Card
         sx={{
@@ -49,7 +78,7 @@ const EvaluationSummaryView = () => {
         }}
       >
         <Typography>Total Material: </Typography>
-        <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+        <Typography sx={{ textDecoration: 'underline' }}> {totalMaterial}</Typography>
       </Card>
       <Card
         sx={{
@@ -60,7 +89,7 @@ const EvaluationSummaryView = () => {
         }}
       >
         <Typography>Total Travel : </Typography>
-        <Typography sx={{ textDecoration: 'underline' }}> 555</Typography>
+        <Typography sx={{ textDecoration: 'underline' }}> {totalTravel}</Typography>
       </Card>
       <Typography
         sx={{
@@ -69,68 +98,17 @@ const EvaluationSummaryView = () => {
       >
         Total Hours By CLIN:{' '}
       </Typography>
-      <Card
-        sx={{
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'row' },
-        }}
-      >
-        <Card
-          sx={{
-            flexGrow: { md: 1 },
-            display: { md: 'flex' },
-            flexDirection: { md: 'row' },
-          }}
-        >
-          <Typography>CLIN 001: </Typography>
-          <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-        </Card>
-        <Card
-          sx={{
-            flexGrow: { md: 1 },
-            display: { md: 'flex' },
-            flexDirection: { md: 'row' },
-          }}
-        >
-          <Typography>CLIN 002: </Typography>
-          <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-            {' '}
-            555
-          </Typography>
-        </Card>
-      </Card>
-      <Card
-        sx={{
-          flexGrow: { md: 1 },
-          display: { md: 'flex' },
-          flexDirection: { md: 'row' },
-        }}
-      >
-        <Card
-          sx={{
-            flexGrow: { md: 1 },
-            display: { md: 'flex' },
-            flexDirection: { md: 'row' },
-          }}
-        >
-          <Typography>CLIN 003: </Typography>
-          <Typography sx={{ textDecoration: 'underline', ml: 1 }}> 555</Typography>
-        </Card>
-        <Card
-          sx={{
-            flexGrow: { md: 1 },
-            display: { md: 'flex' },
-            flexDirection: { md: 'row' },
-          }}
-        >
-          <Typography>CLIN 004: </Typography>
-          <Typography sx={{ textDecoration: 'underline', ml: 1 }} align="center">
-            {' '}
-            555
-          </Typography>
-        </Card>
-      </Card>
+
+      {clins &&
+        clins.map((clin) => (
+          <ClinTotalItem
+            key={clin.id}
+            clinId={clin.id}
+            clinNumber={clin.clinNumber}
+            clinData={evaluationData}
+          />
+        ))}
+
       <Card
         sx={{
           height: '48px',

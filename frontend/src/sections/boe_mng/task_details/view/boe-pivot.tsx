@@ -1,82 +1,38 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { useMemo, useState, useEffect } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
-import { Card, Stack, Button, MenuItem } from '@mui/material';
+import { Card, Stack, Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
-import { useGetWBSLists } from 'src/api/wbs';
+import { useGetGanttData } from 'src/api/ganttData';
 
-import { RHFSelect } from 'src/components/hook-form';
 import { useSettingsContext } from 'src/components/settings';
-import FormProvider from 'src/components/hook-form/form-provider';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { ITask } from 'src/types/wbs';
+import { IOriginData, IEvaluationData } from 'src/types/gantt';
 
-import NewGanttChart from '../ganttChat';
-import ProposalSummaryView from '../proposal_summary_view';
-import EvaluationSummaryView from '../evaluation_summary_view';
+import WbsPivotTable from '../wbs_pivot_table';
 import ProposalPivotSelection from '../proposal_pivot-selection';
 import EvaluationPivotSelection from '../evaluation_pivot_selection';
-import { useRouter } from 'src/routes/hooks';
-import WbsPivotTable from '../wbs_pivot_table';
 
 // ----------------------------------------------------------------------
-
-const tasks = [
-  {
-    name: 'Task 1',
-    data: { Evaluator: 'Jan', TBD: '10', status: 'complete' },
-    subtasks: [
-      {
-        name: 'Subtask 1.1',
-        data: { Evaluator: 'Jan', TBD: '10', status: 'in-progress' },
-      },
-    ],
-  },
-  {
-    name: 'Task 2',
-    data: { Evaluator: 'Jan', TBD: '10', status: 'complete' },
-  },
-];
 
 export default function BoePivotView() {
   const settings = useSettingsContext();
 
-  const { wbsList } = useGetWBSLists();
+  const { ganttData } = useGetGanttData();
 
-  const [selectedTasks, setTasks] = useState<ITask[]>([]);
-
-  const WbsSchema = Yup.object().shape({
-    wbsId: Yup.string().required('Wbs is required'),
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      wbsId: '',
-    }),
-    []
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(WbsSchema),
-    defaultValues,
-  });
-
-  const { setValue } = methods;
-
-  /* const values = watch();  */
+  const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
+  const [evaluationData, setEvaluationData] = useState<IEvaluationData[]>([]);
 
   useEffect(() => {
-    if (wbsList.length > 0) {
-      setTasks(wbsList[0].tasks);
-      setValue('wbsId', wbsList[0].id);
+    if (ganttData?.originData && ganttData?.evaluationData) {
+      setProposedData(ganttData.originData);
+      setEvaluationData(ganttData.evaluationData);
     }
-  }, [wbsList, setValue]);
+  }, [ganttData]);
 
   const router = useRouter();
 
@@ -86,6 +42,37 @@ export default function BoePivotView() {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+      <CustomBreadcrumbs
+        heading="Pivot"
+        links={[
+          { name: 'BOE', href: paths.boe_mng.root },
+          { name: 'Tasks', href: paths.boe_mng.wbs_summary },
+          { name: 'Details' },
+        ]}
+        // action={
+        //   <FormProvider methods={methods}>
+        //     <RHFSelect
+        //       name="wbsId"
+        //       label="WBS Code"
+        //       fullWidth
+        //       InputLabelProps={{ shrink: true }}
+        //       PaperPropsSx={{ textTransform: 'capitalize' }}
+        //       sx={{ minWidth: 140 }}
+        //     >
+        //       {wbsList &&
+        //         wbsList.map((wbs) => (
+        //           <MenuItem key={wbs.id} value={wbs.id}>
+        //             {wbs.title}
+        //           </MenuItem>
+        //         ))}
+        //     </RHFSelect>
+        //   </FormProvider>
+        // }
+        sx={{
+          mb: { xs: 3, md: 5 },
+        }}
+      />
+
       <Stack component={Card} direction="row">
         <Card
           sx={{
@@ -103,9 +90,9 @@ export default function BoePivotView() {
               flexDirection: { md: 'row' },
             }}
           >
-            <ProposalPivotSelection />
+            <ProposalPivotSelection data={proposaedData} />
 
-            <EvaluationPivotSelection />
+            <EvaluationPivotSelection data={evaluationData} />
           </Stack>
 
           <Card
@@ -146,7 +133,7 @@ export default function BoePivotView() {
               justifyContent: 'space-around',
             }}
           >
-            <WbsPivotTable tasks={tasks} />
+            <WbsPivotTable tasks={evaluationData} />
           </Card>
         </Card>
       </Stack>

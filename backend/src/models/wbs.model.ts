@@ -1,14 +1,17 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface WBSDocument extends Document {
+export interface WbsDocument extends Document {
   id: string;
-  boeId: string;
-  title: string;
-  wbsCode: string;
+  proposalId: string;
+  wbsNumber: string;
+  wbsTitle: string;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const WbsSchema = new Schema<WBSDocument>(
+const WbsSchema = new Schema<WbsDocument>(
   {
     id: {
       type: String,
@@ -16,15 +19,9 @@ const WbsSchema = new Schema<WBSDocument>(
       required: true,
       unique: true,
     },
-    boeId: {
-      type: String,
-    },
-    title: {
-      type: String,
-    },
-    wbsCode: {
-      type: String,
-    },
+    proposalId: { type: String },
+    wbsNumber: { type: String },
+    wbsTitle: { type: String },
   },
   {
     timestamps: {
@@ -34,4 +31,4 @@ const WbsSchema = new Schema<WBSDocument>(
   }
 );
 
-export const WbsModel = model<WBSDocument>('Wbs', WbsSchema);
+export const WbsModel = model<WbsDocument>('Wbs', WbsSchema);

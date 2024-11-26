@@ -1,4 +1,4 @@
-import { ITask } from './wbs';
+import { IProposal } from './proposal';
 
 export type ITempTask = {
   id: string;
@@ -42,5 +42,5 @@ export type IApproveTask = {
   id?: string;
   wbsId: string;
   userId: string;
-  tasks: ITask[];
+  tasks: IProposal[];
 };

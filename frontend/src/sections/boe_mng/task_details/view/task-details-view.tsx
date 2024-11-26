@@ -1,16 +1,18 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { useMemo, useState, useEffect } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useState, useEffect } from 'react';
 
 import Container from '@mui/material/Container';
 import { Card, Stack, Button } from '@mui/material';
 
-import { useGetWBSLists } from 'src/api/wbs';
+import { paths } from 'src/routes/paths';
+
+import { useGetClinLists } from 'src/api/cline';
+import { useGetGanttData } from 'src/api/ganttData';
 
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { ITask } from 'src/types/wbs';
+import { IClin } from 'src/types/clin';
+import { IOriginData, IEvaluationData } from 'src/types/gantt';
 
 import NewGanttChart from '../ganttChat';
 import ProposalSummaryView from '../proposal_summary_view';
@@ -18,123 +20,79 @@ import EvaluationSummaryView from '../evaluation_summary_view';
 
 // ----------------------------------------------------------------------
 
-const tasks = [
-  {
-    name: 'Task 1',
-    data: [
-      { month: 'Jan', value: 10, status: 'complete' },
-      { month: 'Feb', value: 20, status: 'in-progress' },
-    ],
-    subtasks: [
-      {
-        name: 'Subtask 1.1',
-        data: [
-          { month: 'Jan', value: 5, status: 'complete' },
-          { month: 'Mar', value: 15, status: 'in-progress' },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Task 2',
-    data: [
-      { month: 'Mar', value: 40, status: 'complete' },
-      { month: 'Apr', value: 40, status: 'complete' },
-      { month: 'May', value: 40, status: 'complete' },
-      { month: 'Jun', value: 40, status: 'complete' },
-      { month: 'Aug', value: 40, status: 'in-progress' },
-
-      { month: 'Sep', value: 40, status: 'in-progress' },
-      { month: 'Oct', value: 40, status: 'in-progress' },
-      { month: 'Nov', value: 40, status: 'in-progress' },
-    ],
-  },
-];
-
 export default function TaskDetailsView() {
   const settings = useSettingsContext();
 
-  const { wbsList } = useGetWBSLists();
-
-  const [selectedTasks, setTasks] = useState<ITask[]>([]);
-
   const [monthFlag, setMonthFlag] = useState<boolean>(true);
+
+  const { ganttData } = useGetGanttData();
+  const { clinList } = useGetClinLists();
+
+  const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
+  const [evaluationData, setEvaluationData] = useState<IEvaluationData[]>([]);
+  const [clins, setClins] = useState<IClin[]>([]);
 
   const handleCalendarChange = (value: boolean) => {
     setMonthFlag(value);
   };
 
-  const WbsSchema = Yup.object().shape({
-    wbsId: Yup.string().required('Wbs is required'),
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      wbsId: '',
-    }),
-    []
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(WbsSchema),
-    defaultValues,
-  });
-
-  const { setValue } = methods;
-
-  /* const values = watch();  */
+  useEffect(() => {
+    if (ganttData?.originData && ganttData?.evaluationData) {
+      setProposedData(ganttData.originData);
+      setEvaluationData(ganttData.evaluationData);
+    }
+  }, [ganttData]);
 
   useEffect(() => {
-    if (wbsList.length > 0) {
-      setTasks(wbsList[0].tasks);
-      setValue('wbsId', wbsList[0].id);
+    if (clinList.length > 0) {
+      setClins(clinList);
     }
-  }, [wbsList, setValue]);
+  }, [clinList]);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      {/* <CustomBreadcrumbs
+      <CustomBreadcrumbs
         heading="Task Details"
         links={[
           { name: 'BOE', href: paths.boe_mng.root },
           { name: 'Tasks', href: paths.boe_mng.wbs_summary },
           { name: 'Details' },
         ]}
-        action={
-          <FormProvider methods={methods}>
-            <RHFSelect
-              name="wbsId"
-              label="WBS Code"
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-              PaperPropsSx={{ textTransform: 'capitalize' }}
-              sx={{ minWidth: 140 }}
-            >
-              {wbsList &&
-                wbsList.map((wbs) => (
-                  <MenuItem key={wbs.id} value={wbs.id}>
-                    {wbs.title}
-                  </MenuItem>
-                ))}
-            </RHFSelect>
-          </FormProvider>
-        }
+        // action={
+        //   <FormProvider methods={methods}>
+        //     <RHFSelect
+        //       name="wbsId"
+        //       label="WBS Code"
+        //       fullWidth
+        //       InputLabelProps={{ shrink: true }}
+        //       PaperPropsSx={{ textTransform: 'capitalize' }}
+        //       sx={{ minWidth: 140 }}
+        //     >
+        //       {wbsList &&
+        //         wbsList.map((wbs) => (
+        //           <MenuItem key={wbs.id} value={wbs.id}>
+        //             {wbs.title}
+        //           </MenuItem>
+        //         ))}
+        //     </RHFSelect>
+        //   </FormProvider>
+        // }
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-      /> */}
+      />
 
       <Stack component={Card} direction="row">
         <Stack
           sx={{
             height: 1,
             flexShrink: 0,
-            width: 320,
+            width: 240,
           }}
         >
-          <ProposalSummaryView />
+          <ProposalSummaryView proposaedData={proposaedData} clins={clins} />
 
-          <EvaluationSummaryView />
+          <EvaluationSummaryView evaluationData={evaluationData} clins={clins} />
         </Stack>
         <Card
           sx={{
@@ -155,7 +113,7 @@ export default function TaskDetailsView() {
               justifyContent: 'space-around',
             }}
           >
-            <NewGanttChart tasks={tasks} monthFlag={monthFlag} />
+            <NewGanttChart tasks={evaluationData} monthFlag={monthFlag} />
           </Card>
           <Card
             sx={{

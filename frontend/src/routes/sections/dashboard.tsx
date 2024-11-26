@@ -16,6 +16,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 const SummaryPage = lazy(() => import('src/pages/dashboard/summary'));
 const EvalProgressPage = lazy(() => import('src/pages/dashboard/eval-progress'));
 
+const ScrollPDF = lazy(() => import('src/pages/dashboard/scrollPDF'));
 // ----------------------------------------------------------------------
 
 export const dashboardRoutes = [
@@ -34,6 +35,7 @@ export const dashboardRoutes = [
       { element: <IndexPage />, index: true },
       { path: paths.dashboard.status_summary, element: <SummaryPage /> },
       { path: paths.dashboard.eval_progress, element: <EvalProgressPage /> },
+      { path: paths.scroll.root, element: <ScrollPDF /> },
     ],
   },
 ];

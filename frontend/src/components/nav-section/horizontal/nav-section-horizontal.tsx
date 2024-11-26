@@ -8,6 +8,7 @@ import { NavProps, NavGroupProps } from '../types';
 // ----------------------------------------------------------------------
 
 function NavSectionHorizontal({ data, slotProps, sx, ...other }: NavProps) {
+
   return (
     <Stack
       component="nav"

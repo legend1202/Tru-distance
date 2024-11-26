@@ -12,7 +12,7 @@ export function useGetUserLists() {
 
   const memoizedValue = useMemo(
     () => ({
-      users: data?.result.users as IUserItem[],
+      users: (data?.result.users as IUserItem[]) || [],
       usersLoading: isLoading,
       usersError: error,
       usersValidating: isValidating,

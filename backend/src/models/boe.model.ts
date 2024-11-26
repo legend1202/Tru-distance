@@ -1,28 +1,22 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export interface PeriodOfPerformanceDocument {
-  start: Date;
-  end: Date;
-}
-
 export interface BoeDocument extends Document {
   id: string;
-  name: string;
-  title: string;
-  proposalName: string;
-  createdBy: string;
-  periodOfPerformance: PeriodOfPerformanceDocument;
-  description: string;
+  proposalId: string;
+  wbsId: string;
+  clinId: string;
+  boeStartDate: string;
+  boeEnddate: string;
+  boeTitle: string;
+  component: string;
+  boeAuthor: string;
+  sowReference: string[];
+  boeDescription: string;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-export const PeriodOfPerformanceSchema =
-  new Schema<PeriodOfPerformanceDocument>({
-    start: { type: Date },
-    end: { type: Date },
-  });
 
 const BoeSchema = new Schema<BoeDocument>(
   {
@@ -32,12 +26,16 @@ const BoeSchema = new Schema<BoeDocument>(
       required: true,
       unique: true,
     },
-    name: { type: String },
-    title: { type: String },
-    proposalName: { type: String },
-    createdBy: { type: String },
-    periodOfPerformance: { type: PeriodOfPerformanceSchema },
-    description: { type: String },
+    proposalId: { type: String },
+    wbsId: { type: String },
+    clinId: { type: String },
+    boeStartDate: { type: String },
+    boeEnddate: { type: String },
+    boeTitle: { type: String },
+    component: { type: String },
+    boeAuthor: { type: String },
+    sowReference: { type: [String] },
+    boeDescription: { type: String },
   },
   {
     timestamps: {

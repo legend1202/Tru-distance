@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import mongoose, { ClientSession } from 'mongoose';
 import { RequestError } from '../utils/globalErrorHandler';
 
-import { DecodedToken } from '../types/req.type';
 import {
   handleAssignedTaskCreation,
   handleGetAssignedTask,
@@ -22,12 +21,11 @@ export const assignedTaskcreate = async (req: Request, res: Response) => {
 };
 
 export const getAssignedTask = async (req: Request, res: Response) => {
-  const { wbsId, userId } = req.query;
+  const { wbsId } = req.query;
   const wbsIdString = typeof wbsId === 'string' ? wbsId : undefined;
-  const userIdString = typeof userId === 'string' ? userId : undefined;
   try {
-    if (wbsIdString && userIdString) {
-      const apprvedData = await handleGetAssignedTask(wbsIdString, userIdString);
+    if (wbsIdString) {
+      const apprvedData = await handleGetAssignedTask(wbsIdString);
       return sendResponse(res, 200, 'Get Assigned tasks', {
         apprvedData,
       });

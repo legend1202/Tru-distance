@@ -19,7 +19,6 @@ import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { AuthProvider } from 'src/auth/context/jwt';
-import { GlobalDataProvider } from './context/global-data/global-data-provider';
 
 // ----------------------------------------------------------------------
 
@@ -68,23 +67,21 @@ export default function App() {
             themeMode: 'dark', // 'light' | 'dark'
             themeDirection: 'ltr', //  'rtl' | 'ltr'
             themeContrast: 'default', // 'default' | 'bold'
-            themeLayout: 'horizontal', // 'vertical' | 'horizontal' | 'mini'
+            themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
             themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
             themeStretch: false,
           }}
         >
-          <GlobalDataProvider>
-            <ThemeProvider>
-              <MotionLazy>
-                <SnackbarProvider>
-                  <SettingsDrawer />
-                  <ProgressBar />
+          <ThemeProvider>
+            <MotionLazy>
+              <SnackbarProvider>
+                <SettingsDrawer />
+                <ProgressBar />
 
-                  <Router />
-                </SnackbarProvider>
-              </MotionLazy>
-            </ThemeProvider>
-          </GlobalDataProvider>
+                <Router />
+              </SnackbarProvider>
+            </MotionLazy>
+          </ThemeProvider>
         </SettingsProvider>
       </LocalizationProvider>
     </AuthProvider>

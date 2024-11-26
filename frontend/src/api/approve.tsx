@@ -3,14 +3,14 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { IApproveTask } from 'src/types/task';
+import { IEvaluationData } from 'src/types/gantt';
 
 const options = {
   revalidateOnFocus: true,
   revalidateOnMount: true,
 };
 
-export const TaskAssignApprove = async (query: IApproveTask) => {
+export const TaskAssignApprove = async (query: IEvaluationData[]) => {
   const res = await axiosInstance.post(endpoints.approve_workflow.task_assign, {
     approveData: query,
   });
@@ -22,19 +22,18 @@ export const TaskAssignApprove = async (query: IApproveTask) => {
   return memoizedValue;
 };
 
-export const GetApprovedTaskByuserId_WbsId = (wbsId: string, userId: string) => {
-  const URL = [endpoints.approve_workflow.get_assigned_tasks, { wbsId, userId }];
+export const useGetApprovedTaskByWbsId = (wbsId: string) => {
+  const URL = [endpoints.approve_workflow.get_assigned_tasks, { wbsId }];
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
 
-  const memoizedValue = useMemo(
+  return useMemo(
     () => ({
-      approvedData: data?.result?.apprvedData as IApproveTask,
+      approvedData: data?.result?.apprvedData as IEvaluationData[],
       approvedDataLoading: isLoading,
       approvedDataError: error,
       approvedDataValidating: isValidating,
     }),
     [data?.result, error, isLoading, isValidating]
   );
-  return memoizedValue;
 };

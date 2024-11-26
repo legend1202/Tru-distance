@@ -1,5 +1,3 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { Document } from 'mongoose';
 import {
   ClientSession,
@@ -8,76 +6,66 @@ import {
   QueryOptions,
   UpdateQuery,
 } from 'mongoose';
-import { RequestError, AuthenticationError } from '../utils/globalErrorHandler';
-import { User, UserModel } from '../models/user.model';
-import { Roles } from '../utils/constants';
-import { haveCommonItem } from '../utils/common';
+import { RequestError } from '../utils/globalErrorHandler';
+
 import {
-  AssignedTaskDocument,
-  AssignedTaskModel,
-} from '../models/assign.task.model';
+  ProcessingTaskDocument,
+  ProcessingTaskModel,
+} from '../models/process.task.model';
 
 export const handleAssignedTaskCreation = async (
-  approveData: Partial<AssignedTaskDocument> & Document,
+  approveData: Partial<ProcessingTaskDocument[]> & Document[],
   session?: ClientSession
-): Promise<AssignedTaskDocument> => {
+) => {
   const approvedTask = await approveTask(approveData, session);
 
   return approvedTask;
 };
 
 export const handleGetAssignedTask = async (
-  wbsId: string,
-  userId: string
-): Promise<AssignedTaskDocument | null> => {
-  const approvedData = await findOneAssignedTask({ wbsId, userId });
+  wbsId: string
+): Promise<ProcessingTaskDocument[]> => {
+  const approvedData = await ProcessingTaskModel.find({ wbsId });
+
   if (!approvedData) {
-    return null; // Return null instead of an empty object
+    throw new RequestError(`Task with ID does not exist.`, 404);
   }
   return approvedData;
 };
 
 export async function findOneAssignedTask(
-  filter?: FilterQuery<AssignedTaskDocument>,
-  projection?: ProjectionType<AssignedTaskDocument>,
-  options?: QueryOptions<AssignedTaskDocument>
-): Promise<AssignedTaskDocument | null> {
-  return await AssignedTaskModel.findOne(filter, projection, options);
+  filter?: FilterQuery<ProcessingTaskDocument>,
+  projection?: ProjectionType<ProcessingTaskDocument>,
+  options?: QueryOptions<ProcessingTaskDocument>
+): Promise<ProcessingTaskDocument | null> {
+  return await ProcessingTaskModel.findOne(filter, projection, options);
 }
 
 export const approveTask = async (
-  approveData: Partial<AssignedTaskDocument> & Document,
+  approveData: Partial<ProcessingTaskDocument[]>,
   session?: ClientSession
-): Promise<AssignedTaskDocument> => {
-  const { id, ...rest } = approveData;
-  if (id) {
-    const existingTask = await AssignedTaskModel.findOne({ id });
-    if (existingTask) {
-      const updateAssignedTask = await findByIdAndUpdateAssignTaskDocument(id, {
-        ...rest,
-      });
-      return (
-        updateAssignedTask ||
-        Promise.reject(new RequestError(`There is not ${id} user.`, 500))
-      );
-    } else {
-      throw new RequestError(`Task with ID ${id} does not exist.`, 404);
-    }
-  } else {
-    const newAssignedTask = new AssignedTaskModel({
-      ...rest,
+) => {
+  if (approveData.length > 0) {
+    approveData.forEach(async (task) => {
+      if (task?.id) {
+        await findByIdAndUpdateAssignTaskDocument(task.id, {
+          ...task,
+        });
+      } else {
+        throw new RequestError(`Task with ID ${task?.id} does not exist.`, 404);
+      }
     });
-    await newAssignedTask.save();
-    return newAssignedTask;
+  } else {
+    throw new RequestError(`Task with ID  does not exist.`, 404);
   }
 };
 
 export const findByIdAndUpdateAssignTaskDocument = async (
   id: string,
-  update: UpdateQuery<AssignedTaskDocument>,
-  options?: QueryOptions<AssignedTaskDocument>
+  update: UpdateQuery<ProcessingTaskDocument>,
+  options?: QueryOptions<ProcessingTaskDocument>
 ) => {
-  return await AssignedTaskModel.findOneAndUpdate({ id }, update, {
+  return await ProcessingTaskModel.findOneAndUpdate({ id }, update, {
     ...options,
     returnDocument: 'after',
   });

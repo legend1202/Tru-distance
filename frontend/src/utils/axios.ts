@@ -45,8 +45,16 @@ export const endpoints = {
   wbs_mng: {
     wbs_lists: '/api/wbs/wbslists',
   },
+  gantt: {
+    details: '/api/gantt/details',
+  },
+  clin: {
+    getData: '/api/clin/getClin',
+  },
   approve_workflow: {
     task_assign: '/api/approve/task_assign',
     get_assigned_tasks: '/api/approve/get_assigned_tasks',
+    get_proposal_list: '/api/proposal/getlist',
+    update_proposal_list: '/api/proposal/updatelist',
   },
 };

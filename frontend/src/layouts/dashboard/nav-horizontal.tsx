@@ -4,8 +4,9 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 
+import { useMockedUser } from 'src/hooks/use-mocked-user';
+
 import { bgBlur } from 'src/theme/css';
-import { useAuthContext } from 'src/auth/hooks';
 
 import Scrollbar from 'src/components/scrollbar';
 import { NavSectionHorizontal } from 'src/components/nav-section';
@@ -19,11 +20,9 @@ import HeaderShadow from '../common/header-shadow';
 function NavHorizontal() {
   const theme = useTheme();
 
-  const { user } = useAuthContext();
+  const { user } = useMockedUser();
 
   const navData = useNavData();
-
-  console.log(user)
 
   return (
     <AppBar

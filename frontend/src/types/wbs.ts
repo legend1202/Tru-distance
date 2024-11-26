@@ -1,34 +1,11 @@
-export type ISubtask = {
-  subtaskCode: string;
-  name: string;
-  description: string;
-  hours: number | 0;
-  cost: number | 0;
-  checked?: boolean | undefined;
-};
-
-export type ITask = {
-  checked?: boolean | undefined;
-  id: string;
-  wbsId: string;
-  name: string;
-  taskCode: string;
-  periodOfPerformance: {
-    start: Date;
-    end: Date;
-  };
-  description: string;
-  hours: number | 0;
-  cost: number | 0;
-  subtasks: ISubtask[];
-};
+import { IOriginData } from './gantt';
 
 export type IWbs = {
   id: string;
   boeId: string;
-  title: string;
+  wbsTitle: string;
   wbsCode: string;
-  tasks: ITask[]; // Add tasks array
+  tasks: IOriginData[];
   createdAt: Date;
   updateAt: Date;
 };

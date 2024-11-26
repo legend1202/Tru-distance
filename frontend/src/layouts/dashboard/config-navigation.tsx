@@ -55,36 +55,36 @@ export function useNavData() {
     () => [
       // Dashboard
       // ADMIN' | 'Lead' | 'Tech' | 'Material' | 'Travel' | 'Cost';
-      {
-        subheader: t('Dashbaord'),
-        roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
-        items: [
-          {
-            title: t('Overview'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead', 'Tech'],
-          },
-          {
-            title: t('Assigned Tasks'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['Tech', 'Material', 'Travel'],
-          },
-          {
-            title: t('Status Summary'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
-          },
-          {
-            title: t('Evaluation Progress'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
-          },
-        ],
-      },
+      // {
+      //   subheader: t('Dashbaord'),
+      //   roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
+      //   items: [
+      //     {
+      //       title: t('Overview'),
+      //       path: paths.dashboard.root,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead', 'Tech'],
+      //     },
+      //     {
+      //       title: t('Assigned Tasks'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Tech', 'Material', 'Travel'],
+      //     },
+      //     {
+      //       title: t('Status Summary'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
+      //     },
+      //     {
+      //       title: t('Evaluation Progress'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead'],
+      //     },
+      //   ],
+      // },
       {
         subheader: t('BOE Management'),
         roles: ['ADMIN', 'Lead'],
@@ -102,7 +102,7 @@ export function useNavData() {
             roles: ['ADMIN', 'Lead'],
           },
           {
-            title: t('BOE Summary / GANNT'),
+            title: t('Task Details'),
             path: paths.boe_mng.boe_gantt,
             icon: ICONS.dashboard,
             roles: ['ADMIN', 'Lead'],
@@ -115,8 +115,8 @@ export function useNavData() {
         items: [
           {
             title: t('Scope Evaluation'),
-            path: paths.evalation.scope,
-            icon: ICONS.external,
+            path: paths.dashboard.root,
+            icon: ICONS.dashboard,
             roles: ['Tech'],
           },
           {
@@ -144,10 +144,23 @@ export function useNavData() {
         roles: ['ADMIN', 'Lead'],
         items: [
           {
-            title: t('Evaluator Assignment Approval'),
+            title: t('User Management'),
+            path: paths.admin.userslist,
+            icon: ICONS.user,
+            roles: ['ADMIN'],
+          },
+          {
+            title: t('Team Lead Assignment'),
+            path: paths.approval_workflow.teamLead_assign,
+            icon: ICONS.dashboard,
+            roles: ['ADMIN'],
+          },
+
+          {
+            title: t('Evaluation Team Assignment'),
             path: paths.approval_workflow.task_assign,
             icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
+            roles: ['Lead'],
           },
           {
             title: t('Assessment Approval'),
@@ -247,30 +260,25 @@ export function useNavData() {
           },
         ],
       },
-      {
-        subheader: t('Admin Settings'),
-        roles: ['ADMIN'],
-        items: [
-          {
-            title: t('User Management'),
-            path: paths.admin.userslist,
-            icon: ICONS.user,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('Roles and Permissions'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('Settings and Configurations'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-        ],
-      },
+      // {
+      //   subheader: t('Admin Settings'),
+      //   roles: ['ADMIN'],
+      //   items: [
+
+      //     {
+      //       title: t('Roles and Permissions'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //     {
+      //       title: t('Settings and Configurations'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //   ],
+      // },
       {
         subheader: t('Help & Documentation'),
         roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
