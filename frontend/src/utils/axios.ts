@@ -57,4 +57,7 @@ export const endpoints = {
     get_proposal_list: '/api/proposal/getlist',
     update_proposal_list: '/api/proposal/updatelist',
   },
+  evaluation: {
+    getTotalTaskDataByProposalId: '/api/evaluation/getTotalTaskDataByProposalId',
+  },
 };

@@ -5,7 +5,7 @@ const ROOTS = {
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
   TEMP: '/temp',
-
+  EVALUATION: '/evaluation',
   ADMIN: '/admin',
   BOEMNG: '/boe_mng',
   APPROVALWORKFLOW: '/approve',
@@ -43,6 +43,11 @@ export const paths = {
   approval_workflow: {
     teamLead_assign: `${ROOTS.APPROVALWORKFLOW}/teamLead_assign`,
     task_assign: `${ROOTS.APPROVALWORKFLOW}/task_assign`,
+  },
+  evalation: {
+    tasks:`${ROOTS.EVALUATION}/tasks`,
+    scope: `${ROOTS.EVALUATION}/scope`,
+    scope1: `${ROOTS.EVALUATION}/scope1`,
   },
   importPDF: {
     root: `${ROOTS.DASHBOARD}/import`,

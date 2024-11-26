@@ -5,6 +5,7 @@ import { mainRoutes } from './main';
 import { adminRoutes } from './admin';
 import { beo_mng_Routes } from './boe_mng';
 import { dashboardRoutes } from './dashboard';
+import { evaluationRoutes } from './evaluation';
 import { approve_workflow_Routes } from './approval_workflow';
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,8 @@ export default function Router() {
     ...beo_mng_Routes,
 
     ...approve_workflow_Routes,
+
+    ...evaluationRoutes,
 
     // No match 404
     { path: '*', element: <Navigate to="/404" replace /> },

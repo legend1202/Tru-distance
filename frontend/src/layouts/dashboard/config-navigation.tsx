@@ -111,13 +111,25 @@ export function useNavData() {
       },
       {
         subheader: t('Evaluation Process'),
-        roles: ['Tech', 'Material', 'Travel'],
+        roles: ['Tech', 'Material', 'Travel', 'Cost'],
         items: [
           {
+            title: t('Assigned Tasks'),
+            path: paths.evalation.tasks,
+            icon: ICONS.external,
+            roles: ['Tech', 'Material', 'Travel', 'Cost'],
+          },
+          {
             title: t('Scope Evaluation'),
-            path: paths.dashboard.root,
+            path: paths.evalation.scope,
+            icon: ICONS.external,
+            roles: ['Tech', 'Material', 'Travel', 'Cost'],
+          },
+          {
+            title: t('scrol UI'),
+            path: paths.scroll.root,
             icon: ICONS.dashboard,
-            roles: ['Tech'],
+            roles: ['COST', 'ADMIN', 'Tech'],
           },
           {
             title: t('Hours Evaluation'),
@@ -176,90 +188,90 @@ export function useNavData() {
           },
         ],
       },
-      {
-        subheader: t('Reports'),
-        roles: ['ADMIN', 'Lead', 'Tech', 'Material'],
-        items: [
-          {
-            title: t('Proposal Reports'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
-          },
-          {
-            title: t('Cost and Hours Distribution'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('GANNT Chart'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
-          },
-          {
-            title: t('Labor Category Breakdown'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('Task Hours Summary'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Lead'],
-          },
-          {
-            title: t('Task-Level Reports'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Tech'],
-          },
-          {
-            title: t('Summary Reports'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Tech'],
-          },
-          {
-            title: t('Cost Evaluation (Material Cost Analysis)'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Material'],
-          },
-          {
-            title: t('Travel Cost Summary'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Travel'],
-          },
-        ],
-      },
-      {
-        subheader: t('Metrics and Analytics'),
-        roles: ['ADMIN'],
-        items: [
-          {
-            title: t('Complexity and Risk Factors'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('Skill Mix and Resource Analysis'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-          {
-            title: t('Historical Data Comparison'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN'],
-          },
-        ],
-      },
+      // {
+      //   subheader: t('Reports'),
+      //   roles: ['ADMIN', 'Lead', 'Tech', 'Material'],
+      //   items: [
+      //     {
+      //       title: t('Proposal Reports'),
+      //       path: paths.dashboard.root,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead'],
+      //     },
+      //     {
+      //       title: t('Cost and Hours Distribution'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //     {
+      //       title: t('GANNT Chart'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead'],
+      //     },
+      //     {
+      //       title: t('Labor Category Breakdown'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //     {
+      //       title: t('Task Hours Summary'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Lead'],
+      //     },
+      //     {
+      //       title: t('Task-Level Reports'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Tech'],
+      //     },
+      //     {
+      //       title: t('Summary Reports'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Tech'],
+      //     },
+      //     {
+      //       title: t('Cost Evaluation (Material Cost Analysis)'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Material'],
+      //     },
+      //     {
+      //       title: t('Travel Cost Summary'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['Travel'],
+      //     },
+      //   ],
+      // },
+      // {
+      //   subheader: t('Metrics and Analytics'),
+      //   roles: ['ADMIN'],
+      //   items: [
+      //     {
+      //       title: t('Complexity and Risk Factors'),
+      //       path: paths.dashboard.root,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //     {
+      //       title: t('Skill Mix and Resource Analysis'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //     {
+      //       title: t('Historical Data Comparison'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN'],
+      //     },
+      //   ],
+      // },
       // {
       //   subheader: t('Admin Settings'),
       //   roles: ['ADMIN'],
@@ -279,30 +291,30 @@ export function useNavData() {
       //     },
       //   ],
       // },
-      {
-        subheader: t('Help & Documentation'),
-        roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
-        items: [
-          {
-            title: t('User Guide'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
-          },
-          {
-            title: t('FAQs'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
-          },
-          {
-            title: t('Contact Support'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead', 'Tech'],
-          },
-        ],
-      },
+      // {
+      //   subheader: t('Help & Documentation'),
+      //   roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
+      //   items: [
+      //     {
+      //       title: t('User Guide'),
+      //       path: paths.dashboard.root,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
+      //     },
+      //     {
+      //       title: t('FAQs'),
+      //       path: paths.dashboard.status_summary,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead', 'Tech', 'Material', 'Travel'],
+      //     },
+      //     {
+      //       title: t('Contact Support'),
+      //       path: paths.dashboard.eval_progress,
+      //       icon: ICONS.dashboard,
+      //       roles: ['ADMIN', 'Lead', 'Tech'],
+      //     },
+      //   ],
+      // },
       /* {
         subheader: t('Home'),
         roles: ['COST', 'ADMIN'],

@@ -6,6 +6,7 @@ import assignTaskRoutes from './assign.task.routes';
 import ganttChartRoutes from './gantt.chart.routes';
 import ganttClinRoutes from './clin.routes';
 import getProposalRoutes from './proposal.routes';
+import evaluationRoutes from './evaluation.routes';
 import { sendResponse } from '../utils/response.utils';
 
 const router = express.Router();
@@ -18,4 +19,5 @@ router.use('/api/approve', assignTaskRoutes);
 router.use('/api/gantt', ganttChartRoutes);
 router.use('/api/clin', ganttClinRoutes);
 router.use('/api/proposal', getProposalRoutes);
+router.use('/api/evaluation', evaluationRoutes);
 export default router;

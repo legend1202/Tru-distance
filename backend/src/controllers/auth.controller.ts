@@ -30,12 +30,12 @@ export const login = async (req: Request, res: Response) => {
 
   try {
     const { user } = req.body;
-    const { token, id, name, email, role, avatar } = await handleUserLogin(
+    const { token, userId, name, email, role, avatar } = await handleUserLogin(
       user,
       session
     );
     return sendResponse(res, 200, 'Login Successfully', {
-      user: { id, name, email, avatar, role },
+      user: { userId, name, email, avatar, role },
       JWT_token: token,
     });
   } catch (error) {
