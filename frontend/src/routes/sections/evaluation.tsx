@@ -40,7 +40,7 @@ export const evaluationRoutes = [
       { path: paths.evalation.tasks, element: <AssignedTasksView /> },
       { path: paths.evalation.scope, element: <EvaluationScope /> },
       {
-        path: 'question_flow/scope_section/:wbsId',
+        path: 'question_flow/scope_section/:wbsId/:taskId',
         element: <EvaluationQuestionFlowScopeSectionPage />,
       },
     ],

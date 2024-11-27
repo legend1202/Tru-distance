@@ -48,8 +48,9 @@ export const paths = {
     tasks: `${ROOTS.EVALUATION}/tasks`,
     scope: `${ROOTS.EVALUATION}/scope`,
     scope1: `${ROOTS.EVALUATION}/scope1`,
-    question_flow: {
-      scope_section: (wbsId: string) => `${ROOTS.EVALUATION}/question_flow/scope_section/${wbsId}`,
+    question_flow_task: {
+      scope_section: (wbsId: string, taskId: string) =>
+        `${ROOTS.EVALUATION}/question_flow/scope_section/${wbsId}/${taskId}`,
     },
   },
   importPDF: {

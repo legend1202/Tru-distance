@@ -12,7 +12,7 @@ import { useGetWBSLists } from 'src/api/wbs';
 
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 
-import { ISubtask, IOriginData, IEvaluationData } from 'src/types/gantt';
+import { ISubtask, IEvaluationData } from 'src/types/gantt';
 
 type Props = {
   data: IEvaluationData[];
@@ -21,8 +21,8 @@ type Props = {
 const EvaluationPivotSelection = ({ data }: Props) => {
   const { wbsList } = useGetWBSLists();
 
-  const [tasks, setTasks] = useState<IOriginData[] | ISubtask[]>([]);
-  const [taskList, setTaskList] = useState<IOriginData[]>([]);
+  const [tasks, setTasks] = useState<IEvaluationData[] | ISubtask[]>([]);
+  const [taskList, setTaskList] = useState<IEvaluationData[]>([]);
   const [subTasks, setSubTasks] = useState<ISubtask[]>([]);
 
   const [totalHours, setTotalHours] = useState(0);

@@ -22,9 +22,10 @@ const text4 = 'text4';
 
 type Props = {
   wbsId: string;
+  taskId: string;
 };
 
-export default function EvaluationQuestionFlowScopeSectionView({ wbsId }: Props) {
+export default function EvaluationQuestionFlowScopeSectionView({ wbsId, taskId }: Props) {
   const settings = useSettingsContext();
 
   const { user } = useAuthContext();
@@ -38,7 +39,7 @@ export default function EvaluationQuestionFlowScopeSectionView({ wbsId }: Props)
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
   useEffect(() => {
     if (approvedData?.length > 0) {
-      const filteredData = approvedData
+      const filteredData: IEvaluationData[] = approvedData
         .map((task) => {
           // Filter subtasks if they have the userId
           const filteredSubtasks = task.subtasks.filter((subtask) =>
@@ -53,9 +54,9 @@ export default function EvaluationQuestionFlowScopeSectionView({ wbsId }: Props)
             };
           }
 
-          return null; // Exclude task if it doesn't match the criteria
+          return null; // Return null for tasks that don't match the criteria
         })
-        .filter((task) => task !== null); // Remove null values
+        .filter((task) => task !== null) as IEvaluationData[]; // Type-cast to ensure correct type
 
       if (filteredData.length > 0) {
         setWbsTitle(filteredData[0]?.wbsDetails[0].wbsTitle);

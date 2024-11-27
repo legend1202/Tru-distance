@@ -9,14 +9,14 @@ import { EvaluationQuestionFlowScopeSectionView } from 'src/sections/evaluation/
 export default function EvaluationQuestionFlowScopeSectionPage() {
   const params = useParams();
 
-  const { wbsId } = params;
+  const { wbsId, taskId } = params;
   return (
     <>
       <Helmet>
         <title> Evaluation Scope Section</title>
       </Helmet>
 
-      <EvaluationQuestionFlowScopeSectionView wbsId={wbsId || ''} />
+      <EvaluationQuestionFlowScopeSectionView wbsId={wbsId || ''} taskId={taskId || ''} />
     </>
   );
 }
