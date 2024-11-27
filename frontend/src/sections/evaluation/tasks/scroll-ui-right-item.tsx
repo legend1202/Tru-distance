@@ -14,12 +14,16 @@ import TaskListItem from './task-list-item';
 
 type Props = {
   data: IEvaluationData[];
+  wbsId: string;
 };
 
-const ScrolUIRightItem = ({ data }: Props) => {
+const ScrolUIRightItem = ({ data, wbsId }: Props) => {
   const theme = useTheme();
   const { user } = useAuthContext();
   const [userId, setUserId] = useState('');
+
+  const [selectedTaskId, setSelectedTaskId] = useState('');
+  const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState<number>(0);
 
   const router = useRouter();
 
@@ -30,7 +34,18 @@ const ScrolUIRightItem = ({ data }: Props) => {
   }, [user]);
 
   const handleStartEvaluation = () => {
-    router.push(paths.evalation.scope);
+    if (wbsId && selectedTaskId) {
+      router.push(paths.evalation.question_flow.scope_section(wbsId));
+    }
+  };
+
+  const handleSelectTaskId = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    setSelectedSubTaskIndex(0);
+  };
+  const handleSelectSubTaskIndex = (taskId: string, subTaskIndex: number) => {
+    setSelectedTaskId(taskId);
+    setSelectedSubTaskIndex(subTaskIndex);
   };
 
   return (
@@ -61,7 +76,17 @@ const ScrolUIRightItem = ({ data }: Props) => {
           <CardContent>
             {userId &&
               data.length > 0 &&
-              data.map((task, index) => <TaskListItem key={index} userId={userId} task={task} />)}
+              data.map((task, index) => (
+                <TaskListItem
+                  key={index}
+                  userId={userId}
+                  task={task}
+                  selectedTaskId={selectedTaskId}
+                  selectedSubTaskIndex={selectedSubTaskIndex}
+                  handleSelectTaskId={handleSelectTaskId}
+                  handleSelectSubTaskIndex={handleSelectSubTaskIndex}
+                />
+              ))}
           </CardContent>
           <Box sx={{ position: 'absolute', bottom: 2, right: 2 }}>
             <Button variant="contained" sx={{ mr: 1 }} onClick={handleStartEvaluation}>

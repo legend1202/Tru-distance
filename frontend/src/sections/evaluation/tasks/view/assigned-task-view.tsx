@@ -139,7 +139,7 @@ export default function EvaluationScopeView() {
           handleSelectedWbsId={handleSelectedWbsId}
         />
 
-        <ScrolUIRightItem data={assignedTasks} />
+        <ScrolUIRightItem data={assignedTasks} wbsId={wbsId} />
       </Card>
     </Container>
   );

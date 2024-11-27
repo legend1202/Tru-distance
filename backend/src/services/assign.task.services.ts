@@ -12,6 +12,7 @@ import {
   ProcessingTaskDocument,
   ProcessingTaskModel,
 } from '../models/process.task.model';
+import { WbsModel } from '../models/wbs.model';
 
 export const handleAssignedTaskCreation = async (
   approveData: Partial<ProcessingTaskDocument[]> & Document[],
@@ -25,7 +26,19 @@ export const handleAssignedTaskCreation = async (
 export const handleGetAssignedTask = async (
   wbsId: string
 ): Promise<ProcessingTaskDocument[]> => {
-  const approvedData = await ProcessingTaskModel.find({ wbsId });
+  const approvedData = await ProcessingTaskModel.aggregate([
+    {
+      $match: { wbsId },
+    },
+    {
+      $lookup: {
+        from: WbsModel.collection.name, // The name of the Task collection in MongoDB
+        localField: 'wbsId',
+        foreignField: 'id',
+        as: 'wbsDetails', // The field in the output document where the tasks will be stored
+      },
+    },
+  ]);
 
   if (!approvedData) {
     throw new RequestError(`Task with ID does not exist.`, 404);

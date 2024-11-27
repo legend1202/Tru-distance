@@ -45,9 +45,12 @@ export const paths = {
     task_assign: `${ROOTS.APPROVALWORKFLOW}/task_assign`,
   },
   evalation: {
-    tasks:`${ROOTS.EVALUATION}/tasks`,
+    tasks: `${ROOTS.EVALUATION}/tasks`,
     scope: `${ROOTS.EVALUATION}/scope`,
     scope1: `${ROOTS.EVALUATION}/scope1`,
+    question_flow: {
+      scope_section: (wbsId: string) => `${ROOTS.EVALUATION}/question_flow/scope_section/${wbsId}`,
+    },
   },
   importPDF: {
     root: `${ROOTS.DASHBOARD}/import`,

@@ -1,3 +1,12 @@
+type IWbs = {
+  id: string;
+  boeId: string;
+  wbsTitle: string;
+  wbsCode: string;
+  createdAt: Date;
+  updateAt: Date;
+};
+
 export type ISubtask = {
   data: any;
   subtaskCode: string;
@@ -62,10 +71,7 @@ export type IEvaluationData = {
     clinNumber: string;
     clinTitle: string;
   };
-  wbsDetails: {
-    wbsNumber: string;
-    wbsTitle: string;
-  };
+  wbsDetails: IWbs[];
   assignedUsers: String[];
   status: Number;
 };
