@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 import { Card } from '@mui/material';
 import { Container } from '@mui/system';
+
+import { flowData } from 'src/utils/evaluation-flow';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetApprovedTaskByWbsId } from 'src/api/approve';
@@ -10,15 +12,11 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IEvaluationData } from 'src/types/gantt';
+import { IflowDataItem, IflowDataItemChild } from 'src/types/flowData';
 
-import Footer from '../footer';
-import ScrolUILeftItem from '../scroll-ui-left-item';
-import ScrolUIRightItem from '../scroll-ui-right-item';
-
-const text1 = 'text1';
-const text2 = 'text2';
-const text3 = 'text3';
-const text4 = 'text4';
+import Footer from './common/footer';
+import ScrolUILeftItem from './common/scroll-ui-left-item';
+import ScrolUIRightItem from './common/scroll-ui-right-item';
 
 type Props = {
   wbsId: string;
@@ -26,12 +24,18 @@ type Props = {
   subTaskIndex: number;
 };
 
-export default function EvaluationQuestionFlowScopeSectionView({
-  wbsId,
-  taskId,
-  subTaskIndex,
-}: Props) {
+export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex }: Props) {
   const settings = useSettingsContext();
+
+  const [currenFlowPosition, setCurrentFlowPosition] = useState<number[]>([0, 0]);
+
+  const [totalFlowData, setTotalFlowData] = useState<IflowDataItem[] | any>();
+
+  const [currentFlowData, setCurrentFlowData] = useState<IflowDataItemChild | any>();
+
+  const [currentWorkFlowHeader, setCurrentWorkFlowheader] = useState<string>('');
+
+  const [scrollStatus, setScrollStatus] = useState<boolean>(false);
 
   const { user } = useAuthContext();
 
@@ -42,6 +46,8 @@ export default function EvaluationQuestionFlowScopeSectionView({
   const [currentTask, setCurrentTask] = useState<IEvaluationData>();
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
+
+  // task data from api
   useEffect(() => {
     if (approvedData?.length > 0) {
       const filteredData: IEvaluationData[] = approvedData
@@ -71,7 +77,46 @@ export default function EvaluationQuestionFlowScopeSectionView({
     }
   }, [approvedData, user?.userId]);
 
-  console.log(taskId, taskId, subTaskIndex);
+  useMemo(() => {
+    if (flowData) {
+      setTotalFlowData(flowData);
+    }
+  }, []);
+
+  // workflow data from static
+  useMemo(() => {
+    if (currenFlowPosition.length > 0 && totalFlowData?.length > 0) {
+      const flowdata = totalFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]];
+
+      if (flowdata) {
+        setCurrentWorkFlowheader(totalFlowData[currenFlowPosition[0]].title || '');
+        setCurrentFlowData(flowdata);
+      }
+    }
+  }, [totalFlowData, currenFlowPosition]);
+
+  // set workflow position
+  const handleSetCurrentWorkflowPosition = (pos: number[]) => {
+    setCurrentFlowPosition(pos);
+  };
+
+  const handleWorkflowPosition = (nextStep: boolean) => {
+    if (nextStep) {
+      handleSetCurrentWorkflowPosition(currentFlowData.next);
+    } else {
+      handleSetCurrentWorkflowPosition(currentFlowData.prev);
+    }
+  };
+
+  const handleCurrentStatus = (status: number, statusFlag: boolean) => {
+    const tempFlowData = totalFlowData;
+    if (statusFlag) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].status1 = status;
+    } else {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].status2 = status;
+    }
+    setTotalFlowData(tempFlowData);
+  };
 
   return (
     <Container
@@ -83,7 +128,7 @@ export default function EvaluationQuestionFlowScopeSectionView({
       }}
     >
       <CustomBreadcrumbs
-        heading="Section 4.1: Scope Sectione"
+        heading={currentWorkFlowHeader}
         links={[{ name: wbsTitle }, { name: currentTask?.name }]}
         sx={{
           mb: {
@@ -103,11 +148,16 @@ export default function EvaluationQuestionFlowScopeSectionView({
           bgcolor: 'background.default',
         }}
       >
-        <ScrolUILeftItem text1={text1} text2={text2} />
+        <ScrolUILeftItem
+          data={currentFlowData}
+          scrollStatus={scrollStatus}
+          setCurrentWorkflowPosition={handleSetCurrentWorkflowPosition}
+          handleCurrentStatus={handleCurrentStatus}
+        />
 
-        <ScrolUIRightItem text1={text3} text2={text4} />
+        <ScrolUIRightItem data={currentFlowData} scrollStatus={scrollStatus} />
       </Card>
-      <Footer />
+      <Footer handleWorkflowPosition={handleWorkflowPosition} />
     </Container>
   );
 }

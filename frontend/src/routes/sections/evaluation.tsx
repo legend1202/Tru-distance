@@ -17,9 +17,7 @@ const EvaluationScope = lazy(() => import('src/pages/evaluation/scope'));
 
 const AssignedTasksView = lazy(() => import('src/pages/evaluation/tasks'));
 
-const EvaluationQuestionFlowScopeSectionPage = lazy(
-  () => import('src/pages/evaluation/question-flow/scope-section')
-);
+const EvaluationQuestionFlowPage = lazy(() => import('src/pages/evaluation/question-flow'));
 
 // ----------------------------------------------------------------------
 
@@ -40,8 +38,8 @@ export const evaluationRoutes = [
       { path: paths.evalation.tasks, element: <AssignedTasksView /> },
       { path: paths.evalation.scope, element: <EvaluationScope /> },
       {
-        path: 'question_flow/scope_section/:wbsId/:taskId',
-        element: <EvaluationQuestionFlowScopeSectionPage />,
+        path: 'question_flow/:wbsId/:taskId/:subTaskIndex',
+        element: <EvaluationQuestionFlowPage />,
       },
     ],
   },

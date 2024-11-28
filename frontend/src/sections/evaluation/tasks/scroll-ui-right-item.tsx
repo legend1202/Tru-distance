@@ -35,7 +35,7 @@ const ScrolUIRightItem = ({ data, wbsId }: Props) => {
 
   const handleStartEvaluation = () => {
     if (wbsId && selectedTaskId) {
-      router.push(paths.evalation.question_flow_task.scope_section(wbsId, selectedTaskId));
+      router.push(paths.evalation.question_flow.root(wbsId, selectedTaskId, selectedSubTaskIndex));
     }
   };
 

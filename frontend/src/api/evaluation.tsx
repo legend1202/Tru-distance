@@ -26,3 +26,4 @@ export const useGetEvaluationDataByEvaluator = (proposalId: string) => {
   );
   return memoizedValue;
 };
+
