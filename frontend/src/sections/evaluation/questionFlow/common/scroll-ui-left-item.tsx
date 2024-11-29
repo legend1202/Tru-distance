@@ -2,8 +2,8 @@ import * as Yup from 'yup';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useMemo, useState, useEffect } from 'react';
-import { useResizable } from 'react-resizable-layout';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useResizable } from 'react-resizable-layout';
 
 import Box from '@mui/material/Box';
 import {
@@ -69,8 +69,8 @@ const ScrolUILeftItem = ({
     splitterProps: terminalDragBarProps,
   } = useResizable({
     axis: 'y',
-    initial: 150,
-    min: 50,
+    initial: 250,
+    min: 0,
     reverse: true,
   });
 
@@ -239,9 +239,10 @@ const ScrolUILeftItem = ({
             </CardContent>
           </Card>
         </Box>
+
         <SimpleSplitter isDragging={isTerminalDragging} {...terminalDragBarProps} />
         {data.description3 && (
-          <Box height={terminalH} overflow="hidden">
+          <Box height={terminalH - 100} overflow="hidden">
             <Card>
               <CardContent>
                 <FormProvider methods={methods}>

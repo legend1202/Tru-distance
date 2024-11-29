@@ -57,8 +57,8 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
     splitterProps: terminalDragBarProps,
   } = useResizable({
     axis: 'y',
-    initial: 150,
-    min: 50,
+    initial: 250,
+    min: 0,
     reverse: true,
   });
 
@@ -176,7 +176,7 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
 
         <SimpleSplitter isDragging={isTerminalDragging} {...terminalDragBarProps} />
         {data.description4 && (
-          <Box height={terminalH} overflow="hidden">
+          <Box height={terminalH - 100} overflow="hidden">
             <Card>
               <CardContent>
                 <FormProvider methods={methods}>
