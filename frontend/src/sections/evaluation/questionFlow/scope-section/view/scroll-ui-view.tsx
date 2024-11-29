@@ -71,7 +71,7 @@ export default function EvaluationQuestionFlowScopeSectionView({
     }
   }, [approvedData, user?.userId]);
 
-  console.log(taskId, taskId, subTaskIndex);
+  console.log(tasks);
 
   return (
     <Container

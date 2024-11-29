@@ -17,14 +17,44 @@ export type IflowDataItemChild = {
   answer?: number; // Make answer optional
   intro?: string; // Make intro1 optional
   question1: string;
-  description1: string;
   question2?: string; // Make question2 optional
+  question3?: string; // Make question2 optional
+  question4?: string; // Make question2 optional
+  description1: string;
   description2?: string; // Make description2 optional
-  narrative?: string; // Make narrative optional
+  description3?: string; // Make description2 optional
+  description4?: string; // Make description2 optional
+  moveOptions?: IflowDataItemChildMoveOption[];
+  selectOptions?: string[];
+  factor?: IFactor;
+  factorJustification?: IFactorJustification;
   yes1?: number[];
   no1?: number[];
   yes2?: number[]; // Make yes2 optional
   no2?: number[]; // Make no2 optional
   next?: number[];
   prev?: number[];
+};
+
+export type IflowDataItemChildMoveOption = {
+  title: string;
+  next: number[];
+};
+
+export type IFactor = {
+  complexityValue: string;
+  complexityConcur: string;
+  complexityNonConcur: string;
+  riskValue: string;
+  riskConcur: string;
+  riskNonConcur: string;
+  curveValue: string;
+  curveConcur: string;
+  curveNonConcur: string;
+};
+
+export type IFactorJustification = {
+  complexity: string;
+  risk: string;
+  curve: string;
 };

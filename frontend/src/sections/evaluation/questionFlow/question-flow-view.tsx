@@ -8,7 +8,6 @@ import { flowData } from 'src/utils/evaluation-flow';
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 import { IEvaluationData } from 'src/types/gantt';
@@ -25,7 +24,7 @@ type Props = {
 };
 
 export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex }: Props) {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [currenFlowPosition, setCurrentFlowPosition] = useState<number[]>([0, 0]);
 
@@ -47,6 +46,7 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
+  console.log(tasks);
   // task data from api
   useEffect(() => {
     if (approvedData?.length > 0) {
@@ -92,6 +92,11 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
         setCurrentWorkFlowheader(totalFlowData[currenFlowPosition[0]].title || '');
         setCurrentFlowData(flowdata);
       }
+      if (currenFlowPosition[0] === 1) {
+        setScrollStatus(true);
+      } else {
+        setScrollStatus(false);
+      }
     }
   }, [totalFlowData, currenFlowPosition]);
 
@@ -120,7 +125,8 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   return (
     <Container
-      maxWidth={settings.themeStretch ? false : 'lg'}
+      // maxWidth={settings.themeStretch ? false : 'lg'}
+      maxWidth={false}
       sx={{
         flexGrow: 1,
         display: 'flex',
@@ -139,7 +145,7 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
       />
       <Card
         sx={{
-          height: { xs: '80vh' },
+          height: { xs: '70vh' },
 
           flexGrow: { md: 1 },
           display: { md: 'flex' },

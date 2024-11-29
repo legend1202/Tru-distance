@@ -17,16 +17,26 @@ import {
   CardContent,
 } from '@mui/material';
 
+import Label from 'src/components/label';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import { IflowDataItemChild } from 'src/types/flowData';
 
 import SimpleSplitter from './simple-spliter';
+import FactorGroup from '../component/factor-group';
+import MoveOptionGroup from '../component/move-option-item';
+import SelectOptionGroup from '../component/select-option-item';
 
 const FirstButtonGroupContainer = styled('div')({
   position: 'absolute',
   top: '25%',
   right: '-4.5%',
+});
+
+const CustomButton = styled(Button)({
+  p: '0px',
+  fontSize: '12px',
+  width: '56px',
 });
 
 const ThirdButtonGroupContainer = styled('div')({
@@ -50,6 +60,7 @@ const ScrolUILeftItem = ({
 }: Props) => {
   const [checkbox1, setCheckbox1] = useState<boolean>(data?.status1 === 1);
   const [checkbox2, setCheckbox2] = useState<boolean>(data?.status1 === 1);
+  const [optionIndex, setOptionIndex] = useState<number>(data?.status1 || 0);
 
   const theme = useTheme();
   const {
@@ -58,18 +69,20 @@ const ScrolUILeftItem = ({
     splitterProps: terminalDragBarProps,
   } = useResizable({
     axis: 'y',
-    initial: 250,
-    min: 150,
+    initial: 150,
+    min: 50,
     reverse: true,
   });
 
   const NewDescriptionSchema = Yup.object().shape({
-    description: Yup.string(),
+    description1: Yup.string(),
+    description3: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
-      description: data.description1 || '',
+      description1: data.description1 || '',
+      description3: data.description3 || '',
     }),
     [data]
   );
@@ -83,6 +96,8 @@ const ScrolUILeftItem = ({
 
   const values = watch();
 
+  console.log(values);
+
   useEffect(() => {
     if (data?.status1 !== 1) {
       setCheckbox1(false);
@@ -94,8 +109,18 @@ const ScrolUILeftItem = ({
     } else {
       setCheckbox2(true);
     }
+    if (data?.status1) {
+      setOptionIndex(data.status1);
+    }
     if (data.description1) {
-      setValue('description', data.description1);
+      setValue('description1', data.description1);
+    } else {
+      setValue('description1', '');
+    }
+    if (data.description3) {
+      setValue('description3', data.description3);
+    } else {
+      setValue('description3', '');
     }
   }, [data, setValue]);
 
@@ -129,7 +154,7 @@ const ScrolUILeftItem = ({
       <Box
         display="grid"
         gridTemplateRows="1fr auto"
-        height="80vh"
+        height="70vh"
         bgcolor="#333"
         color="white"
         fontFamily="monospace"
@@ -158,7 +183,21 @@ const ScrolUILeftItem = ({
                   top: 0,
                 }}
               >
-                <Checkbox title="Yes" checked={checkbox1} onChange={() => handleClickCheckbox1()} />
+                <Label
+                  sx={{
+                    color: 'green',
+                  }}
+                >
+                  Y
+                </Label>
+                <Checkbox checked={checkbox1} onChange={() => handleClickCheckbox1()} />
+                <Label
+                  sx={{
+                    color: 'red',
+                  }}
+                >
+                  N
+                </Label>
                 <Checkbox checked={checkbox2} onChange={() => handleClickCheckbox2()} />
               </Typography>
             )}
@@ -169,48 +208,74 @@ const ScrolUILeftItem = ({
             }}
           >
             <CardContent>
-              <FormProvider methods={methods}>
-                <RHFTextField name="description" label="" multiline rows={18} />
-              </FormProvider>
+              {data.description1 && (
+                <FormProvider methods={methods}>
+                  <RHFTextField
+                    name="description1"
+                    label=""
+                    multiline
+                    rows={18}
+                    // disabled
+                  />
+                </FormProvider>
+              )}
+              {data.moveOptions && (
+                <MoveOptionGroup
+                  data={data.moveOptions}
+                  optionIndex={optionIndex}
+                  setCurrentWorkflowPosition={setCurrentWorkflowPosition}
+                  handleCurrentStatus={handleCurrentStatus}
+                />
+              )}
+              {data.selectOptions && (
+                <SelectOptionGroup
+                  data={data.selectOptions}
+                  optionIndex={optionIndex}
+                  handleCurrentStatus={handleCurrentStatus}
+                />
+              )}
+
+              {data.factor && <FactorGroup data={data.factor} />}
             </CardContent>
           </Card>
         </Box>
         <SimpleSplitter isDragging={isTerminalDragging} {...terminalDragBarProps} />
-        {scrollStatus && (
+        {data.description3 && (
           <Box height={terminalH} overflow="hidden">
             <Card>
-              <CardHeader title="WBS" />
-              <CardContent>data</CardContent>
-            </Card>
-            <Card
-              sx={{
-                mt: 2,
-              }}
-            >
-              <CardHeader title="WBS" />
-              <CardContent>body</CardContent>
+              <CardContent>
+                <FormProvider methods={methods}>
+                  <RHFTextField
+                    name="description3"
+                    label=""
+                    multiline
+                    rows={18}
+                    // disabled
+                  />
+                </FormProvider>
+              </CardContent>
             </Card>
           </Box>
         )}
       </Box>
-      {scrollStatus && (
+      {scrollStatus && !data.factor && (
         <>
           <FirstButtonGroupContainer>
             <ButtonGroup variant="contained" orientation="vertical">
-              <Button>SOW</Button>
-              <Button>BOE</Button>
-              <Button>Hours</Button>
-              <Button>Material</Button>
-              <Button>Travel</Button>
+              <CustomButton>SOW</CustomButton>
+              <CustomButton>BOE</CustomButton>
+              <CustomButton>Hours</CustomButton>
+              <CustomButton>Material</CustomButton>
+              <CustomButton>Travel</CustomButton>
             </ButtonGroup>
           </FirstButtonGroupContainer>
           <ThirdButtonGroupContainer>
             <ButtonGroup variant="contained" orientation="vertical">
-              <Button>SOW</Button>
-              <Button>BOE</Button>
-              <Button>Hours</Button>
-              <Button>Material</Button>
-              <Button>Travel</Button>
+              <CustomButton>SOW</CustomButton>
+              <CustomButton>BOE</CustomButton>
+              <CustomButton>Hours</CustomButton>
+              <CustomButton>Material</CustomButton>
+              <CustomButton>Travel</CustomButton>
             </ButtonGroup>
           </ThirdButtonGroupContainer>
         </>
