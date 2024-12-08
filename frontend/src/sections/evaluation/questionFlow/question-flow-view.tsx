@@ -3,10 +3,14 @@ import { useMemo, useState, useEffect } from 'react';
 import { Card } from '@mui/material';
 import { Container } from '@mui/system';
 
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { flowData } from 'src/utils/evaluation-flow';
 
 import { useAuthContext } from 'src/auth/hooks';
 import { useGetApprovedTaskByWbsId } from 'src/api/approve';
+import { UpdateFlowData, useGetFlowDataByTask } from 'src/api/evaluation';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
@@ -25,6 +29,10 @@ type Props = {
 
 export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex }: Props) {
   // const settings = useSettingsContext();
+
+  const router = useRouter();
+
+  const [flowDataId, setFlowDataId] = useState<string>('');
 
   const [currenFlowPosition, setCurrentFlowPosition] = useState<number[]>([0, 0]);
 
@@ -46,7 +54,8 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
-  console.log(tasks);
+  const { taskFlowData } = useGetFlowDataByTask(wbsId, taskId, subTaskIndex);
+
   // task data from api
   useEffect(() => {
     if (approvedData?.length > 0) {
@@ -78,10 +87,15 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
   }, [approvedData, user?.userId]);
 
   useMemo(() => {
-    if (flowData) {
+    if (taskFlowData?.flowData?.length > 0) {
+      setFlowDataId(taskFlowData.id || '');
+      setTotalFlowData(taskFlowData.flowData);
+      // eslint-disable-next-line no-bitwise
+    } else if (wbsId || taskId) {
+      setTotalFlowData([]);
       setTotalFlowData(flowData);
     }
-  }, []);
+  }, [taskFlowData, wbsId, taskId]);
 
   // workflow data from static
   useMemo(() => {
@@ -101,8 +115,25 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
   }, [totalFlowData, currenFlowPosition]);
 
   // set workflow position
-  const handleSetCurrentWorkflowPosition = (pos: number[]) => {
-    setCurrentFlowPosition(pos);
+  const handleSetCurrentWorkflowPosition = async (pos: number[]) => {
+    const updatedFlowData = await UpdateFlowData({
+      id: flowDataId,
+      wbsId,
+      taskId,
+      subTaskIndex,
+      flowData: totalFlowData,
+    });
+
+    if (updatedFlowData.data.id) {
+      setFlowDataId(updatedFlowData.data.id);
+    }
+
+    if (pos[0] === 100 && pos[1] === 100) {
+      setCurrentFlowPosition(pos);
+      router.push(paths.evalation.tasks);
+    } else {
+      setCurrentFlowPosition(pos);
+    }
   };
 
   const handleWorkflowPosition = (nextStep: boolean) => {

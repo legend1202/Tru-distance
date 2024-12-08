@@ -84,7 +84,6 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
 
   const values = watch();
 
-  console.log(values);
   useEffect(() => {
     if (data.description2) {
       setValue('description2', data.description2);
@@ -99,11 +98,13 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
   }, [data, setValue]);
 
   const handleClickCheckbox1 = () => {
-    setCheckbox1(!checkbox1);
+    setCheckbox1(true);
+    setCheckbox2(false);
   };
 
   const handleClickCheckbox2 = () => {
-    setCheckbox2(!checkbox2);
+    setCheckbox2(true);
+    setCheckbox1(false);
   };
 
   return (
@@ -137,7 +138,7 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
           >
             {/* <CardHeader title={data.intro} /> */}
             <CardContent>{data.question2}</CardContent>
-            {data.yes2?.length && (
+            {data.yes2?.length ? (
               <Typography
                 sx={{
                   position: 'absolute',
@@ -148,6 +149,8 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
                 <Checkbox checked={checkbox1} onChange={() => handleClickCheckbox1()} />
                 <Checkbox checked={checkbox2} onChange={() => handleClickCheckbox2()} />
               </Typography>
+            ) : (
+              ''
             )}
           </Card>
           <Card

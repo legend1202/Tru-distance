@@ -19,6 +19,7 @@ import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 
 import { AuthProvider } from 'src/auth/context/jwt';
+import { FlowDataProvider } from './context/flowData/context';
 
 // ----------------------------------------------------------------------
 
@@ -77,8 +78,9 @@ export default function App() {
               <SnackbarProvider>
                 <SettingsDrawer />
                 <ProgressBar />
-
-                <Router />
+                <FlowDataProvider>
+                  <Router />
+                </FlowDataProvider>
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>

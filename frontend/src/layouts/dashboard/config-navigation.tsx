@@ -119,36 +119,6 @@ export function useNavData() {
             icon: ICONS.external,
             roles: ['Tech', 'Material', 'Travel', 'Cost'],
           },
-          {
-            title: t('Scope Evaluation'),
-            path: paths.evalation.scope,
-            icon: ICONS.external,
-            roles: ['Tech', 'Material', 'Travel', 'Cost'],
-          },
-          {
-            title: t('scrol UI'),
-            path: paths.scroll.root,
-            icon: ICONS.dashboard,
-            roles: ['COST', 'ADMIN', 'Tech'],
-          },
-          {
-            title: t('Hours Evaluation'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['Tech'],
-          },
-          {
-            title: t('Cost Evaluation'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Tech', 'Material'],
-          },
-          {
-            title: t('Cost Evaluation (Travel Cost Analysis)'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['Travel'],
-          },
         ],
       },
       {

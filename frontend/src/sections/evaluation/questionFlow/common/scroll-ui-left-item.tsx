@@ -96,8 +96,6 @@ const ScrolUILeftItem = ({
 
   const values = watch();
 
-  console.log(values);
-
   useEffect(() => {
     if (data?.status1 !== 1) {
       setCheckbox1(false);
@@ -125,22 +123,16 @@ const ScrolUILeftItem = ({
   }, [data, setValue]);
 
   const handleClickCheckbox1 = () => {
-    setCheckbox1(!checkbox1);
-    if (!checkbox1) {
-      handleCurrentStatus(1, true);
-    } else {
-      handleCurrentStatus(2, true);
-    }
+    setCheckbox1(true);
+    setCheckbox2(false);
+    handleCurrentStatus(1, true);
     setCurrentWorkflowPosition(data.yes1 || [0, 0]);
   };
 
   const handleClickCheckbox2 = () => {
-    setCheckbox2(!checkbox2);
-    if (!checkbox1) {
-      handleCurrentStatus(1, false);
-    } else {
-      handleCurrentStatus(2, false);
-    }
+    setCheckbox2(true);
+    setCheckbox1(false);
+    handleCurrentStatus(2, true);
     setCurrentWorkflowPosition(data.no1 || [0, 0]);
   };
 
@@ -175,7 +167,7 @@ const ScrolUILeftItem = ({
           >
             <CardHeader title={data.intro} />
             <CardContent>{data.question1}</CardContent>
-            {data.yes1?.length && (
+            {data?.yes1?.length ? (
               <Typography
                 sx={{
                   position: 'absolute',
@@ -200,6 +192,8 @@ const ScrolUILeftItem = ({
                 </Label>
                 <Checkbox checked={checkbox2} onChange={() => handleClickCheckbox2()} />
               </Typography>
+            ) : (
+              ''
             )}
           </Card>
           <Card

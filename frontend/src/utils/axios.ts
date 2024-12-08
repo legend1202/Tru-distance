@@ -59,5 +59,7 @@ export const endpoints = {
   },
   evaluation: {
     getTotalTaskDataByProposalId: '/api/evaluation/getTotalTaskDataByProposalId',
+    getFlowdata: '/api/evaluation/getFlowdata',
+    updateFlowdata: '/api/evaluation/updateFlowdata',
   },
 };

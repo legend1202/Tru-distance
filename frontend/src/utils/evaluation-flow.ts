@@ -1,4 +1,6 @@
-export const flowData = [
+import { IflowDataItem } from "src/types/flowData";
+
+export const flowData : IflowDataItem[] = [
   {
     type: 'scope',
     status: 0, // 0 not start, 1: correct, 2: not correct
@@ -678,10 +680,8 @@ export const flowData = [
           '4.9.3-Q1: WBS Labor Categories: Do you agree that all of the different labor categories are needed for the overall WBS task?',
         description1: 'SOW Language (SOW language specifically associated only with this WBS)',
         description3: 'SOW Language (SOW language specifically associated only with this WBS)',
-        yes1: [0, 0],
-        no1: [0, 0],
-        prev: [0, 0],
-        next: [0, 0],
+        prev: [8, 0],
+        next: [100, 100],
       },
     ],
   },

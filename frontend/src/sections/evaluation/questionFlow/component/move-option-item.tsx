@@ -29,7 +29,7 @@ const MoveOptionGroup = ({
 
   useEffect(() => {
     if (optionIndex > 0) {
-      setSelectedValue(data[optionIndex - 1].title);
+      setSelectedValue(data[optionIndex - 1]?.title || '');
     }
   }, [data, optionIndex]);
 
@@ -44,7 +44,7 @@ const MoveOptionGroup = ({
         {data.map((moveOption, index) => (
           <FormControlLabel
             key={index}
-            value={moveOption.title}
+            value={moveOption?.title || ''}
             control={<Radio onClick={() => handleClickItem(moveOption.next, index + 1)} />}
             label={moveOption.title}
           />

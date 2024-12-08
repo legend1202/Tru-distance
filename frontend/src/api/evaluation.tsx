@@ -1,8 +1,9 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
+import { IflowData } from 'src/types/flowData';
 import { ITotalTaskDataByEvaluator } from 'src/types/evaluation';
 
 const options = {
@@ -27,3 +28,31 @@ export const useGetEvaluationDataByEvaluator = (proposalId: string) => {
   return memoizedValue;
 };
 
+export const useGetFlowDataByTask = (wbsId: string, taskId: string, subTaskIndex: number) => {
+  const URL = [endpoints.evaluation.getFlowdata, { wbsId, taskId, subTaskIndex }];
+
+  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher, options);
+
+  const memoizedValue = useMemo(
+    () => ({
+      taskFlowData: (data?.result?.flowData as IflowData),
+      dataLoading: isLoading,
+      dataError: error,
+      dataValidating: isValidating,
+    }),
+    [data?.result, error, isLoading, isValidating]
+  );
+  return memoizedValue;
+};
+
+export const UpdateFlowData = async (query: IflowData) => {
+  const res = await axiosInstance.post(endpoints.evaluation.updateFlowdata, {
+    flowData: query,
+  });
+
+  const memoizedValue = {
+    data: (res?.data?.result.apprvedData as IflowData) || [],
+  };
+
+  return memoizedValue;
+};
