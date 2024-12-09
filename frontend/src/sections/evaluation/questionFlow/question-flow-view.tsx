@@ -6,8 +6,10 @@ import { Container } from '@mui/system';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { isLeadFn } from 'src/utils/role-check';
 import { flowData } from 'src/utils/evaluation-flow';
 
+import { useAuthContext } from 'src/auth/hooks';
 import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 import { UpdateFlowData, useGetFlowDataByTask } from 'src/api/evaluation';
 
@@ -36,6 +38,8 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
   // const settings = useSettingsContext();
 
   const router = useRouter();
+
+  const { user } = useAuthContext();
 
   const [flowDataId, setFlowDataId] = useState<string>('');
 
@@ -130,7 +134,12 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
     if (pos[0] === 100 && pos[1] === 100) {
       setCurrentFlowPosition(pos);
-      router.push(paths.evalation.tasks);
+      const isLead = isLeadFn(user?.role);
+      if (isLead) {
+        router.push(paths.approval_workflow.task_review);
+      } else {
+        router.push(paths.evalation.tasks);
+      }
     } else {
       setCurrentFlowPosition(pos);
     }
