@@ -56,6 +56,41 @@ export const handleUpdateOrCreateFlowdata = async (
   flowData: FlowDataDocument
 ) => {
   try {
+    const task = await ProcessingTaskModel.findOne({
+      wbsId: flowData.wbsId,
+      id: flowData.taskId,
+    });
+
+    if (!task) {
+      throw new Error('Task not found.');
+    }
+
+    if (task.subtasks[flowData.subTaskIndex - 1]) {
+      const result = await ProcessingTaskModel.updateOne(
+        {
+          wbsId: flowData.wbsId,
+          id: flowData.taskId,
+        },
+        {
+          $set: {
+            [`subtasks.${flowData.subTaskIndex - 1}.status`]: 1,
+          },
+        }
+      );
+    } else {
+      const result = await ProcessingTaskModel.updateOne(
+        {
+          wbsId: flowData.wbsId,
+          id: flowData.taskId,
+        },
+        {
+          $set: {
+            status: 1,
+          },
+        }
+      );
+    }
+
     if (flowData?.id) {
       // If the flow data already exists, update it
       const updatedFlowData = await findByIdAndUpdateFlowDataDocument(
@@ -68,7 +103,7 @@ export const handleUpdateOrCreateFlowdata = async (
     } else {
       flowData.id = uuidv4();
       // If the flow data does not exist, create a new one
-      const newFlowData = new FlowDataModel(flowData);
+      const newFlowData = new FlowDataModel({ ...flowData });
       await newFlowData.save();
       return newFlowData;
     }

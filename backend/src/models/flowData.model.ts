@@ -124,7 +124,7 @@ export interface FlowDataDocument extends Document {
   id: string;
   wbsId: string;
   taskId: string; // 0 not start, 1: correct, 2: not correct
-  subTaskIndex?: number;
+  subTaskIndex: number;
   userId: string;
   flowData: FlowDataItemDocument[];
 

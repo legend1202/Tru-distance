@@ -150,18 +150,18 @@ export function useNavData() {
             icon: ICONS.dashboard,
             roles: ['Lead'],
           },
-          {
-            title: t('Assessment Approval'),
-            path: paths.dashboard.status_summary,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
-          },
-          {
-            title: t('Consolidation and Roll-Up'),
-            path: paths.dashboard.eval_progress,
-            icon: ICONS.dashboard,
-            roles: ['ADMIN', 'Lead'],
-          },
+          // {
+          //   title: t('Assessment Approval'),
+          //   path: paths.dashboard.status_summary,
+          //   icon: ICONS.dashboard,
+          //   roles: ['ADMIN', 'Lead'],
+          // },
+          // {
+          //   title: t('Consolidation and Roll-Up'),
+          //   path: paths.dashboard.eval_progress,
+          //   icon: ICONS.dashboard,
+          //   roles: ['ADMIN', 'Lead'],
+          // },
         ],
       },
       // {
