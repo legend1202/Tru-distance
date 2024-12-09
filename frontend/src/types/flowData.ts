@@ -9,9 +9,15 @@ export type IflowData = {
 
 export type IflowDataItem = {
   type: string;
+  code?: string;
   status: number; // 0 not start, 1: correct, 2: not correct
   title: string;
   children: IflowDataItemChild[];
+};
+
+export type IPeriodOfPerformance = {
+  start: string;
+  end: string;
 };
 
 export type IflowDataItemChild = {
@@ -23,7 +29,7 @@ export type IflowDataItemChild = {
   question2?: string; // Make question2 optional
   question3?: string; // Make question2 optional
   question4?: string; // Make question2 optional
-  description1: string;
+  description1?: string;
   description2?: string; // Make description2 optional
   description3?: string; // Make description2 optional
   description4?: string; // Make description2 optional
@@ -31,6 +37,8 @@ export type IflowDataItemChild = {
   selectOptions?: string[];
   factor?: IFactor;
   factorJustification?: IFactorJustification;
+  hours?: number;
+  periodOfPerformance?: IPeriodOfPerformance;
   yes1?: number[];
   no1?: number[];
   yes2?: number[]; // Make yes2 optional
@@ -60,4 +68,18 @@ export type IFactorJustification = {
   complexity: string;
   risk: string;
   curve: string;
+};
+
+export type IFlowDataTask = {
+  name: string;
+  description: string;
+  periodOfPerformance: IPeriodOfPerformance;
+  hours: number;
+  hoursDesc: string;
+  cost: string;
+  costdesc: string;
+  material: string;
+  materialDesc: string;
+  travel: string;
+  travelDesc: string;
 };

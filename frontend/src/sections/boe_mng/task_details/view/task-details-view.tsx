@@ -5,13 +5,14 @@ import { Card, Stack, Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 
+import { useGetBoeLists } from 'src/api/boe';
 import { useGetClinLists } from 'src/api/cline';
 import { useGetGanttData } from 'src/api/ganttData';
 
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { IClin } from 'src/types/clin';
+import { IPeriodOfPerformance } from 'src/types/flowData';
 import { IOriginData, IEvaluationData } from 'src/types/gantt';
 
 import NewGanttChart from '../ganttChat';
@@ -21,16 +22,18 @@ import EvaluationSummaryView from '../evaluation_summary_view';
 // ----------------------------------------------------------------------
 
 export default function TaskDetailsView() {
-  const settings = useSettingsContext();
+  // const settings = useSettingsContext();
 
   const [monthFlag, setMonthFlag] = useState<boolean>(true);
 
   const { ganttData } = useGetGanttData();
   const { clinList } = useGetClinLists();
+  const { boeList } = useGetBoeLists();
 
   const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
   const [evaluationData, setEvaluationData] = useState<IEvaluationData[]>([]);
   const [clins, setClins] = useState<IClin[]>([]);
+  const [workPeriod, setWorkPeriod] = useState<IPeriodOfPerformance>();
 
   const handleCalendarChange = (value: boolean) => {
     setMonthFlag(value);
@@ -49,8 +52,14 @@ export default function TaskDetailsView() {
     }
   }, [clinList]);
 
+  useEffect(() => {
+    if (boeList.length > 0) {
+      setWorkPeriod({ start: boeList[0].boeStartDate, end: boeList[0].boeEnddate });
+    }
+  }, [boeList]);
+
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={false}>
       <CustomBreadcrumbs
         heading="Task Details"
         links={[
@@ -113,7 +122,7 @@ export default function TaskDetailsView() {
               justifyContent: 'space-around',
             }}
           >
-            <NewGanttChart tasks={evaluationData} monthFlag={monthFlag} />
+            <NewGanttChart tasks={evaluationData} monthFlag={monthFlag} workPeriod={workPeriod} />
           </Card>
           <Card
             sx={{

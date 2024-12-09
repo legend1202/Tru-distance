@@ -8,6 +8,7 @@ import {
   handleGetFlowData,
 } from '../services/evaluation.services';
 import { FlowDataDocument } from '../models/flowData.model';
+import { handleUpdateTaskStatus } from '../services/assign.task.services';
 
 export const getTotalTaskDataByProposalId = async (
   req: Request,
@@ -56,6 +57,27 @@ export const updateFlowData = async (req: Request, res: Response) => {
   try {
     if (flowData) {
       const apprvedData = await handleUpdateOrCreateFlowdata(flowData);
+      return sendResponse(res, 200, 'Flow data updated successfully', {
+        apprvedData,
+      });
+    } else {
+      throw new RequestError('flowData is required', 400);
+    }
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const updateTaskStatus = async (req: Request, res: Response) => {
+  const { wbsId, taskId, subTaskIndex, taskStatus } = req.body;
+  try {
+    if (taskStatus) {
+      const apprvedData = await handleUpdateTaskStatus(
+        wbsId,
+        taskId,
+        subTaskIndex,
+        taskStatus
+      );
       return sendResponse(res, 200, 'Flow data updated successfully', {
         apprvedData,
       });

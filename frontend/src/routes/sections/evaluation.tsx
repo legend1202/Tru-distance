@@ -15,7 +15,7 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
 const EvaluationScope = lazy(() => import('src/pages/evaluation/scope'));
 
-const AssignedTasksView = lazy(() => import('src/pages/evaluation/tasks'));
+const AssignedTasksView = lazy(() => import('src/pages/evaluation/assigned_tasks'));
 
 const EvaluationQuestionFlowPage = lazy(() => import('src/pages/evaluation/question-flow'));
 

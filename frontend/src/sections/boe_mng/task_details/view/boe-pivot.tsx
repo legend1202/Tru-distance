@@ -8,7 +8,6 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useGetGanttData } from 'src/api/ganttData';
 
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { IOriginData, IEvaluationData } from 'src/types/gantt';
@@ -20,8 +19,6 @@ import EvaluationPivotSelection from '../evaluation_pivot_selection';
 // ----------------------------------------------------------------------
 
 export default function BoePivotView() {
-  const settings = useSettingsContext();
-
   const { ganttData } = useGetGanttData();
 
   const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
@@ -41,7 +38,7 @@ export default function BoePivotView() {
   };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={false}>
       <CustomBreadcrumbs
         heading="Pivot"
         links={[

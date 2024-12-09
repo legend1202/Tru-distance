@@ -145,6 +145,12 @@ export function useNavData() {
             roles: ['Lead'],
           },
           {
+            title: t('Assessment Review'),
+            path: paths.approval_workflow.task_review,
+            icon: ICONS.dashboard,
+            roles: ['Lead'],
+          },
+          {
             title: t('Assessment Approval'),
             path: paths.dashboard.status_summary,
             icon: ICONS.dashboard,

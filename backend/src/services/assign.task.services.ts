@@ -13,6 +13,7 @@ import {
   ProcessingTaskModel,
 } from '../models/process.task.model';
 import { WbsModel } from '../models/wbs.model';
+import { FlowDataModel } from '../models/flowData.model';
 
 export const handleAssignedTaskCreation = async (
   approveData: Partial<ProcessingTaskDocument[]> & Document[],
@@ -82,4 +83,85 @@ export const findByIdAndUpdateAssignTaskDocument = async (
     ...options,
     returnDocument: 'after',
   });
+};
+
+export const handleUpdateTaskStatus = async (
+  wbsId: string,
+  taskId: string,
+  subTaskIndex: number,
+  taskStatus: number,
+  session?: ClientSession
+) => {
+  try {
+    const task = await ProcessingTaskModel.findOne({
+      wbsId: wbsId,
+      id: taskId,
+    });
+
+    if (!task) {
+      throw new Error('Task not found.');
+    }
+
+    const flowData = await FlowDataModel.findOne({
+      wbsId,
+      taskId,
+      subTaskIndex,
+    });
+
+    const hours = flowData?.flowData[2]?.children[2]?.hours;
+    const periodOfPerformance =
+      flowData?.flowData[3].children[3].periodOfPerformance;
+
+    if (task.subtasks[subTaskIndex - 1]) {
+      const result = await ProcessingTaskModel.updateOne(
+        {
+          wbsId: wbsId,
+          id: taskId,
+        },
+        {
+          $set: {
+            [`subtasks.${subTaskIndex - 1}.status`]: taskStatus,
+            [`subtasks.${subTaskIndex - 1}.hours`]: hours,
+            [`subtasks.${subTaskIndex - 1}.periodOfPerformance`]:
+              periodOfPerformance,
+          },
+        },
+        {
+          session: session || undefined,
+        }
+      );
+
+      if (result.modifiedCount === 0) {
+        console.error('Failed to update subtask status.');
+        throw new Error('Failed to update subtask status.');
+      } else {
+        return result;
+      }
+    } else {
+      const result = await ProcessingTaskModel.updateOne(
+        {
+          wbsId: wbsId,
+          id: taskId,
+        },
+        {
+          $set: {
+            status: taskStatus,
+            hours: hours,
+            periodOfPerformance: periodOfPerformance,
+          },
+        },
+        {
+          session: session || undefined,
+        }
+      );
+
+      if (result.modifiedCount === 0) {
+        throw new Error('Failed to update task status.');
+      } else {
+        return result;
+      }
+    }
+  } catch (error) {
+    throw error;
+  }
 };

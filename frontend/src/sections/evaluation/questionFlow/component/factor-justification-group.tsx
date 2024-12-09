@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import React, { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Typography } from '@mui/material';
@@ -14,12 +14,14 @@ type Props = {
   optionIndex?: number;
   setCurrentWorkflowPosition?: (pos: number[]) => void;
   handleCurrentStatus?: (status: number, statusFlag: boolean) => void;
+  handleSetFactorJustification: (data: IFactorJustification) => void;
 };
 const IFactorJustificationGroup = ({
   data,
   optionIndex,
   setCurrentWorkflowPosition,
   handleCurrentStatus,
+  handleSetFactorJustification,
 }: Props) => {
   const NewDescriptionSchema = Yup.object().shape({
     complexity: Yup.string(),
@@ -41,9 +43,18 @@ const IFactorJustificationGroup = ({
     defaultValues,
   });
 
-  //   const { watch, setValue } = methods;
+  const { watch } = methods;
 
-  //   const values = watch();
+  const values = watch();
+
+  useEffect(() => {
+    const factorJustification: IFactorJustification = {
+      complexity: values.complexity || '',
+      risk: values.risk || '',
+      curve: values.curve || '',
+    };
+    handleSetFactorJustification(factorJustification);
+  }, [handleSetFactorJustification, values]);
 
   return (
     <FormProvider methods={methods}>

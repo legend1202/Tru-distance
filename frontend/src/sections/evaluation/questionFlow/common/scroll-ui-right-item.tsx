@@ -18,7 +18,7 @@ import {
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { IflowDataItemChild } from 'src/types/flowData';
+import { IflowDataItemChild, IFactorJustification } from 'src/types/flowData';
 
 import SimpleSplitter from './simple-spliter';
 import IFactorJustificationGroup from '../component/factor-justification-group';
@@ -44,9 +44,18 @@ const CustomButton = styled(Button)({
 type Props = {
   data: IflowDataItemChild;
   scrollStatus: boolean;
+  handleSetDescription2: (description: string) => void;
+  handleSetDescription4: (description: string) => void;
+  handleSetFactorJustification: (data: IFactorJustification) => void;
 };
 
-const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
+const ScrolUIRightItem = ({
+  data,
+  scrollStatus,
+  handleSetDescription2,
+  handleSetDescription4,
+  handleSetFactorJustification,
+}: Props) => {
   const [checkbox1, setCheckbox1] = useState<boolean>(false);
   const [checkbox2, setCheckbox2] = useState<boolean>(false);
 
@@ -96,6 +105,14 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
       setValue('description4', '');
     }
   }, [data, setValue]);
+
+  useEffect(() => {
+    handleSetDescription2(values.description2 || '');
+  }, [handleSetDescription2, values.description2]);
+
+  useEffect(() => {
+    handleSetDescription4(values.description4 || '');
+  }, [handleSetDescription4, values.description4]);
 
   const handleClickCheckbox1 = () => {
     setCheckbox1(true);
@@ -171,7 +188,10 @@ const ScrolUIRightItem = ({ data, scrollStatus }: Props) => {
                 </FormProvider>
               )}
               {data.factorJustification && (
-                <IFactorJustificationGroup data={data.factorJustification} />
+                <IFactorJustificationGroup
+                  data={data.factorJustification}
+                  handleSetFactorJustification={handleSetFactorJustification}
+                />
               )}
             </CardContent>
           </Card>

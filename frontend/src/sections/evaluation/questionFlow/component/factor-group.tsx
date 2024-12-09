@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
-import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import React, { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Box, Typography } from '@mui/material';
@@ -14,12 +14,14 @@ type Props = {
   optionIndex?: number;
   setCurrentWorkflowPosition?: (pos: number[]) => void;
   handleCurrentStatus?: (status: number, statusFlag: boolean) => void;
+  handleSetFactor: (data: IFactor) => void;
 };
 const FactorGroup = ({
   data,
   optionIndex,
   setCurrentWorkflowPosition,
   handleCurrentStatus,
+  handleSetFactor,
 }: Props) => {
   const NewDescriptionSchema = Yup.object().shape({
     complexityValue: Yup.string(),
@@ -57,9 +59,26 @@ const FactorGroup = ({
     defaultValues,
   });
 
-  // const { watch, setValue } = methods;
+  const { watch } = methods;
 
-  // const values = watch();
+  const values = watch();
+
+  useEffect(() => {
+    const factor: IFactor = {
+      complexityValue: values.complexityValue || '',
+      complexityConcur: values.complexityConcur || '',
+      complexityNonConcur: values.complexityNonConcur || '',
+      riskValue: values.riskValue || '',
+      riskConcur: values.riskConcur || '',
+      riskNonConcur: values.riskNonConcur || '',
+      curveValue: values.curveValue || '',
+      curveConcur: values.curveConcur || '',
+      curveNonConcur: values.curveNonConcur || '',
+    };
+    handleSetFactor(factor);
+  }, [handleSetFactor, values]);
+
+  console.log('factor');
 
   return (
     <FormProvider methods={methods}>

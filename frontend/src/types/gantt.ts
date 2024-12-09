@@ -1,3 +1,5 @@
+import { IPeriodOfPerformance } from './flowData';
+
 type IWbs = {
   id: string;
   boeId: string;
@@ -12,7 +14,8 @@ export type ISubtask = {
   subtaskCode: string;
   name: string;
   description: string;
-  hours: string;
+  periodOfPerformance: IPeriodOfPerformance;
+  hours: number;
   hoursDesc: string;
   cost: string;
   costdesc: string;
@@ -38,6 +41,7 @@ export type IOriginData = {
   taskCode: string;
   description: string;
   hours: number;
+  periodOfPerformance: IPeriodOfPerformance;
   cost: number;
   material: number;
   travel: number;
@@ -61,10 +65,15 @@ export type IEvaluationData = {
   name: string;
   taskCode: string;
   description: string;
+  periodOfPerformance: IPeriodOfPerformance;
   hours: number;
-  cost: number;
-  material: number;
-  travel: number;
+  hoursDesc: string;
+  cost: string;
+  costdesc: string;
+  material: string;
+  materialDesc: string;
+  travel: string;
+  travelDesc: string;
   month?: number[];
   subtasks: ISubtask[];
   clinDetails: {

@@ -20,12 +20,19 @@ import {
 import Label from 'src/components/label';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { IflowDataItemChild } from 'src/types/flowData';
+import {
+  IFactor,
+  IFlowDataTask,
+  IflowDataItemChild,
+  IPeriodOfPerformance,
+} from 'src/types/flowData';
 
 import SimpleSplitter from './simple-spliter';
+import PopGroup from '../component/pop-group';
 import FactorGroup from '../component/factor-group';
 import MoveOptionGroup from '../component/move-option-item';
 import SelectOptionGroup from '../component/select-option-item';
+import RecommendHourItem from '../component/recommend-hour-input-item';
 
 const FirstButtonGroupContainer = styled('div')({
   position: 'absolute',
@@ -47,19 +54,31 @@ const ThirdButtonGroupContainer = styled('div')({
 
 type Props = {
   data: IflowDataItemChild;
+  task?: IFlowDataTask;
   scrollStatus: boolean;
   setCurrentWorkflowPosition: (pos: number[]) => void;
   handleCurrentStatus: (status: number, statusFlag: boolean) => void;
+  handleSetDescription1: (description: string) => void;
+  handleSetDescription3: (description: string) => void;
+  handleSetFactor: (data: IFactor) => void;
+  handleSetRecommendHours: (data: number) => void;
+  handleSetPopDistribution: (data: IPeriodOfPerformance) => void;
 };
 
 const ScrolUILeftItem = ({
   data,
+  task,
   scrollStatus,
   setCurrentWorkflowPosition,
   handleCurrentStatus,
+  handleSetDescription1,
+  handleSetDescription3,
+  handleSetFactor,
+  handleSetRecommendHours,
+  handleSetPopDistribution,
 }: Props) => {
-  const [checkbox1, setCheckbox1] = useState<boolean>(data?.status1 === 1);
-  const [checkbox2, setCheckbox2] = useState<boolean>(data?.status1 === 1);
+  const [checkbox1, setCheckbox1] = useState<boolean>(false);
+  const [checkbox2, setCheckbox2] = useState<boolean>(false);
   const [optionIndex, setOptionIndex] = useState<number>(data?.status1 || 0);
 
   const theme = useTheme();
@@ -97,16 +116,15 @@ const ScrolUILeftItem = ({
   const values = watch();
 
   useEffect(() => {
-    if (data?.status1 !== 1) {
-      setCheckbox1(false);
-    } else {
+    if (data?.status1 === 1) {
       setCheckbox1(true);
-    }
-    if (data?.status2 !== 1) {
       setCheckbox2(false);
-    } else {
+    }
+    if (data?.status1 === 2) {
+      setCheckbox1(false);
       setCheckbox2(true);
     }
+
     if (data?.status1) {
       setOptionIndex(data.status1);
     }
@@ -122,17 +140,21 @@ const ScrolUILeftItem = ({
     }
   }, [data, setValue]);
 
-  const handleClickCheckbox1 = () => {
-    setCheckbox1(true);
-    setCheckbox2(false);
-    handleCurrentStatus(1, true);
+  useEffect(() => {
+    handleSetDescription1(values.description1 || '');
+  }, [handleSetDescription1, values.description1]);
+
+  useEffect(() => {
+    handleSetDescription3(values.description3 || '');
+  }, [handleSetDescription3, values.description3]);
+
+  const handleClickCheckbox1 = async () => {
+    await handleCurrentStatus(1, true);
     setCurrentWorkflowPosition(data.yes1 || [0, 0]);
   };
 
-  const handleClickCheckbox2 = () => {
-    setCheckbox2(true);
-    setCheckbox1(false);
-    handleCurrentStatus(2, true);
+  const handleClickCheckbox2 = async () => {
+    await handleCurrentStatus(2, true);
     setCurrentWorkflowPosition(data.no1 || [0, 0]);
   };
 
@@ -229,7 +251,27 @@ const ScrolUILeftItem = ({
                 />
               )}
 
-              {data.factor && <FactorGroup data={data.factor} />}
+              {data.factor && <FactorGroup data={data.factor} handleSetFactor={handleSetFactor} />}
+
+              {data?.hours && data?.hours >= 0 && task ? (
+                <RecommendHourItem
+                  recommendHours={data.hours}
+                  task={task}
+                  handleSetRecommendHours={handleSetRecommendHours}
+                />
+              ) : (
+                ''
+              )}
+
+              {data?.periodOfPerformance && task ? (
+                <PopGroup
+                  periodOfPerformance={data.periodOfPerformance}
+                  task={task}
+                  handleSetPopDistribution={handleSetPopDistribution}
+                />
+              ) : (
+                ''
+              )}
             </CardContent>
           </Card>
         </Box>

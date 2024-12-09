@@ -43,6 +43,7 @@ export const paths = {
   approval_workflow: {
     teamLead_assign: `${ROOTS.APPROVALWORKFLOW}/teamLead_assign`,
     task_assign: `${ROOTS.APPROVALWORKFLOW}/task_assign`,
+    task_review: `${ROOTS.APPROVALWORKFLOW}/task_review`,
   },
   evalation: {
     tasks: `${ROOTS.EVALUATION}/tasks`,

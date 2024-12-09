@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 
 import { Card } from '@mui/material';
 import { Container } from '@mui/system';
@@ -8,14 +8,19 @@ import { useRouter } from 'src/routes/hooks';
 
 import { flowData } from 'src/utils/evaluation-flow';
 
-import { useAuthContext } from 'src/auth/hooks';
 import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 import { UpdateFlowData, useGetFlowDataByTask } from 'src/api/evaluation';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IEvaluationData } from 'src/types/gantt';
-import { IflowDataItem, IflowDataItemChild } from 'src/types/flowData';
+import {
+  IFactor,
+  IflowDataItem,
+  IFlowDataTask,
+  IflowDataItemChild,
+  IFactorJustification,
+  IPeriodOfPerformance,
+} from 'src/types/flowData';
 
 import Footer from './common/footer';
 import ScrolUILeftItem from './common/scroll-ui-left-item';
@@ -44,47 +49,41 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   const [scrollStatus, setScrollStatus] = useState<boolean>(false);
 
-  const { user } = useAuthContext();
-
   const [wbsTitle, setWbsTitle] = useState('');
 
-  const [tasks, setTasks] = useState<IEvaluationData[]>([]);
-
-  const [currentTask, setCurrentTask] = useState<IEvaluationData>();
+  const [currentTask, setCurrentTask] = useState<IFlowDataTask>();
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
   const { taskFlowData } = useGetFlowDataByTask(wbsId, taskId, subTaskIndex);
 
+  const [description1, setDescription1] = useState<string>();
+  const [description3, setDescription3] = useState<string>();
+  const [description2, setDescription2] = useState<string>();
+  const [description4, setDescription4] = useState<string>();
+
+  const [factor, setFactor] = useState<IFactor>();
+  const [factorJustification, setFactorJustification] = useState<IFactorJustification>();
+
+  const [recommendHours, setRecommendHours] = useState<number>();
+
+  const popDistributionRef = useRef<IPeriodOfPerformance>();
+
   // task data from api
   useEffect(() => {
     if (approvedData?.length > 0) {
-      const filteredData: IEvaluationData[] = approvedData
-        .map((task) => {
-          // Filter subtasks if they have the userId
-          const filteredSubtasks = task.subtasks.filter((subtask) =>
-            subtask.assignedUsers.includes(user?.userId)
-          );
+      const filteredData = approvedData.filter(
+        (task) => task.wbsId === wbsId && task.id === taskId
+      );
 
-          // Include task only if it has the userId or there are relevant subtasks
-          if (task.assignedUsers.includes(user?.userId) || filteredSubtasks.length > 0) {
-            return {
-              ...task,
-              subtasks: filteredSubtasks, // Include only the filtered subtasks
-            };
-          }
-
-          return null; // Return null for tasks that don't match the criteria
-        })
-        .filter((task) => task !== null) as IEvaluationData[]; // Type-cast to ensure correct type
-
-      if (filteredData.length > 0) {
-        setWbsTitle(filteredData[0]?.wbsDetails[0].wbsTitle);
-        setTasks(filteredData);
+      setWbsTitle(filteredData[0]?.wbsDetails[0].wbsTitle);
+      if (subTaskIndex) {
+        setCurrentTask(filteredData[0].subtasks[subTaskIndex]);
+      } else {
         setCurrentTask(filteredData[0]);
       }
     }
-  }, [approvedData, user?.userId]);
+  }, [approvedData, subTaskIndex, taskId, wbsId]);
 
   useMemo(() => {
     if (taskFlowData?.flowData?.length > 0) {
@@ -116,6 +115,7 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   // set workflow position
   const handleSetCurrentWorkflowPosition = async (pos: number[]) => {
+    await handleSaveCurrentData();
     const updatedFlowData = await UpdateFlowData({
       id: flowDataId,
       wbsId,
@@ -154,6 +154,78 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
     setTotalFlowData(tempFlowData);
   };
 
+  const handleSetDescription1 = (description: string) => {
+    setDescription1(description);
+  };
+
+  const handleSetDescription3 = (description: string) => {
+    setDescription3(description);
+  };
+
+  const handleSetDescription2 = (description: string) => {
+    setDescription2(description);
+  };
+
+  const handleSetDescription4 = (description: string) => {
+    setDescription4(description);
+  };
+
+  const handleSetFactor = (data: IFactor) => {
+    setFactor(data);
+  };
+
+  const handleSetFactorJustification = (data: IFactorJustification) => {
+    setFactorJustification(data);
+  };
+
+  const handleSetRecommendHours = (data: number) => {
+    setRecommendHours(data);
+  };
+
+  const handleSetPopDistribution = (data: IPeriodOfPerformance) => {
+    popDistributionRef.current = data;
+  };
+
+  const handleSaveCurrentData = () => {
+    const tempFlowData = totalFlowData;
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.description1) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].description1 =
+        description1;
+    }
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.description3) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].description3 =
+        description3;
+    }
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.description2) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].description2 =
+        description2;
+    }
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.description4) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].description4 =
+        description4;
+    }
+
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.factor) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].factor = factor;
+    }
+
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.factorJustification) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].factorJustification =
+        factorJustification;
+    }
+
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.hours >= 0) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].hours = recommendHours;
+    }
+
+    if (tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]]?.periodOfPerformance) {
+      tempFlowData[currenFlowPosition[0]].children[currenFlowPosition[1]].periodOfPerformance =
+        popDistributionRef.current;
+    }
+
+    setTotalFlowData(tempFlowData);
+  };
+
   return (
     <Container
       // maxWidth={settings.themeStretch ? false : 'lg'}
@@ -187,12 +259,24 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
       >
         <ScrolUILeftItem
           data={currentFlowData}
+          task={currentTask}
           scrollStatus={scrollStatus}
           setCurrentWorkflowPosition={handleSetCurrentWorkflowPosition}
           handleCurrentStatus={handleCurrentStatus}
+          handleSetDescription1={handleSetDescription1}
+          handleSetDescription3={handleSetDescription3}
+          handleSetFactor={handleSetFactor}
+          handleSetRecommendHours={handleSetRecommendHours}
+          handleSetPopDistribution={handleSetPopDistribution}
         />
 
-        <ScrolUIRightItem data={currentFlowData} scrollStatus={scrollStatus} />
+        <ScrolUIRightItem
+          data={currentFlowData}
+          scrollStatus={scrollStatus}
+          handleSetDescription2={handleSetDescription2}
+          handleSetDescription4={handleSetDescription4}
+          handleSetFactorJustification={handleSetFactorJustification}
+        />
       </Card>
       <Footer handleWorkflowPosition={handleWorkflowPosition} />
     </Container>

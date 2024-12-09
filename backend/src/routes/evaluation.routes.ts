@@ -4,6 +4,7 @@ import {
   getTotalTaskDataByProposalId,
   updateFlowData,
   getFlowdata,
+  updateTaskStatus
 } from '../controllers/evaluation.controller';
 import { errorWrap } from '../utils/error.utils';
 import { withTransaction } from '../utils/transactionHelper';
@@ -27,6 +28,12 @@ router.post(
   '/updateFlowdata',
   errorWrap(verifyToken, 'Could not verify JWT token'),
   withTransaction(errorWrap(updateFlowData, 'Could not get users'))
+);
+
+router.post(
+  '/updateTaskStatus',
+  errorWrap(verifyToken, 'Could not verify JWT token'),
+  withTransaction(errorWrap(updateTaskStatus, 'Could not get users'))
 );
 
 export default router;

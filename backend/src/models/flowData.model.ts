@@ -1,5 +1,9 @@
 import { Document, model, Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  PeriodOfPerformanceDocument,
+  PeriodOfPerformanceSchema,
+} from './origin.task.model';
 
 interface FlowDataItemChildMoveOptionDocument extends Document {
   title: string;
@@ -57,14 +61,16 @@ interface FlowDataItemChildDocumnet extends Document {
   question2: string; // Make question2 optional
   question3: string; // Make question2 optional
   question4: string; // Make question2 optional
-  description1: string;
-  description2: string; // Make description2 optional
-  description3: string; // Make description2 optional
-  description4: string; // Make description2 optional
-  moveOptions: FlowDataItemChildMoveOptionDocument[];
-  selectOptions: string[];
-  factor: FactorDocument;
-  factorJustification: FactorJustificationDocument;
+  description1?: string;
+  description2?: string; // Make description2 optional
+  description3?: string; // Make description2 optional
+  description4?: string; // Make description2 optional
+  moveOptions?: FlowDataItemChildMoveOptionDocument[];
+  selectOptions?: string[];
+  factor?: FactorDocument;
+  factorJustification?: FactorJustificationDocument;
+  hours?: number;
+  periodOfPerformance?: PeriodOfPerformanceDocument;
   yes1: number[];
   no1: number[];
   yes2: number[]; // Make yes2 optional
@@ -90,6 +96,8 @@ const FlowDataItemChildSchema = new Schema<FlowDataItemChildDocumnet>({
   selectOptions: { type: [String] },
   factor: { type: FactorSchema },
   factorJustification: { type: FactorJustificationSchema },
+  hours: { type: Number },
+  periodOfPerformance: { type: PeriodOfPerformanceSchema },
   yes1: { type: [Number] },
   no1: { type: [Number] },
   yes2: { type: [Number] }, // Make yes2 optional

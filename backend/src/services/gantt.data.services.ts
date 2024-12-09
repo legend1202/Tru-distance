@@ -100,6 +100,7 @@ export const handleGetGanttData = async (
         name: 1,
         taskCode: 1,
         description: 1,
+        periodOfPerformance: 1,
         hours: 1,
         cost: 1,
         travel: 1,

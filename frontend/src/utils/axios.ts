@@ -51,6 +51,9 @@ export const endpoints = {
   clin: {
     getData: '/api/clin/getClin',
   },
+  boe: {
+    getData: '/api/boe/boeLists',
+  },
   approve_workflow: {
     task_assign: '/api/approve/task_assign',
     get_assigned_tasks: '/api/approve/get_assigned_tasks',
@@ -61,5 +64,6 @@ export const endpoints = {
     getTotalTaskDataByProposalId: '/api/evaluation/getTotalTaskDataByProposalId',
     getFlowdata: '/api/evaluation/getFlowdata',
     updateFlowdata: '/api/evaluation/updateFlowdata',
+    updateTaskStatus: '/api/evaluation/updateTaskStatus',
   },
 };

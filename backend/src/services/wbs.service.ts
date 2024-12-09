@@ -10,6 +10,7 @@ import {
 } from 'mongoose';
 import { WbsDocument, WbsModel } from '../models/wbs.model';
 import { OriginTaskModel } from '../models/origin.task.model';
+import { ProcessingTaskModel } from '../models/process.task.model';
 
 export const handleGetWbs = async (
   session?: ClientSession
@@ -19,7 +20,7 @@ export const handleGetWbs = async (
   const wbsWithTasks = await WbsModel.aggregate([
     {
       $lookup: {
-        from: OriginTaskModel.collection.name, // The name of the Task collection in MongoDB
+        from: ProcessingTaskModel.collection.name, // The name of the Task collection in MongoDB
         localField: 'id',
         foreignField: 'wbsId',
         as: 'tasks', // The field in the output document where the tasks will be stored

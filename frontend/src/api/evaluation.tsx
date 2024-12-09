@@ -35,7 +35,7 @@ export const useGetFlowDataByTask = (wbsId: string, taskId: string, subTaskIndex
 
   const memoizedValue = useMemo(
     () => ({
-      taskFlowData: (data?.result?.flowData as IflowData),
+      taskFlowData: data?.result?.flowData as IflowData,
       dataLoading: isLoading,
       dataError: error,
       dataValidating: isValidating,
@@ -52,6 +52,26 @@ export const UpdateFlowData = async (query: IflowData) => {
 
   const memoizedValue = {
     data: (res?.data?.result.apprvedData as IflowData) || [],
+  };
+
+  return memoizedValue;
+};
+
+export const UpdateTaskStatus = async (
+  wbsId: string,
+  taskId: string,
+  subTaskIndex: number,
+  taskStatus: number
+) => {
+  const res = await axiosInstance.post(endpoints.evaluation.updateTaskStatus, {
+    wbsId,
+    taskId,
+    subTaskIndex,
+    taskStatus,
+  });
+
+  const memoizedValue = {
+    data: res?.data,
   };
 
   return memoizedValue;

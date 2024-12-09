@@ -1,6 +1,6 @@
-import { IflowDataItem } from "src/types/flowData";
+import { IflowDataItem } from 'src/types/flowData';
 
-export const flowData : IflowDataItem[] = [
+export const flowData: IflowDataItem[] = [
   {
     type: 'scope',
     status: 0, // 0 not start, 1: correct, 2: not correct
@@ -19,9 +19,8 @@ export const flowData : IflowDataItem[] = [
         description2: '', // Default value for description2
         yes2: [], // Default value for yes2
         no2: [], // Default value for no2
-        narrative: '', // Default value for narrative
         next: [0, 1], // Default value for next
-        prev: [],
+        prev: [0, 0],
       },
       {
         status1: 0, // 0 not start, 1: correct, 2: not correct
@@ -41,7 +40,7 @@ export const flowData : IflowDataItem[] = [
         description1:
           'Redline the SOW in the section below: (Section shows redlines, but has button options to show all mark-up, simple mark-up and no mark-up. (Data is captured in database)',
         next: [0, 3],
-        prev: [0, 1],
+        prev: [0, 0],
       },
       {
         status1: 0, // 0 not start, 1: correct, 2: not correct
@@ -55,7 +54,6 @@ export const flowData : IflowDataItem[] = [
         description2: '', // Default value for description2
         yes2: [], // Default value for yes2
         no2: [], // Default value for no2
-        narrative: '', // Default value for narrative
         next: [0, 4], // Default value for next
         prev: [0, 0],
       },
@@ -108,9 +106,8 @@ export const flowData : IflowDataItem[] = [
         question1:
           '4.1.3-Q2: Provide missing CDRLs needed in the SOW in box below (narrative box Page 4.1.3-Q2.) ',
         description1: 'Recommended CDRLs:',
-        description2:
+        description3:
           'Redline the SOW in the section below: (Section shows redlines, but has button options to show all mark-up, simple mark-up and no mark-up. (Data is captured in database)',
-        narrative: '',
         next: [0, 9],
         prev: [0, 7],
       },
@@ -132,8 +129,7 @@ export const flowData : IflowDataItem[] = [
         question1:
           '4.1.4-Q2: Provide narrative of how SOW doesn’t align with WBS Descriptions in box below (narrative box Section 1: Page 4.1.4-Q2.)',
         description1: 'WBS Description',
-        description2: '1.4.Q2 Narrative',
-        narrative: '',
+        description3: '1.4.Q2 Narrative',
         prev: [0, 9],
         next: [0, 11],
       },
@@ -152,11 +148,10 @@ export const flowData : IflowDataItem[] = [
       {
         status1: 0, // 0 not start, 1: correct, 2: not correct
         status2: 0, // 0 not start, 1: correct, 2: not correct
-        number: '4.1.4-Q4',
         question1:
           '4.1.4-Q4: Redline the SOW in the section below: (Section shows redlines, but has button options to show all mark-up, simple mark-up and no mark-up. (Data is captured in database)',
         description1: 'WBS Description',
-        narrative: '',
+
         prev: [0, 11],
         next: [1, 0],
       },
@@ -166,10 +161,10 @@ export const flowData : IflowDataItem[] = [
     type: 'Methodology',
     code: '4.2',
     title: 'Evaluate Methodology:',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
-        number: '4.2.1-Q1',
         intro: 'Read the BOE to the right ',
         question1:
           '4.2.1-Q1: What type of Methodology approach was used: (Provide a small help link next to each answer or make the answer a link that provides a pop-up description of each methodology) Get descriptions from DAU.',
@@ -202,7 +197,6 @@ export const flowData : IflowDataItem[] = [
       },
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
-        number: '4.2.1.a-Q1',
         intro: 'Read the BOE to the right ',
         question1:
           '4.2.1.a-Q1: Analogous Methodology: Do you believe that the justification provided as part of the Methodology uses actuals with similar work to the work in the WBS/Task? ',
@@ -224,7 +218,7 @@ export const flowData : IflowDataItem[] = [
       },
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
-        number: '4.2.1.a-Q1',
+
         intro: 'Read the BOE to the right ',
         question1:
           '4.2.1.b.Q1: Cost Estimating Relationship (CER): Do you believe that the justification provided as part of the Methodology uses actuals with similar work to the work in the WBS/Task? ',
@@ -379,6 +373,8 @@ export const flowData : IflowDataItem[] = [
     type: 'quantity',
     code: '4.3',
     title: 'Evaluate Quantity of Hours using methodology:',
+
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -407,7 +403,7 @@ export const flowData : IflowDataItem[] = [
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....',
         question1:
           'In the narrative boxes below, input the recommended # of hours and provide narrative and justification of narrative as to why the estimated number of hours is accurate or inaccurate for the Task. ',
-        description1: 'BOE Hours:\n Estimated Hours \nRecommanded Hours',
+        hours: 0,
         description3: 'Justification / Narration: ',
         prev: [2, 0],
         next: [2, 3],
@@ -438,6 +434,7 @@ export const flowData : IflowDataItem[] = [
     type: 'pop',
     code: '4.4',
     title: ' Evaluate Distribution of Proposed Hours across provided period of performance (POP):',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -474,8 +471,11 @@ export const flowData : IflowDataItem[] = [
         status1: 0,
         question1:
           '4.4.1-Q4: Provide distribution of hours within the Period of Performance (POP) table Pop-up:',
-        description1: 'Narrative / Justification',
         description3: 'SOW Language (SOW language specifically associated only with this WBS)',
+        periodOfPerformance: {
+          start: '',
+          end: '',
+        },
         prev: [3, 2],
         next: [4, 0],
       },
@@ -485,6 +485,7 @@ export const flowData : IflowDataItem[] = [
     type: 'labor',
     code: '4.5',
     title: 'Evaluate Labor Categories ',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -516,6 +517,7 @@ export const flowData : IflowDataItem[] = [
     type: 'labor distribution',
     code: '4.6',
     title: 'Evaluate Labor Categories Distribution of work',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -564,6 +566,7 @@ export const flowData : IflowDataItem[] = [
     type: 'Material',
     code: '4.7',
     title: 'Evaluate Material Costs on BOM/CBOM (Associated with WBS/Task)',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -593,6 +596,7 @@ export const flowData : IflowDataItem[] = [
     type: 'Travel',
     code: '4.8',
     title: 'Evaluate Travel Proposal',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....
@@ -622,6 +626,7 @@ export const flowData : IflowDataItem[] = [
     type: 'summary',
     code: '4.9',
     title: 'WBS Summary Review',
+    status: 0,
     children: [
       {
         status1: 0, // 0 not start, 1: moveOptions 1, 2: moveOptions 2 ....

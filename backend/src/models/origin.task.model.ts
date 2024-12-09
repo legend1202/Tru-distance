@@ -14,7 +14,7 @@ export interface MoqDocument {
     actualHours: string;
     chargeNumber: string;
     contractNumber: string;
-    periodOfPerformance: PeriodOfPerformanceDocument;
+    periodOfPerformance?: PeriodOfPerformanceDocument;
     reportName: string;
     dataCollectedDate: string;
     additionalSortFields: string[];
@@ -28,6 +28,7 @@ export interface Subtask {
   description: string;
   hours: number;
   hoursDesc?: string;
+  periodOfPerformance?: PeriodOfPerformanceDocument;
   cost: number;
   costdesc?: string;
   material: number;
@@ -46,7 +47,7 @@ export interface OriginTaskDocument extends Document {
 
   name: string;
   taskCode: string;
-  periodOfPerformance: PeriodOfPerformanceDocument;
+  periodOfPerformance?: PeriodOfPerformanceDocument;
   description: string;
 
   hours: number | 0;
@@ -94,6 +95,7 @@ const SubtaskSchema = new Schema<Subtask>({
   description: { type: String },
   hours: { type: Number },
   hoursDesc: { type: String },
+  periodOfPerformance: { type: PeriodOfPerformanceSchema },
   cost: { type: Number },
   costdesc: { type: String },
   material: { type: Number },

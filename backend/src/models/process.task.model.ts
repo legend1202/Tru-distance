@@ -14,6 +14,7 @@ export interface Subtask {
   hours: number | 0;
   hoursDesc: string;
   cost: number | 0;
+  periodOfPerformance?: PeriodOfPerformanceDocument;
   costdesc: string;
   material: string;
   materialDesc: string;
@@ -32,7 +33,7 @@ export interface ProcessingTaskDocument extends Document {
 
   name: string;
   taskCode: string;
-  periodOfPerformance: PeriodOfPerformanceDocument;
+  periodOfPerformance?: PeriodOfPerformanceDocument;
   description: string;
 
   hours: number | 0;
@@ -60,6 +61,7 @@ const SubtaskSchema = new Schema<Subtask>({
   description: { type: String },
   hours: { type: Number },
   hoursDesc: { type: String },
+  periodOfPerformance: { type: PeriodOfPerformanceSchema },
   cost: { type: Number },
   costdesc: { type: String },
   material: { type: String },
