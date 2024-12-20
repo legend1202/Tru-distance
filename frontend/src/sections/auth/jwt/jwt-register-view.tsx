@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -29,6 +30,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 export default function JwtRegisterView() {
   const { t } = useTranslate();
   const { register } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const router = useRouter();
 
@@ -65,6 +67,7 @@ export default function JwtRegisterView() {
     try {
       await register?.(data.email, data.password, data.firstName, data.lastName);
 
+      enqueueSnackbar('Your account was registered successfully!');
       router.push(PATH_AFTER_REGISTER);
     } catch (error) {
       reset();

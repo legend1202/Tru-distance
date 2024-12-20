@@ -84,6 +84,76 @@ export const handleUserLogin = async (
   }
 };
 
+export const handleMSUserCreation = async (
+  user: Partial<User> & Document,
+  session?: ClientSession
+): Promise<User> => {
+  const { microsoftId, email, name } = user;
+
+  if (!name) throw new RequestError('Name must not be empty', 400);
+  if (!email) throw new RequestError('Invalid fields', 400);
+  if (!microsoftId) throw new RequestError('Password must not be empty', 400);
+
+  const existingUser = await findOneUser({ email });
+
+  if (existingUser) {
+    throw new RequestError(
+      `Can't register this user. this email used by someone.`,
+      500
+    );
+  }
+
+  const newUser = await createNewMSUser(microsoftId, email, name, session);
+
+  return newUser;
+};
+
+export const handleUserLoginMS = async (
+  user: Partial<User> & Document,
+  session?: ClientSession
+): Promise<any> => {
+  const { microsoftId, email, name } = user;
+
+  if (!email) throw new RequestError('Invalid fields', 400);
+  if (!name) throw new RequestError('Password must not be empty', 400);
+
+  const existingUser = await findOneUser({ email }, { _id: 0, __v: 0 });
+
+  if (microsoftId && existingUser) {
+    if (microsoftId !== existingUser.microsoftId) {
+      throw new AuthenticationError(`You just signed up! Please try again!`);
+    }
+
+    if (existingUser?.role && haveCommonItem(Roles, existingUser.role)) {
+      const secretKey: string = process.env.JWT_SECRET_KEY || '';
+      const token = jwt.sign(
+        {
+          userId: existingUser.id,
+          name: existingUser.name,
+          role: existingUser.role,
+          email: existingUser.email,
+        },
+        secretKey,
+        {
+          expiresIn: '6d',
+        }
+      );
+      return {
+        token,
+        userId: existingUser.id,
+        email: existingUser.email,
+        name: existingUser.name,
+        role: existingUser.role,
+      };
+    } else {
+      throw new AuthenticationError(`You didn't approved by admin.`);
+    }
+  } else {
+    handleMSUserCreation(user);
+    throw new AuthenticationError(`Authentication error.`);
+  }
+};
+
 export const handleGetUsers = async (
   userId?: string,
   session?: ClientSession
@@ -153,6 +223,23 @@ export const createNewUser = async (
   const newUser = new UserModel({
     email,
     password,
+    name,
+    role: ['Cost'],
+  });
+
+  await newUser.save({ session });
+  return newUser;
+};
+
+export const createNewMSUser = async (
+  microsoftId: string,
+  email: string,
+  name: string,
+  session?: ClientSession
+): Promise<User> => {
+  const newUser = new UserModel({
+    email,
+    microsoftId,
     name,
     role: ['Cost'],
   });

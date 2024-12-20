@@ -96,6 +96,12 @@ export function useNavData() {
             roles: ['ADMIN', 'Lead'],
           },
           {
+            title: t('File List'),
+            path: paths.boe_mng.file_list,
+            icon: ICONS.dashboard,
+            roles: ['ADMIN', 'Lead'],
+          },
+          {
             title: t('WBS Summary'),
             path: paths.boe_mng.wbs_summary,
             icon: ICONS.dashboard,

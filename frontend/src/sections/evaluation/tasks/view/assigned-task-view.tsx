@@ -15,7 +15,7 @@ import { useSettingsContext } from 'src/components/settings';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 import ScrolUILeftItem from '../scroll-ui-left-item';
 import ScrolUIRightItem from '../scroll-ui-right-item';
@@ -31,7 +31,7 @@ export default function EvaluationScopeView() {
 
   const { dataList } = useGetEvaluationDataByEvaluator(proposalId);
 
-  const [assignedTasks, setAssignedTasks] = useState<IEvaluationData[]>([]);
+  const [assignedTasks, setAssignedTasks] = useState<ITask[]>([]);
 
   const ProposalSchema = Yup.object().shape({
     proposalId: Yup.string().required('Wbs is required'),
@@ -68,6 +68,7 @@ export default function EvaluationScopeView() {
   useEffect(() => {
     if (dataList.length > 0) {
       setWbsId(dataList[0].id);
+      setAssignedTasks(dataList[0].tasks);
     }
   }, [dataList]);
 
@@ -139,7 +140,7 @@ export default function EvaluationScopeView() {
           handleSelectedWbsId={handleSelectedWbsId}
         />
 
-        <ScrolUIRightItem data={assignedTasks} wbsId={wbsId} />
+        {assignedTasks.length > 0 && <ScrolUIRightItem data={assignedTasks} wbsId={wbsId} />}
       </Card>
     </Container>
   );

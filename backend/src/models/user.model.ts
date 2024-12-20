@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface User extends Document {
   id: string;
   avatar?: string;
+  microsoftId: string;
   name: string;
   email: string;
   password: string;
@@ -21,10 +22,13 @@ const UserSchema = new Schema<User>(
       required: true,
       unique: true,
     },
+    microsoftId: {
+      type: String,
+    },
     avatar: { type: String },
     name: { type: String },
     email: { type: String },
-    password: { type: String, required: true },
+    password: { type: String },
     role: {
       type: [String],
     },

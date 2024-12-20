@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 
+import { paths } from 'src/routes/paths';
 /* import { paths } from 'src/routes/paths'; */
 import { useRouter } from 'src/routes/hooks';
 
@@ -61,10 +62,9 @@ export default function AccountPopover() {
     }
   };
 
-  /* const handleClickItem = (path: string) => {
-    popover.onClose();
-    router.push(path);
-  }; */
+  const handleClickHome = () => {
+    router.push(paths.home);
+  };
 
   return (
     <>
@@ -119,6 +119,13 @@ export default function AccountPopover() {
         </Stack>
  */}
         <Divider sx={{ borderStyle: 'dashed' }} />
+
+        <MenuItem
+          onClick={handleClickHome}
+          sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'success.main' }}
+        >
+          {t('Home')}
+        </MenuItem>
 
         <MenuItem
           onClick={handleLogout}

@@ -2,24 +2,24 @@ import { useState, useEffect } from 'react';
 
 import { Card, Typography } from '@mui/material';
 
-import { calculateTotals } from 'src/utils/wbs-total';
+import { calculateClinTotals } from 'src/utils/wbs-total';
 
-import { IOriginData, IEvaluationData } from 'src/types/gantt';
+import { IWbs } from 'src/types/wbs';
 
 type Props = {
   clinId: string;
   clinNumber: string;
-  clinData: IOriginData[] | IEvaluationData[];
+  clinData: IWbs[];
 };
 
 const ClinTotalItem = ({ clinId, clinNumber, clinData }: Props) => {
   const [totalHours, setTotalHours] = useState(0);
 
   useEffect(() => {
-    if (clinId && clinData.length > 0) {
+    if (clinId && clinData) {
       // const filteredClinData = clinData.filter((clin) => clin.id === clinId);
-      const total = calculateTotals(clinData);
-      setTotalHours(total.totalHours);
+      const total = calculateClinTotals(clinData, clinId);
+      setTotalHours(total);
     }
   }, [clinId, clinData]);
 

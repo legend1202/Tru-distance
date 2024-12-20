@@ -9,7 +9,7 @@ import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 import Footer from '../footer';
 import ScrolUILeftItem from '../scroll-ui-left-item';
@@ -37,33 +37,43 @@ export default function EvaluationQuestionFlowScopeSectionView({
 
   const [wbsTitle, setWbsTitle] = useState('');
 
-  const [tasks, setTasks] = useState<IEvaluationData[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
 
-  const [currentTask, setCurrentTask] = useState<IEvaluationData>();
+  const [currentTask, setCurrentTask] = useState<ITask>();
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
   useEffect(() => {
     if (approvedData?.length > 0) {
-      const filteredData: IEvaluationData[] = approvedData
+      const filteredData: ITask[] = approvedData
         .map((task) => {
           // Filter subtasks if they have the userId
-          const filteredSubtasks = task.subtasks.filter((subtask) =>
-            subtask.assignedUsers.includes(user?.userId)
-          );
+          // const filteredSubtasks = task.subtasks.filter((subtask) =>
+          //   subtask.assignedUsers.includes(user?.userId)
+          // );
 
           // Include task only if it has the userId or there are relevant subtasks
-          if (task.assignedUsers.includes(user?.userId) || filteredSubtasks.length > 0) {
+          // if (task.assignedUsers.includes(user?.userId) || filteredSubtasks.length > 0) {
+          //   return {
+          //     ...task,
+          //     // subtasks: filteredSubtasks, // Include only the filtered subtasks
+          //   };
+          // }
+          if (task.assignedUsers.includes(user?.userId)) {
             return {
               ...task,
-              subtasks: filteredSubtasks, // Include only the filtered subtasks
+              // subtasks: filteredSubtasks, // Include only the filtered subtasks
             };
           }
 
           return null; // Return null for tasks that don't match the criteria
         })
-        .filter((task) => task !== null) as IEvaluationData[]; // Type-cast to ensure correct type
+        .filter((task) => task !== null) as ITask[]; // Type-cast to ensure correct type
 
-      if (filteredData.length > 0) {
+      if (
+        filteredData.length > 0 &&
+        filteredData[0]?.wbsDetails &&
+        filteredData[0]?.wbsDetails.length > 0
+      ) {
         setWbsTitle(filteredData[0]?.wbsDetails[0].wbsTitle);
         setTasks(filteredData);
         setCurrentTask(filteredData[0]);

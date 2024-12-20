@@ -4,110 +4,106 @@ import { Table, TableRow, Container, TableBody, TableCell, TableHead } from '@mu
 
 import { useGetUserLists } from 'src/api/admin';
 
+import { IWbs } from 'src/types/wbs';
+import { ITask } from 'src/types/task';
 import { IUserItem } from 'src/types/user';
-import { ISubtask, IEvaluationData } from 'src/types/gantt';
 
 interface GanttChartProps {
-  tasks: IEvaluationData[];
+  wbs: IWbs[];
 }
 
 interface RenderRowProps {
-  task: IEvaluationData;
+  taskData: ITask;
   users: IUserItem[];
+  index: number;
 }
 
-interface RenderSubRowProps {
-  task: ISubtask;
-  users: IUserItem[];
+interface RenderWbsRowProps {
+  wbsData: IWbs;
 }
 
-const RenderRow = ({ task, users }: RenderRowProps) => {
-  const filteredUser = task.assignedUsers
-    ? users.filter((user) => user.id === task.assignedUsers[0])
+const RenderRow = ({ taskData, users, index }: RenderRowProps) => {
+  const filteredUser = taskData.assignedUsers
+    ? users.filter((user) => user.id === taskData.assignedUsers[0])
     : [];
   return (
-    <TableRow key={`${task.name}-task`}>
+    <TableRow key={`${taskData.id}-task`}>
       {/* Add unique key based on task.name */}
       <TableCell
-        key={`${task.name}-name`}
+        key={`${taskData.name}-name`}
         style={{ paddingLeft: '16px', border: '1px solid #ccc' }}
       >
-        {task.name}
+        {index + 1}. {taskData.name}
       </TableCell>
       <TableCell
-        key={`${task.name}-evaluator`}
+        key={`${taskData.name}-evaluator`}
         style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
       >
         {filteredUser[0]?.name || ''}
       </TableCell>
       <TableCell
-        key={`${task.name}-status`}
+        key={`${taskData.name}-status`}
         style={{
           backgroundColor:
             // eslint-disable-next-line no-nested-ternary
-            task.status === 2 ? 'green' : task.status === 1 ? 'orange' : 'transparent',
+            taskData.status === 2 ? 'green' : taskData.status === 1 ? 'orange' : 'transparent',
           color: '#fff',
           textAlign: 'center',
           border: '1px solid #ccc',
         }}
       >
         {/* eslint-disable-next-line no-nested-ternary */}
-        {task.status === 2 ? (task.status === 1 ? 'Partially' : 'Completed') : 'Not Yet'}
+        {taskData.status === 2 ? (taskData.status === 1 ? 'Partially' : 'Completed') : 'Not Yet'}
       </TableCell>
       <TableCell
-        key={`${task.name}-tbd`}
+        key={`${taskData.name}-tbd`}
         style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
       >
-        TBD
+        {taskData.description || ''}
       </TableCell>
     </TableRow>
   );
 };
 
-const RenderSubRow = ({ task, users }: RenderSubRowProps) => {
-  const filteredUser = task.assignedUsers
-    ? users.filter((user) => user.id === task.assignedUsers[0])
-    : [];
-  return (
-    <TableRow key={`${task.name}-subtask`}>
-      <TableCell
-        key={`${task.name}-subname`}
-        style={{ paddingLeft: '36px', border: '1px solid #ccc' }}
-      >
-        {task.name}
-      </TableCell>
-      <TableCell
-        key={`${task.name}-subevaluator`}
-        style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
-      >
-        {filteredUser[0]?.name || ''}
-      </TableCell>
-      <TableCell
-        key={`${task.name}-substatus`}
-        style={{
+const RenderWbsRow = ({ wbsData }: RenderWbsRowProps) => (
+  <TableRow key={`${wbsData.wbsNumber}-task`}>
+    {/* Add unique key based on task.name */}
+    <TableCell
+      key={`${wbsData.wbsTitle}-name`}
+      style={{ paddingLeft: '16px', border: '1px solid #ccc', backgroundColor: 'gray' }}
+    >
+      {wbsData.wbsTitle}
+    </TableCell>
+    <TableCell
+      key={`${wbsData.wbsTitle}-evaluator`}
+      style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
+    >
+      {wbsData?.eveluatorName || ''}
+    </TableCell>
+    <TableCell
+      key={`${wbsData.wbsNumber}-status`}
+      style={{
+        backgroundColor:
           // eslint-disable-next-line no-nested-ternary
-          backgroundColor:
-            // eslint-disable-next-line no-nested-ternary
-            task.status === 2 ? 'green' : task.status === 1 ? 'orange' : 'transparent',
-          color: '#fff',
-          textAlign: 'center',
-          border: '1px solid #ccc',
-        }}
-      >
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {task.status === 2 ? (task.status === 1 ? 'Partially' : 'Completed') : 'Not Yet'}
-      </TableCell>
-      <TableCell
-        key={`${task.name}-subtbd`}
-        style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
-      >
-        TBD
-      </TableCell>
-    </TableRow>
-  );
-};
+          wbsData.status === 2 ? 'green' : wbsData.status === 1 ? 'orange' : 'transparent',
+        color: '#fff',
+        textAlign: 'center',
+        border: '1px solid #ccc',
+      }}
+    >
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {wbsData.status === 2 ? 'Completed' : wbsData.status === 1 ? 'Partially' : 'Not Yet'}
+    </TableCell>
+    <TableCell
+      key={`${wbsData.wbsNumber}-tbd`}
+      style={{ color: '#fff', textAlign: 'center', border: '1px solid #ccc' }}
+    >
+      {` `}
+    </TableCell>
+  </TableRow>
+);
 
-const WbsPivotTable: React.FC<GanttChartProps> = ({ tasks }) => {
+const WbsPivotTable: React.FC<GanttChartProps> = ({ wbs }) => {
   const headers = ['Evaluator', 'Status', 'TBD'];
   const { users = [] } = useGetUserLists(); // Ensure users is at least an empty array.
 
@@ -130,11 +126,16 @@ const WbsPivotTable: React.FC<GanttChartProps> = ({ tasks }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((task) => (
-            <React.Fragment key={task.name}>
-              <RenderRow task={task} users={users} />
-              {task.subtasks?.map((subtask) => (
-                <RenderSubRow key={`${task.name}-${subtask.name}`} task={subtask} users={users} />
+          {wbs.map((wbsData) => (
+            <React.Fragment key={wbsData.wbsNumber}>
+              <RenderWbsRow wbsData={wbsData} />
+              {wbsData.tasks?.map((taskData, index) => (
+                <RenderRow
+                  key={`${taskData.id}-${taskData.name}`}
+                  index={index}
+                  taskData={taskData}
+                  users={users}
+                />
               ))}
             </React.Fragment>
           ))}

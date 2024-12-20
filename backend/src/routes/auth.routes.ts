@@ -5,6 +5,7 @@ import {
   create,
   getUsers,
   login,
+  loginMS,
 } from '../controllers/auth.controller';
 import { errorWrap } from '../utils/error.utils';
 import { withTransaction } from '../utils/transactionHelper';
@@ -17,6 +18,11 @@ router.post('/register', errorWrap(create, 'Could not create user'));
 router.post(
   '/login',
   withTransaction(errorWrap(login, 'Could not login user'))
+);
+
+router.post(
+  '/login_ms',
+  withTransaction(errorWrap(loginMS, 'Could not login user'))
 );
 
 router.put(

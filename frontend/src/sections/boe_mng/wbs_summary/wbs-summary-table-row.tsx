@@ -38,7 +38,7 @@ export function RenderCellHours({ params }: ParamsProps) {
 export function RenderCellCosts({ params }: ParamsProps) {
   return (
     <ListItemText
-      primary={params.row.costs}
+      primary={params.row.cost}
       primaryTypographyProps={{ typography: 'body2', noWrap: true }}
       secondaryTypographyProps={{
         mt: 0.5,

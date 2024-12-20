@@ -147,3 +147,9 @@ export type IUserRoleUpdate = {
   id: string;
   role: string[];
 };
+
+export type IMSUser = {
+  msId: string;
+  name: string;
+  email: string;
+};

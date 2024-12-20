@@ -7,6 +7,7 @@ import { extractClinDetails } from './extract_clin';
 import { extractBoeDetails } from './extract_boe';
 import { extractGraDetails } from './extract_gra';
 import { extractTaskDetails } from './extract_task';
+import { saveFilepath } from './file_save';
 
 const extractPdfText = async (pdfData: Buffer): Promise<string> => {
   const data = await pdfParse(pdfData);
@@ -23,6 +24,8 @@ export const processBoeFunc = async (pdfPath: string) => {
 
     const proposalData = await extractProposalDetails(pdfText);
     const wbsData = await extractWbsDetails(pdfText, proposalData.id);
+    await saveFilepath(proposalData.id, pdfPath);
+
     const clinData = await extractClinDetails(pdfText, proposalData.id);
     const boeData = await extractBoeDetails(
       pdfText,
@@ -49,11 +52,11 @@ export const processBoeFunc = async (pdfPath: string) => {
   } catch (err) {
     console.error('Error:', err);
   }
-  fs.unlink(pdfPath, (err) => {
-    if (err) {
-      console.error(`Error deleting file: ${err.message}`);
-    } else {
-      console.log('File deleted successfully');
-    }
-  });
+  // fs.unlink(pdfPath, (err) => {
+  //   if (err) {
+  //     console.error(`Error deleting file: ${err.message}`);
+  //   } else {
+  //     console.log('File deleted successfully');
+  //   }
+  // });
 };

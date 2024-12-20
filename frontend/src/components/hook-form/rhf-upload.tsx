@@ -64,7 +64,6 @@ export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
         multiple ? (
           <Upload
             multiple
-            accept={{ 'application/pdf': [] }}
             files={field.value}
             error={!!error}
             helperText={

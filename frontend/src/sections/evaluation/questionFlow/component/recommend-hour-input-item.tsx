@@ -7,11 +7,11 @@ import { Box, Typography } from '@mui/material';
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { IFlowDataTask } from 'src/types/flowData';
+import { ITask } from 'src/types/task';
 
 type Props = {
   recommendHours: number;
-  task: IFlowDataTask;
+  task: ITask;
   handleSetRecommendHours: (data: number) => void;
 };
 const RecommendHourItem = ({ recommendHours, task, handleSetRecommendHours }: Props) => {

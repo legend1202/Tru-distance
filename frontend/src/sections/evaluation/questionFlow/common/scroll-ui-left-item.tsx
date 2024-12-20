@@ -20,12 +20,8 @@ import {
 import Label from 'src/components/label';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import {
-  IFactor,
-  IFlowDataTask,
-  IflowDataItemChild,
-  IPeriodOfPerformance,
-} from 'src/types/flowData';
+import { ITask } from 'src/types/task';
+import { IFactor, IflowDataItemChild, IPeriodOfPerformance } from 'src/types/flowData';
 
 import SimpleSplitter from './simple-spliter';
 import PopGroup from '../component/pop-group';
@@ -54,7 +50,7 @@ const ThirdButtonGroupContainer = styled('div')({
 
 type Props = {
   data: IflowDataItemChild;
-  task?: IFlowDataTask;
+  task?: ITask;
   scrollStatus: boolean;
   setCurrentWorkflowPosition: (pos: number[]) => void;
   handleCurrentStatus: (status: number, statusFlag: boolean) => void;
@@ -116,6 +112,10 @@ const ScrolUILeftItem = ({
   const values = watch();
 
   useEffect(() => {
+    if (data?.status1 !== 1 && data?.status1 !== 2) {
+      setCheckbox1(false);
+      setCheckbox2(false);
+    }
     if (data?.status1 === 1) {
       setCheckbox1(true);
       setCheckbox2(false);

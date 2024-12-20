@@ -5,18 +5,17 @@ import { Box, Stack, Button, Checkbox, Typography } from '@mui/material';
 
 import { TaskAssignApprove } from 'src/api/approve';
 
-import Scrollbar from 'src/components/scrollbar/scrollbar';
+import Scrollbar from 'src/components/scrollbar';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 interface Props {
-  data: IEvaluationData[];
-  wbsId: string;
+  data: ITask[];
   selectedUserId: string;
 }
 
-const TaskAssignListView = ({ data, wbsId, selectedUserId }: Props) => {
-  const [tasks, setTasks] = useState<IEvaluationData[]>([]);
+const TaskAssignListView = ({ data, selectedUserId }: Props) => {
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -130,11 +129,11 @@ const TaskAssignListView = ({ data, wbsId, selectedUserId }: Props) => {
                   checked={task.assignedUsers?.includes(selectedUserId)}
                   onChange={() => handleTaskChange(taskIndex)}
                 />
-                {task.name}
+                Task {taskIndex + 1}. {task.name}
               </Typography>
               <Box sx={{ pl: 4 }}>
                 {task.subtasks.map((subtask, subtaskIndex) => (
-                  <Typography key={subtask.subtaskCode}>
+                  <Typography key={subtaskIndex}>
                     <Checkbox
                       checked={subtask.assignedUsers?.includes(selectedUserId)}
                       onChange={() => handleSubtaskChange(taskIndex, subtaskIndex)}

@@ -1,11 +1,11 @@
-import { IEvaluationData } from './gantt';
+import { ITask } from './task';
 
 export type ITotalTaskDataByEvaluator = {
   id: string;
   proposalId: string;
   wbsNumber: string;
   wbsTitle: string;
-  tasks: IEvaluationData[];
+  tasks: ITask[];
   createdAt: Date;
   updateAt: Date;
 };

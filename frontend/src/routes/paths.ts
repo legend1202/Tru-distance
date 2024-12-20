@@ -39,6 +39,7 @@ export const paths = {
     task_details: `${ROOTS.BOEMNG}/task_details`,
     boe_gantt: `${ROOTS.BOEMNG}/boe_gantt`,
     boe_pivot: `${ROOTS.BOEMNG}/boe_pivot`,
+    file_list: `${ROOTS.BOEMNG}/file_list`,
   },
   approval_workflow: {
     teamLead_assign: `${ROOTS.APPROVALWORKFLOW}/teamLead_assign`,

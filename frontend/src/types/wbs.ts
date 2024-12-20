@@ -1,11 +1,21 @@
-import { IOriginData } from './gantt';
+import { ITask } from './task';
 
 export type IWbs = {
-  id: string;
+  status: number;
+  eveluatorName: string;
+  _id: string;
   boeId: string;
   wbsTitle: string;
-  wbsCode: string;
-  tasks: IOriginData[];
+  wbsNumber: string;
+  tasks: ITask[];
   createdAt: Date;
   updateAt: Date;
+};
+
+export type IWbsTask = {
+  id: string;
+  name: string;
+  hours: number;
+  cost: number;
+  status: number;
 };

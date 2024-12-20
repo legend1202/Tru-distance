@@ -8,12 +8,12 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useAuthContext } from 'src/auth/hooks';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 import TaskListItem from './task-list-item';
 
 type Props = {
-  data: IEvaluationData[];
+  data: ITask[];
   wbsId: string;
 };
 
@@ -24,6 +24,7 @@ const ScrolUIRightItem = ({ data, wbsId }: Props) => {
 
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState<number>(0);
+  const [taskData, setTaskData] = useState<ITask[]>([]);
 
   const router = useRouter();
 
@@ -32,6 +33,12 @@ const ScrolUIRightItem = ({ data, wbsId }: Props) => {
       setUserId(user.userId);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      setTaskData(data);
+    }
+  }, [data]);
 
   const handleStartEvaluation = () => {
     if (wbsId && selectedTaskId) {
@@ -74,19 +81,20 @@ const ScrolUIRightItem = ({ data, wbsId }: Props) => {
         <Card>
           <CardHeader title="Assigned Tasks" />
           <CardContent>
-            {userId &&
-              data.length > 0 &&
-              data.map((task, index) => (
-                <TaskListItem
-                  key={index}
-                  userId={userId}
-                  task={task}
-                  selectedTaskId={selectedTaskId}
-                  selectedSubTaskIndex={selectedSubTaskIndex}
-                  handleSelectTaskId={handleSelectTaskId}
-                  handleSelectSubTaskIndex={handleSelectSubTaskIndex}
-                />
-              ))}
+            {taskData.length > 0
+              ? taskData.map((task, index) => (
+                  <TaskListItem
+                    key={index}
+                    taskIndex={index}
+                    userId={userId}
+                    task={task}
+                    selectedTaskId={selectedTaskId}
+                    selectedSubTaskIndex={selectedSubTaskIndex}
+                    handleSelectTaskId={handleSelectTaskId}
+                    handleSelectSubTaskIndex={handleSelectSubTaskIndex}
+                  />
+                ))
+              : 'Please select WBS'}
           </CardContent>
           <Box sx={{ position: 'absolute', bottom: 2, right: 2 }}>
             <Button variant="contained" sx={{ mr: 1 }} onClick={handleStartEvaluation}>

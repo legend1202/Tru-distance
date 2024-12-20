@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-import { Table, Button, TableRow, Container, TableBody, TableCell, TableHead } from '@mui/material';
+import { Table, Button, TableRow, Container, TableCell, TableHead, TableBody } from '@mui/material';
 
-import { generateMonthList, generateMonthListFromDates } from 'src/utils/month-array';
+import { transformData } from 'src/utils/gantt-data';
 
+import { IWbs } from 'src/types/wbs';
 import { IPeriodOfPerformance } from 'src/types/flowData';
-import { ISubtask, IEvaluationData } from 'src/types/gantt';
+import { IGanttWbsItem, IGanttTaskItem } from 'src/types/gantt';
 
 interface GanttChartProps {
-  tasks: IEvaluationData[];
+  tasks: IWbs[];
   monthFlag: boolean;
   workPeriod?: IPeriodOfPerformance;
 }
@@ -26,39 +27,50 @@ const calendarMonths = [
   'Oct',
   'Nov',
   'Dec',
+  'Total',
 ];
 
-// const fiscalMonths = [
-//   'Oct',
-//   'Nov',
-//   'Dec',
-//   'Jan',
-//   'Feb',
-//   'Mar',
-//   'Apr',
-//   'May',
-//   'Jun',
-//   'Jul',
-//   'Aug',
-//   'Sep',
-// ];
+const fiscalMonths = [
+  'Oct',
+  'Nov',
+  'Dec',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Total',
+];
 
 const NewGanttChart: React.FC<GanttChartProps> = ({ tasks, monthFlag, workPeriod }) => {
   const [months, setMonths] = useState<string[]>(calendarMonths);
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set());
+  const [tableData, setTableData] = useState<IGanttWbsItem[]>();
 
   useEffect(() => {
-    if (workPeriod) {
-      const monthList = generateMonthList(workPeriod?.start, workPeriod?.end);
-      if (monthFlag) {
-        // setMonths(calendarMonths);
-        setMonths(monthList);
-      } else {
-        // setMonths(fiscalMonths);
-        setMonths(monthList);
-      }
+    // if (workPeriod) {
+    // const monthList = generateMonthList(workPeriod?.start, workPeriod?.end);
+    if (monthFlag) {
+      setMonths(calendarMonths);
+      // setMonths(monthList);
+    } else {
+      setMonths(fiscalMonths);
+      // setMonths(monthList);
     }
+    // }
   }, [monthFlag, workPeriod]);
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      const result = transformData(tasks, monthFlag);
+      setTableData(result);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    }
+  }, [tasks, monthFlag]);
 
   // Toggle expand/collapse for a task
   const toggleTask = (taskName: string) => {
@@ -74,73 +86,69 @@ const NewGanttChart: React.FC<GanttChartProps> = ({ tasks, monthFlag, workPeriod
   };
 
   // Render a single row for a task or subtask
-  const renderSubRow = (task: ISubtask, taskMonths: string[]): any => {
-    const taskMonthValue = Number(task.hours) / taskMonths.length;
-    return (
-      <React.Fragment key={task.name}>
-        {/* Task Row */}
-        <TableRow key={task.name}>
+  const renderSubRow = (task: IGanttTaskItem, i: number) => (
+    <React.Fragment key={task.id}>
+      {/* Task Row */}
+      <TableRow key={task.id}>
+        <TableCell
+          style={{
+            paddingLeft: '48px',
+            border: '1px solid #ccc',
+            width: '200px', // Ensure consistent width with the header
+          }}
+        >
+          {i + 1}. {task.name}
+        </TableCell>
+
+        {/* Month cells */}
+        {task.hours.map((monthValue, index) => (
           <TableCell
+            key={`${task.name}-${index}`}
             style={{
-              paddingLeft: '48px',
+              // eslint-disable-next-line no-nested-ternary
+              backgroundColor: monthValue ? '#227acb' : 'transparent',
+              color: '#fff',
+              textAlign: 'center',
               border: '1px solid #ccc',
             }}
           >
-            {task.name}
+            {monthValue || ''}
           </TableCell>
+        ))}
 
-          {/* Month cells */}
-          {months.map((month) => {
-            const isValid = taskMonths.includes(month);
-            // month hour detect
-            // if (task.month) {
-            //   data = task?.month.find((d) => d === month) || 0;
-            // }
-            return (
-              <TableCell
-                key={`${task.name}-${month}`}
-                style={{
-                  // eslint-disable-next-line no-nested-ternary
-                  backgroundColor: isValid && taskMonthValue ? 'green' : 'transparent',
-                  color: '#fff',
-                  textAlign: 'center',
-                  border: '1px solid #ccc',
-                }}
-              >
-                {taskMonthValue && isValid ? taskMonthValue.toFixed(2) : ''}
-              </TableCell>
-            );
-          })}
-        </TableRow>
-      </React.Fragment>
-    );
-  };
+        <TableCell
+          style={{
+            // eslint-disable-next-line no-nested-ternary
+            backgroundColor: task.total ? 'green' : 'transparent',
+            color: '#fff',
+            textAlign: 'center',
+            border: '1px solid #ccc',
+          }}
+        >
+          {task.total || ''}
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
+  );
 
-  const renderRow = (task: IEvaluationData, isSubtask = false): any => {
-    const isExpanded = expandedTasks.has(task.name);
-    const hasSubtasks = task?.subtasks && task.subtasks.length > 0;
-
-    const taskMonths = generateMonthListFromDates(
-      task.periodOfPerformance.start.slice(0, 7),
-      task.periodOfPerformance.end.slice(0, 7),
-      workPeriod?.start,
-      workPeriod?.end
-    );
-    const taskMonthValue = task.hours / taskMonths.length;
+  const renderRow = (tableDataItem: IGanttWbsItem, isSubtask = false): any => {
+    const isExpanded = expandedTasks.has(tableDataItem.name);
+    const hasSubtasks = tableDataItem?.tasks && tableDataItem.tasks.length > 0;
 
     return (
-      <React.Fragment key={task.name}>
+      <React.Fragment key={tableDataItem.id}>
         {/* Task Row */}
-        <TableRow key={task.name}>
+        <TableRow key={tableDataItem.id}>
           <TableCell
             style={{
               paddingLeft: isSubtask ? '48px' : '15px',
               border: '1px solid #ccc',
+              width: '200px', // Ensure consistent width with the header
             }}
           >
             {hasSubtasks && (
               <Button
-                onClick={() => toggleTask(task.name)}
+                onClick={() => toggleTask(tableDataItem.name)}
                 style={{
                   marginRight: '10px',
                   cursor: 'pointer',
@@ -150,36 +158,40 @@ const NewGanttChart: React.FC<GanttChartProps> = ({ tasks, monthFlag, workPeriod
                 {isExpanded ? '-' : '+'}
               </Button>
             )}
-            {task.name}
+            {tableDataItem.name}
           </TableCell>
 
           {/* Month cells */}
-          {months.map((month, index) => {
-            const isValid = taskMonths.includes(month);
+          {tableDataItem.hours.map((monthValue, index) => (
+            <TableCell
+              key={index}
+              style={{
+                // eslint-disable-next-line no-nested-ternary
+                backgroundColor: monthValue ? '#227acb' : 'transparent',
+                color: '#fff',
+                textAlign: 'center',
+                border: '1px solid #ccc',
+              }}
+            >
+              {monthValue || ''}
+            </TableCell>
+          ))}
 
-            // month hour detect
-            // if (task.month) {
-            //   data = task?.month.find((d) => d === month) || 0;
-            // }
-            return (
-              <TableCell
-                key={index}
-                style={{
-                  // eslint-disable-next-line no-nested-ternary
-                  backgroundColor: taskMonthValue && isValid ? 'green' : 'transparent',
-                  color: '#fff',
-                  textAlign: 'center',
-                  border: '1px solid #ccc',
-                }}
-              >
-                {isValid && taskMonthValue ? taskMonthValue.toFixed(2) : ''}
-              </TableCell>
-            );
-          })}
+          <TableCell
+            style={{
+              // eslint-disable-next-line no-nested-ternary
+              backgroundColor: tableDataItem.total ? 'green' : 'transparent',
+              color: '#fff',
+              textAlign: 'center',
+              border: '1px solid #ccc',
+            }}
+          >
+            {tableDataItem.total || ''}
+          </TableCell>
         </TableRow>
 
         {/* Render Subtasks if Expanded */}
-        {isExpanded && task.subtasks?.map((subtask) => renderSubRow(subtask, taskMonths))}
+        {isExpanded && tableDataItem.tasks?.map((task, i) => renderSubRow(task, i))}
       </React.Fragment>
     );
   };
@@ -203,8 +215,9 @@ const NewGanttChart: React.FC<GanttChartProps> = ({ tasks, monthFlag, workPeriod
             <TableCell
               style={{
                 textAlign: 'center',
-                padding: '5px',
+                padding: '5px 48px',
                 border: '1px solid #ccc',
+                width: '200px', // Ensure consistent width with the header
               }}
             >
               WBS/Task/Sub
@@ -223,7 +236,9 @@ const NewGanttChart: React.FC<GanttChartProps> = ({ tasks, monthFlag, workPeriod
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>{tasks.map((task) => renderRow(task))}</TableBody>
+        {tableData && (
+          <TableBody>{tableData.map((tableDataItem, index) => renderRow(tableDataItem))}</TableBody>
+        )}
       </Table>
     </Container>
   );

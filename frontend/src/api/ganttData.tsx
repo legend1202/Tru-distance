@@ -12,7 +12,7 @@ export function useGetGanttData() {
 
   const memoizedValue = useMemo(
     () => ({
-      ganttData: data?.result?.ganttData as IGanttData || {},
+      ganttData: data?.result?.ganttData as IGanttData,
       ganttLoading: isLoading,
       ganttError: error,
       ganttValidating: isValidating,

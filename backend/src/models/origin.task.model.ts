@@ -46,9 +46,10 @@ export interface OriginTaskDocument extends Document {
   boeId: string;
 
   name: string;
-  taskCode: string;
+  taskCode: number;
   periodOfPerformance?: PeriodOfPerformanceDocument;
   description: string;
+  spread_totals: any;
 
   hours: number | 0;
   hoursDesc: string;
@@ -118,9 +119,11 @@ export const OriginTaskSchema = new Schema<OriginTaskDocument>(
     boeId: { type: String },
 
     name: { type: String },
-    taskCode: { type: String },
+    taskCode: { type: Number },
     periodOfPerformance: { type: PeriodOfPerformanceSchema },
     description: { type: String },
+
+    spread_totals: { type: Schema.Types.Mixed }, // Fixed here
 
     hours: { type: Number },
     hoursDesc: { type: String },

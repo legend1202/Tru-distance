@@ -3,14 +3,15 @@ import { useMemo } from 'react';
 
 import axiosInstance, { fetcher, endpoints } from 'src/utils/axios';
 
-import { IEvaluationData } from 'src/types/gantt';
+import {} from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 const options = {
   revalidateOnFocus: true,
   revalidateOnMount: true,
 };
 
-export const TaskAssignApprove = async (query: IEvaluationData[]) => {
+export const TaskAssignApprove = async (query: ITask[]) => {
   const res = await axiosInstance.post(endpoints.approve_workflow.task_assign, {
     approveData: query,
   });
@@ -29,7 +30,7 @@ export const useGetApprovedTaskByWbsId = (wbsId: string) => {
 
   return useMemo(
     () => ({
-      approvedData: data?.result?.apprvedData as IEvaluationData[],
+      approvedData: data?.result?.apprvedData as ITask[],
       approvedDataLoading: isLoading,
       approvedDataError: error,
       approvedDataValidating: isValidating,

@@ -18,6 +18,8 @@ const WbsSummaryPage = lazy(() => import('src/pages/boe_mng/wbs_summary'));
 const TaskDetailsPage = lazy(() => import('src/pages/boe_mng/task_details/boe-gantt'));
 
 const BoePivotPage = lazy(() => import('src/pages/boe_mng/task_details/boe-pivot'));
+
+const FileListPage = lazy(() => import('src/pages/boe_mng/file_list'));
 // ----------------------------------------------------------------------
 
 export const beo_mng_Routes = [
@@ -35,6 +37,7 @@ export const beo_mng_Routes = [
     children: [
       { element: <DataImportPage />, index: true },
       { path: paths.boe_mng.data_import, element: <DataImportPage /> },
+      { path: paths.boe_mng.file_list, element: <FileListPage /> },
       { path: paths.boe_mng.wbs_summary, element: <WbsSummaryPage /> },
       { path: paths.boe_mng.boe_gantt, element: <TaskDetailsPage /> },
       { path: paths.boe_mng.boe_pivot, element: <BoePivotPage /> },

@@ -9,12 +9,12 @@ import { useRouter } from 'src/routes/hooks';
 import { useAuthContext } from 'src/auth/hooks';
 import { UpdateTaskStatus } from 'src/api/evaluation';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 import TaskListItem from './task-list-item';
 
 type Props = {
-  data: IEvaluationData[];
+  data: ITask[];
   wbsId: string;
 };
 
@@ -23,7 +23,7 @@ const ScrolUIRightItem = ({ data, wbsId }: Props) => {
   const { user } = useAuthContext();
   const [userId, setUserId] = useState('');
 
-  const [tasks, settasks] = useState<IEvaluationData[]>();
+  const [tasks, settasks] = useState<ITask[]>();
 
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState<number>(0);

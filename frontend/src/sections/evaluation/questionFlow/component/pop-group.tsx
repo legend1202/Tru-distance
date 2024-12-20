@@ -9,11 +9,12 @@ import { fMonth } from 'src/utils/format-time';
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { IFlowDataTask, IPeriodOfPerformance } from 'src/types/flowData';
+import { ITask } from 'src/types/task';
+import { IPeriodOfPerformance } from 'src/types/flowData';
 
 type Props = {
   periodOfPerformance: IPeriodOfPerformance;
-  task: IFlowDataTask;
+  task: ITask;
   handleSetPopDistribution: (data: IPeriodOfPerformance) => void;
 };
 const PopGroup = ({ periodOfPerformance, task, handleSetPopDistribution }: Props) => {

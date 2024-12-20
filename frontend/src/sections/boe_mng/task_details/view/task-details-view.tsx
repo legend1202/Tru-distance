@@ -11,9 +11,9 @@ import { useGetGanttData } from 'src/api/ganttData';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
+import { IWbs } from 'src/types/wbs';
 import { IClin } from 'src/types/clin';
 import { IPeriodOfPerformance } from 'src/types/flowData';
-import { IOriginData, IEvaluationData } from 'src/types/gantt';
 
 import NewGanttChart from '../ganttChat';
 import ProposalSummaryView from '../proposal_summary_view';
@@ -30,8 +30,8 @@ export default function TaskDetailsView() {
   const { clinList } = useGetClinLists();
   const { boeList } = useGetBoeLists();
 
-  const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
-  const [evaluationData, setEvaluationData] = useState<IEvaluationData[]>([]);
+  const [proposaedData, setProposedData] = useState<IWbs[]>([]);
+  const [evaluationData, setEvaluationData] = useState<IWbs[]>([]);
   const [clins, setClins] = useState<IClin[]>([]);
   const [workPeriod, setWorkPeriod] = useState<IPeriodOfPerformance>();
 

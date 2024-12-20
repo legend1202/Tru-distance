@@ -4,13 +4,13 @@ import { Card, Typography } from '@mui/material';
 
 import { calculateTotals } from 'src/utils/wbs-total';
 
+import { IWbs } from 'src/types/wbs';
 import { IClin } from 'src/types/clin';
-import { IOriginData } from 'src/types/gantt';
 
 import ClinTotalItem from './clin-total-item';
 
 type Props = {
-  proposaedData: IOriginData[];
+  proposaedData: IWbs[];
   clins: IClin[];
 };
 

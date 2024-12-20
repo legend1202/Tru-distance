@@ -37,10 +37,15 @@ export const endpoints = {
   auth: {
     me: '/api/auth/me',
     login: '/api/auth/login',
+    loginwithMS: '/api/auth/login_ms',
     register: '/api/auth/register',
   },
   upload: {
     boe: '/api/upload/boe',
+    cbom: '/api/upload/cbom',
+    travel: '/api/upload/travel',
+    sow: '/api/upload/sow',
+    gra: '/api/upload/gra',
   },
   wbs_mng: {
     wbs_lists: '/api/wbs/wbslists',
@@ -53,6 +58,8 @@ export const endpoints = {
   },
   boe: {
     getData: '/api/boe/boeLists',
+    getFilelist: '/api/boe/filelist',
+    filedelete: '/api/boe/filedelete',
   },
   approve_workflow: {
     task_assign: '/api/approve/task_assign',

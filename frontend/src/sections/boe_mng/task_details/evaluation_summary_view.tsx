@@ -7,13 +7,13 @@ import { useRouter } from 'src/routes/hooks';
 
 import { calculateTotals } from 'src/utils/wbs-total';
 
+import { IWbs } from 'src/types/wbs';
 import { IClin } from 'src/types/clin';
-import { IEvaluationData } from 'src/types/gantt';
 
 import ClinTotalItem from './clin-total-item';
 
 type Props = {
-  evaluationData: IEvaluationData[];
+  evaluationData: IWbs[];
   clins: IClin[];
 };
 

@@ -15,10 +15,10 @@ import { UpdateFlowData, useGetFlowDataByTask } from 'src/api/evaluation';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { ITask } from 'src/types/task';
 import {
   IFactor,
   IflowDataItem,
-  IFlowDataTask,
   IflowDataItemChild,
   IFactorJustification,
   IPeriodOfPerformance,
@@ -55,7 +55,7 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
 
   const [wbsTitle, setWbsTitle] = useState('');
 
-  const [currentTask, setCurrentTask] = useState<IFlowDataTask>();
+  const [currentTask, setCurrentTask] = useState<ITask>();
 
   const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
@@ -80,7 +80,14 @@ export default function EvaluationQuestionFlowView({ wbsId, taskId, subTaskIndex
         (task) => task.wbsId === wbsId && task.id === taskId
       );
 
-      setWbsTitle(filteredData[0]?.wbsDetails[0].wbsTitle);
+      if (
+        filteredData.length > 0 &&
+        filteredData[0]?.wbsDetails &&
+        filteredData[0]?.wbsDetails.length > 0
+      ) {
+        setWbsTitle(filteredData[0].wbsDetails[0].wbsTitle);
+      }
+
       if (subTaskIndex) {
         setCurrentTask(filteredData[0].subtasks[subTaskIndex]);
       } else {

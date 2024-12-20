@@ -4,13 +4,13 @@ import { Stack } from '@mui/system';
 import { ListItemButton } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   userId: string;
-  task: IEvaluationData;
+  task: ITask;
   selectedTaskId: string;
   selectedSubTaskIndex: number;
   handleSelectTaskId: (taskId: string) => void;

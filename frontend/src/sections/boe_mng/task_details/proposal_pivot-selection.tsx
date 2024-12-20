@@ -6,24 +6,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Stack } from '@mui/system';
 import { Card, MenuItem, Typography } from '@mui/material';
 
-import { calculateTotals } from 'src/utils/wbs-total';
-
-import { useGetWBSLists } from 'src/api/wbs';
+import { calculatePivotTotals } from 'src/utils/wbs-total';
 
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
 
-import { ISubtask, IOriginData } from 'src/types/gantt';
+import { IWbs } from 'src/types/wbs';
+import { ITask } from 'src/types/task';
 
 type Props = {
-  data: IOriginData[];
+  data: IWbs[];
 };
 
 const ProposalPivotSelection = ({ data }: Props) => {
-  const { wbsList } = useGetWBSLists();
-
-  const [tasks, setTasks] = useState<IOriginData[] | ISubtask[]>([]);
-  const [taskList, setTaskList] = useState<IOriginData[]>([]);
-  const [subTasks, setSubTasks] = useState<ISubtask[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [taskList, setTaskList] = useState<ITask[]>([]);
+  const [subTasks, setSubTasks] = useState<ITask[]>([]);
 
   const [totalHours, setTotalHours] = useState(0);
   const [totalCost, setTotalCost] = useState(0);
@@ -31,14 +28,8 @@ const ProposalPivotSelection = ({ data }: Props) => {
   const [totalMaterial, setTotalMaterial] = useState(0);
 
   useEffect(() => {
-    if (data.length > 0) {
-      setTasks(data);
-    }
-  }, [data]);
-
-  useEffect(() => {
     if (tasks.length > 0) {
-      const totals = calculateTotals(tasks);
+      const totals = calculatePivotTotals(tasks);
       setTotalHours(totals.totalHours);
       setTotalCost(totals.totalCost);
       setTotalTravel(totals.totalTravel);
@@ -71,45 +62,29 @@ const ProposalPivotSelection = ({ data }: Props) => {
   const values = watch();
 
   useEffect(() => {
-    if (wbsList.length > 0) {
-      setValue('wbsId', wbsList[0].id);
+    if (data.length > 0) {
+      console.log(data);
     }
-  }, [wbsList, setValue]);
+  }, [data, setValue]);
 
   useMemo(() => {
     if (values.wbsId) {
-      const filteredTasks = data.filter((task) => task.wbsId === values.wbsId);
-      setTasks(filteredTasks);
-      setTaskList(filteredTasks);
+      const filteredTasks = data.filter((wbs) => wbs._id === values.wbsId);
+      setTasks(filteredTasks[0].tasks);
+      setTaskList(filteredTasks[0].tasks);
     } else {
       setTasks([]);
       setTaskList([]);
+      setSubTasks([]);
     }
   }, [values.wbsId, data]);
 
   useMemo(() => {
     if (values.taskId) {
-      const filteredTasks = data.filter((task) => task.id === values.taskId);
+      const filteredTasks = taskList.filter((task) => task.id === values.taskId);
       setTasks(filteredTasks);
-      if (filteredTasks[0].subtasks?.length > 0) {
-        setSubTasks(filteredTasks[0].subtasks);
-      } else {
-        setSubTasks([]);
-      }
     }
-  }, [values.taskId, data]);
-
-  useMemo(() => {
-    if (values.subTaskId) {
-      const filteredTasks = data.filter((task) => task.id === values.taskId);
-      if (values.taskId && filteredTasks[0].subtasks?.length > 0) {
-        const subtask = filteredTasks[0].subtasks[values.subTaskId - 1];
-        setTasks([subtask]);
-      } else {
-        setSubTasks([]);
-      }
-    }
-  }, [values.subTaskId, values.taskId, data]);
+  }, [values.taskId, taskList]);
 
   return (
     <Card
@@ -132,15 +107,15 @@ const ProposalPivotSelection = ({ data }: Props) => {
           >
             <RHFSelect
               name="wbsId"
-              label="WBS Code"
+              label="WBS"
               fullWidth
               InputLabelProps={{ shrink: true }}
               PaperPropsSx={{ textTransform: 'capitalize' }}
               sx={{ minWidth: 140 }}
             >
-              {wbsList &&
-                wbsList.map((wbs) => (
-                  <MenuItem key={wbs.id} value={wbs.id}>
+              {data &&
+                data.map((wbs) => (
+                  <MenuItem key={wbs._id} value={wbs._id}>
                     {wbs.wbsTitle}
                   </MenuItem>
                 ))}

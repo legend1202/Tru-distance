@@ -2,6 +2,8 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { MicrosoftLoginButton } from 'react-social-login-buttons';
 
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
@@ -16,6 +18,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { LOGIN_REQUEST, TOKEN_REQUEST, PUBLIC_CLIENT_APPLICATION } from 'src/utils/msalConfig';
+
 import { useTranslate } from 'src/locales';
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -26,7 +30,40 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function JwtLoginView() {
   const { t } = useTranslate();
-  const { login } = useAuthContext();
+  const { login, loginWithMS } = useAuthContext();
+
+  const [interactionInProgress, setInteractionInProgress] = useState(false);
+
+  const handleSignIn = async () => {
+    setInteractionInProgress(true);
+    const loginResponse = await PUBLIC_CLIENT_APPLICATION.loginPopup(LOGIN_REQUEST);
+    if (loginResponse.account) {
+      PUBLIC_CLIENT_APPLICATION.setActiveAccount(loginResponse.account);
+    }
+    const tokenResponse = await PUBLIC_CLIENT_APPLICATION.acquireTokenSilent(TOKEN_REQUEST);
+
+    // Fetch user information after obtaining the token
+    await fetchUserProfile(tokenResponse.accessToken);
+  };
+
+  const fetchUserProfile = async (accessToken: string) => {
+    try {
+      const response = await fetch('https://graph.microsoft.com/v1.0/me', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+
+      setInteractionInProgress(false);
+      await loginWithMS?.(data.id, data.mail || data.userPrincipalName, data.displayName);
+    } catch (error) {
+      console.error(error);
+      reset();
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+    }
+  };
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -104,10 +141,22 @@ export default function JwtLoginView() {
         size="large"
         type="submit"
         variant="contained"
-        loading={isSubmitting}
+        loading={isSubmitting || interactionInProgress}
       >
         {t('Login')}
       </LoadingButton>
+      {/* <LoadingButton
+        fullWidth
+        color="inherit"
+        size="large"
+        type="submit"
+        variant="contained"
+        onClick={handleSignIn}
+        loading={isSubmitting || interactionInProgress}
+      >
+        {t('MS Login')}
+      </LoadingButton> */}
+      <MicrosoftLoginButton onClick={handleSignIn} />
     </Stack>
   );
 

@@ -168,6 +168,40 @@ export function AuthProvider({ children }: Props) {
     }
   }, []);
 
+  const loginWithMS = useCallback(async (microsoftId: string, email: string, name: string) => {
+    const data = {
+      user: {
+        microsoftId,
+        email,
+        name,
+      },
+    };
+
+    const res = await axios.post(endpoints.auth.loginwithMS, data);
+
+    const { success, result } = res.data;
+
+    if (success) {
+      setSession(result.JWT_token);
+      dispatch({
+        type: Types.LOGIN,
+        payload: {
+          user: {
+            ...result.user,
+            accessToken: result.JWT_token,
+          },
+        },
+      });
+    } else {
+      dispatch({
+        type: Types.INITIAL,
+        payload: {
+          user: null,
+        },
+      });
+    }
+  }, []);
+
   // REGISTER
   const register = useCallback(
     async (email: string, password: string, firstName: string, lastName: string) => {
@@ -229,10 +263,11 @@ export function AuthProvider({ children }: Props) {
       unauthenticated: status === 'unauthenticated',
       //
       login,
+      loginWithMS,
       register,
       logout,
     }),
-    [login, logout, register, state.user, status]
+    [login, loginWithMS, logout, register, state.user, status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

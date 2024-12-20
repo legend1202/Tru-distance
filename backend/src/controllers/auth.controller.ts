@@ -7,6 +7,7 @@ import {
   handleGetUsers,
   handleUserCreation,
   handleUserLogin,
+  handleUserLoginMS,
 } from '../services/user.services';
 import { DecodedToken } from '../types/req.type';
 
@@ -34,6 +35,22 @@ export const login = async (req: Request, res: Response) => {
       user,
       session
     );
+    return sendResponse(res, 200, 'Login Successfully', {
+      user: { userId, name, email, avatar, role },
+      JWT_token: token,
+    });
+  } catch (error) {
+    throw new RequestError(`${error}`, 500);
+  }
+};
+
+export const loginMS = async (req: Request, res: Response) => {
+  const session: ClientSession = req.session!;
+
+  try {
+    const { user } = req.body;
+    const { token, userId, name, email, role, avatar } =
+      await handleUserLoginMS(user, session);
     return sendResponse(res, 200, 'Login Successfully', {
       user: { userId, name, email, avatar, role },
       JWT_token: token,

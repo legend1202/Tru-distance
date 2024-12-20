@@ -10,7 +10,7 @@ import { useGetGanttData } from 'src/api/ganttData';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { IOriginData, IEvaluationData } from 'src/types/gantt';
+import { IWbs } from 'src/types/wbs';
 
 import WbsPivotTable from '../wbs_pivot_table';
 import ProposalPivotSelection from '../proposal_pivot-selection';
@@ -21,8 +21,8 @@ import EvaluationPivotSelection from '../evaluation_pivot_selection';
 export default function BoePivotView() {
   const { ganttData } = useGetGanttData();
 
-  const [proposaedData, setProposedData] = useState<IOriginData[]>([]);
-  const [evaluationData, setEvaluationData] = useState<IEvaluationData[]>([]);
+  const [proposaedData, setProposedData] = useState<IWbs[]>([]);
+  const [evaluationData, setEvaluationData] = useState<IWbs[]>([]);
 
   useEffect(() => {
     if (ganttData?.originData && ganttData?.evaluationData) {
@@ -130,7 +130,7 @@ export default function BoePivotView() {
               justifyContent: 'space-around',
             }}
           >
-            <WbsPivotTable tasks={evaluationData} />
+            <WbsPivotTable wbs={evaluationData} />
           </Card>
         </Card>
       </Stack>

@@ -12,15 +12,14 @@ import { haveCommonItem } from 'src/utils/role-check';
 
 import { useGetWBSLists } from 'src/api/wbs';
 import { useGetUserLists } from 'src/api/admin';
-import { useGetApprovedTaskByWbsId } from 'src/api/approve';
 
 import { RHFSelect } from 'src/components/hook-form';
 import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
+import { ITask } from 'src/types/task';
 import { IUserItem } from 'src/types/user';
-import { IEvaluationData } from 'src/types/gantt';
 
 import UserListView from '../user-list-view';
 import TaskAssignListView from '../task-assign-list';
@@ -33,17 +32,13 @@ export default function TaskAssignView() {
 
   const { wbsList } = useGetWBSLists();
 
-  const [tasks, setTasks] = useState<IEvaluationData[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
 
   const [selectedUserId, setSelectedUserId] = useState<string>('');
-
-  const [wbsId, setWbsId] = useState<string>('');
 
   const [evaluators, setEvaluators] = useState<IUserItem[]>([]);
 
   const [childKey, setChildKey] = useState(0);
-
-  const { approvedData } = useGetApprovedTaskByWbsId(wbsId);
 
   const WbsSchema = Yup.object().shape({
     wbsId: Yup.string().required('Wbs is required'),
@@ -61,14 +56,13 @@ export default function TaskAssignView() {
     defaultValues,
   });
 
-  const { setValue } = methods;
+  const { setValue, watch } = methods;
 
-  /* const values = watch();  */
+  const values = watch();
 
   useEffect(() => {
     if (wbsList.length > 0) {
-      setValue('wbsId', wbsList[0].id);
-      setWbsId(wbsList[0].id);
+      setValue('wbsId', wbsList[0]._id);
     }
   }, [wbsList, setValue]);
 
@@ -87,17 +81,20 @@ export default function TaskAssignView() {
 
   useEffect(() => {
     setChildKey((prevKey) => prevKey + 1); // Update key to force re-render
-  }, [selectedUserId, wbsId]);
+  }, [selectedUserId, values.wbsId]);
 
   const handleSelectedUserId = (userId: string) => {
     setSelectedUserId(userId);
   };
 
   useEffect(() => {
-    if (approvedData) {
-      setTasks(approvedData);
+    if (wbsList.length > 0) {
+      const filteredWbs = wbsList.filter((wbs) => wbs._id === values.wbsId);
+      if (filteredWbs[0]?.tasks) {
+        setTasks(filteredWbs[0].tasks);
+      }
     }
-  }, [approvedData]);
+  }, [wbsList, values.wbsId]);
 
   return (
     <Container
@@ -129,7 +126,7 @@ export default function TaskAssignView() {
             >
               {wbsList &&
                 wbsList.map((wbs) => (
-                  <MenuItem key={wbs.id} value={wbs.id}>
+                  <MenuItem key={wbs._id} value={wbs._id}>
                     {wbs.wbsTitle}
                   </MenuItem>
                 ))}
@@ -144,12 +141,7 @@ export default function TaskAssignView() {
           handleSelectedUserId={handleSelectedUserId}
         />
 
-        <TaskAssignListView
-          key={childKey}
-          data={tasks}
-          wbsId={wbsId}
-          selectedUserId={selectedUserId}
-        />
+        <TaskAssignListView key={childKey} data={tasks} selectedUserId={selectedUserId} />
       </Stack>
     </Container>
   );

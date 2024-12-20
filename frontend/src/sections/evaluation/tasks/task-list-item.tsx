@@ -4,13 +4,14 @@ import { Stack } from '@mui/system';
 import { ListItemButton } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 
-import { IEvaluationData } from 'src/types/gantt';
+import { ITask } from 'src/types/task';
 
 // ----------------------------------------------------------------------
 
 type Props = {
+  taskIndex: number;
   userId: string;
-  task: IEvaluationData;
+  task: ITask;
   selectedTaskId: string;
   selectedSubTaskIndex: number;
   handleSelectTaskId: (taskId: string) => void;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function TaskListItem({
+  taskIndex,
   userId,
   task,
   selectedTaskId,
@@ -27,14 +29,16 @@ export default function TaskListItem({
 }: Props) {
   const [hasSubtask, setIsSubtask] = useState<boolean>(false);
 
-  const [isTask, setIsTask] = useState<boolean>(false);
+  const [isTask, setIsTask] = useState<boolean>(true);
 
   useEffect(() => {
-    if (task.assignedUsers.includes(userId) || false) {
+    if (task.assignedUsers.includes(userId)) {
       setIsTask(true);
       if (task.subtasks.length > 0) {
         setIsSubtask(true);
       }
+    } else {
+      setIsTask(false);
     }
   }, [task, userId]);
 
