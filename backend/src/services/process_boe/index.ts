@@ -29,6 +29,7 @@ export const processBoeModule = async (pdfPath: string) => {
     // Send POST request
     const response = await axios.post(API_URL, form, config);
 
+    console.log('---------------', 'response.data.proposalName');
     // Log the response
     if (response.data.proposalName) {
       const proposal = await handleProposalDetails(response.data.proposalName);
@@ -37,7 +38,6 @@ export const processBoeModule = async (pdfPath: string) => {
     }
     return response.data; // Optionally return data for further processing
   } catch (error) {
-    console.error('Error processing PDF file:', error);
     if (axios.isAxiosError(error) && error.response) {
       console.error('Response Error:', error.response.data);
     }
